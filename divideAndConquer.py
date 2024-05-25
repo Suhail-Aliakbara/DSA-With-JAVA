@@ -1,4 +1,5 @@
 
+#---------------- Merge sort---------------
 def merge_sort(arr):
   if len(arr) <= 1:
     return arr
@@ -34,6 +35,11 @@ def merge(left, right):
   
   return result
 
+arr = [5, 2, 9, 1, 7, 6, 3]
+sorted_arr = merge_sort(arr)
+print(sorted_arr)
+
+#---------------- Quick sort---------------
 def quick_sort(arr):
   if len(arr) <= 1:
     return arr
@@ -47,5 +53,5 @@ def quick_sort(arr):
 
 # Example usage
 arr = [5, 2, 9, 1, 7, 6, 3]
-sorted_arr = merge_sort(arr)
+sorted_arr = quick_sort(arr)
 print(sorted_arr)
