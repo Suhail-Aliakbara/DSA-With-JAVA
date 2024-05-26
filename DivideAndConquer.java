@@ -72,10 +72,35 @@ public class DivideAndConquer {
   }
 
   // --------------Search in Rotated and sorted array-----------------
+  public static int rotatedAndSorted(int arr[], int si, int ei, int key) {
+    if (si > ei) {
+      return -1;
+    }
+
+    int mid = si + (ei - si) / 2;
+
+    if (arr[mid] == key) {
+      return mid;
+    }
+    if (arr[si] <= arr[mid]) {
+      if (arr[si] <= key && key < arr[mid]) {
+        return rotatedAndSorted(arr, si, mid - 1, key);
+      } else {
+        return rotatedAndSorted(arr, mid + 1, ei, key);
+      }
+    } else {
+      if (arr[mid] < key && key <= arr[ei]) {
+        return rotatedAndSorted(arr, mid + 1, ei, key);
+      } else {
+        return rotatedAndSorted(arr, si, mid - 1, key);
+      }
+    }
+  }
 
   public static void main(String[] args) {
-    int n[] = { 5, 8, 3, 2, 7, 8, 2, 3, 2 };
-    quickSort(n, 0, n.length - 1);
-    printFn(n);
+    int n[] = { 2, 3, 4, 0, 1 };
+    // quickSort(n, 0, n.length - 1);
+    System.out.println(rotatedAndSorted(n, 0, n.length - 1, 2));
+    // printFn(n);
   }
 }
