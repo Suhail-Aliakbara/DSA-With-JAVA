@@ -72,6 +72,7 @@ public class DivideAndConquer {
   }
 
   // --------------Search in Rotated and sorted array-----------------
+
   public static int rotatedAndSorted(int arr[], int si, int ei, int key) {
     if (si > ei) {
       return -1;
@@ -97,10 +98,70 @@ public class DivideAndConquer {
     }
   }
 
+  // ------------------Apply merge sort to sort an Array--------------
+
+  public static String[] mergeArray(String[] str, int si, int ei) {
+    if (si == ei) {
+      String[] arr = { str[si] };
+      return arr;
+    }
+    int mid = si + (ei - si) / 2;
+
+    String[] arr1 = mergeArray(str, si, mid);
+    String[] arr2 = mergeArray(str, mid + 1, ei);
+    String[] arr3 = mergeString(arr1, arr2);
+    return arr3;
+  }
+
+  public static String[] mergeString(String[] arr1, String[] arr2) {
+    int n = arr1.length;
+    int m = arr2.length;
+    int i = 0;
+    int j = 0;
+    String temp[] = new String[n + m];
+    int k = 0;
+
+    while (i < n && j < m) {
+      if (isAllpabaticallyCorrect(arr1[i], arr2[j])) {
+        temp[k++] = arr1[i++];
+      } else {
+        temp[k++] = arr2[j++];
+      }
+    }
+
+    while (i < n) {
+      temp[k++] = arr1[i++];
+    }
+    while (j < m) {
+      temp[k++] = arr2[j++];
+    }
+
+    return temp;
+  }
+
+  public static boolean isAllpabaticallyCorrect(String str1, String str2) {
+    if (str1.compareTo(str2) < 0) {
+      return true;
+    }
+    return false;
+  }
+
+  public static void printStringArray(String[] str) {
+    for (int i = 0; i < str.length; i++) {
+      System.out.print(str[i] + " ");
+    }
+  }
+
+  // ---------------Retrun the majority element from array-----------
+
   public static void main(String[] args) {
     int n[] = { 2, 3, 4, 0, 1 };
     // quickSort(n, 0, n.length - 1);
-    System.out.println(rotatedAndSorted(n, 0, n.length - 1, 2));
+    // System.out.println(rotatedAndSorted(n, 0, n.length - 1, 2));
     // printFn(n);
+
+    String str[] = { "sun", "earth", "mars", "mercury" };
+    String[] arr = mergeArray(str, 0, str.length - 1);
+    printStringArray(arr);
   }
 }
