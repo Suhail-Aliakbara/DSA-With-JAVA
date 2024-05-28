@@ -307,4 +307,27 @@ public class Arrays {
   // adding all the numbers of the array, we did not add that particular number
   // that is missing.
 
+  /*
+   * Given a non-empty array of integers nums, every element appears twice except
+   * for one. Find that single one.
+   * 
+   * Input: nums = [2,2,1]
+   * Output: 1
+   * 
+   * Input: nums = [4,1,2,1,2]
+   * Output: 4
+   */
+  public int singleNumber(int[] nums) {
+
+    int n = nums.length;
+    int xor = nums[0];
+
+    for (int i = 1; i < n; i++) {
+      xor = xor ^ nums[i];
+    }
+    return xor;
+  }
+  // it will cancell all the element twice hence which element appear once will
+  // remain
+
 }
