@@ -259,6 +259,18 @@ public class Arrays {
    * [0,3]. 2 is the missing number in the range since it does not appear in nums.
    */
 
+  public static int missingNumber1(int[] a, int N) {
+    int xor1 = 0, xor2 = 0;
+
+    for (int i = 0; i < N - 1; i++) {
+      xor2 = xor2 ^ a[i]; // XOR of array elements
+      xor1 = xor1 ^ (i + 1); // XOR up to [1...N-1]
+    }
+    xor1 = xor1 ^ N; // XOR up to [1...N]
+
+    return (xor1 ^ xor2); // the missing number
+  }
+
   public int missingNumber(int[] nums) {
     int res = nums.length;
     for (int i = 0; i < nums.length; i++) {
@@ -272,5 +284,27 @@ public class Arrays {
   // out all the numbers that are present.
   // the XOR operation helps in finding the missing number in the array
   // efficiently
+  // XOR of two same numbers is always 0 i.e. a ^ a = 0. ←Property 1.
+  // XOR of a number with 0 will result in the number itself i.e. 0 ^ a = a.
+  // ←Property 2
+
+  public static int missingNumber2(int[] a, int N) {
+    // Summation of first N numbers:
+    int sum = ((N + 1) * N) / 2;
+
+    // Summation of all array elements:
+    int s2 = 0;
+    for (int i = 0; i < N - 1; i++) {
+      s2 += a[i];
+    }
+    int missingNum = sum - s2;
+    return missingNum;
+  }
+  // We know that the summation of the first N numbers is (N*(N+1))/2. We can say
+  // this S1. Now, in the given array, every number between 1 to N except one
+  // number is present. So, if we add the numbers of the array (say S2), the
+  // difference between S1 and S2 will be the missing number. Because, while
+  // adding all the numbers of the array, we did not add that particular number
+  // that is missing.
 
 }
