@@ -154,6 +154,10 @@ public class DivideAndConquer {
 
   // ---------------Retrun the majority element from array-----------
 
+  public static int majorityElement(int arr[], int si, int ei) {
+
+  }
+
   public static void main(String[] args) {
     int n[] = { 2, 3, 4, 0, 1 };
     // quickSort(n, 0, n.length - 1);

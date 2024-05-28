@@ -176,5 +176,101 @@ public class Arrays {
     }
   }
 
-  // ------------------------
+  // ------------------------Union of two Arrays--------------------
+  /*
+   * Given two sorted arrays of size n and m respectively, find their union
+   * 
+   * Input:
+   * n = 5, arr1[] = {1, 2, 3, 4, 5}
+   * m = 5, arr2 [] = {1, 2, 3, 6, 7}
+   * Output: 1 2 3 4 5 6 7
+   * Explanation:
+   * Distinct elements including both the arrays are: 1 2 3 4 5 6 7.
+   */
+
+  public static ArrayList<Integer> findUnion(int arr1[], int arr2[], int n, int m) {
+    // add your code here
+    HashSet<Integer> union = new HashSet<>();
+
+    for (int nums : arr1) {
+      union.add(nums);
+    }
+
+    for (int nums : arr2) {
+      union.add(nums);
+    }
+
+    ArrayList<Integer> unionArray = new ArrayList<>(union);
+    Collections.sort(unionArray);
+    return unionArray;
+  }
+
+  // Another Solution without using HastSet
+  public static ArrayList<Integer> findUnionWithoutHashSet(int arr1[], int arr2[], int n, int m) {
+    ArrayList<Integer> ans = new ArrayList<>();
+
+    int i = 0, j = 0;
+
+    while (i < n && j < m) {
+      int x = arr1[i];
+      int y = arr2[j];
+
+      if (x < y) {
+        ans.add(x);
+        while (i < n && arr1[i] == x)
+          i++; // Until the current element is not in array
+      } else if (x == y) {
+        ans.add(x);
+        while (i < n && arr1[i] == x)
+          i++;
+        while (j < m && arr2[j] == y)
+          j++;
+      } else {
+        ans.add(y);
+        while (j < m && arr2[j] == y)
+          j++;
+      }
+    }
+
+    while (i < n) {
+      int x = arr1[i];
+      ans.add(x);
+      while (i < n && arr1[i] == x)
+        i++;
+    }
+
+    while (j < m) {
+      int y = arr2[j];
+      ans.add(y);
+      while (j < m && arr2[j] == y)
+        j++;
+    }
+
+    return ans;
+  }
+
+  /*
+   * Given an array nums containing n distinct numbers in the range [0, n], return
+   * the only number in the range that is missing from the array.
+   * 
+   * Input: nums = [3,0,1]
+   * Output: 2
+   * Explanation: n = 3 since there are 3 numbers, so all numbers are in the range
+   * [0,3]. 2 is the missing number in the range since it does not appear in nums.
+   */
+
+  public int missingNumber(int[] nums) {
+    int res = nums.length;
+    for (int i = 0; i < nums.length; i++) {
+      res ^= i;
+      res ^= nums[i];
+    }
+    return res;
+  }
+
+  // The result will be the missing number because the XOR operation will cancel
+  // out all the numbers that are present.
+  // the XOR operation helps in finding the missing number in the array
+  // efficiently
+
 }
