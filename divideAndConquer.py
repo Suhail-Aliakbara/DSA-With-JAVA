@@ -121,6 +121,28 @@ def print_string_array(str):
     for s in str:
         print(s, end=" ")
 
+#------------------- Return Majority element -------------------
+def majority_element(arr, si, ei):
+    if si == ei:
+        return arr[si]
+
+    mid = si + (ei - si) // 2
+
+    left = majority_element(arr, si, mid)
+    right = majority_element(arr, mid + 1, ei)
+
+    if left == right:
+        return left
+
+    left_count = count_majority_element(arr, left, si, ei)
+    right_count = count_majority_element(arr, right, si, ei)
+
+    return left if left_count > right_count else right
+
+def count_majority_element(arr, num, si, ei):
+    return arr[si:ei+1].count(num)
+
+
 
 # Example usage
 arr = [4,5,6,7,0,1,2]
@@ -128,3 +150,4 @@ sorted_arr = rotated_and_sorted(arr, 0, len(arr)-1, 0);
 # print(sorted_arr)
 arr1 = merge_array(arr, 0, len(arr)-1)
 print_string_array(arr1);
+
