@@ -155,17 +155,44 @@ public class DivideAndConquer {
   // ---------------Retrun the majority element from array-----------
 
   public static int majorityElement(int arr[], int si, int ei) {
+    if (si == ei) {
+      return arr[si];
+    }
+    int mid = si + (ei - si) / 2;
 
+    int left = majorityElement(arr, si, mid);
+    int right = majorityElement(arr, mid + 1, ei);
+
+    if (left == right) {
+      return left;
+    }
+
+    int leftCount = countMajorityElement(arr, left, si, ei);
+    int rightCount = countMajorityElement(arr, right, si, ei);
+
+    return leftCount > rightCount ? left : right;
+  }
+
+  static int countMajorityElement(int arr[], int num, int si, int ei) {
+    int count = 0;
+
+    for (int i = si; i <= ei; i++) {
+      if (num == arr[i])
+        count++;
+    }
+    return count;
   }
 
   public static void main(String[] args) {
-    int n[] = { 2, 3, 4, 0, 1 };
+    int n[] = { 2, 2, 1, 1, 1, 1, 2 };
     // quickSort(n, 0, n.length - 1);
     // System.out.println(rotatedAndSorted(n, 0, n.length - 1, 2));
     // printFn(n);
 
-    String str[] = { "sun", "earth", "mars", "mercury" };
-    String[] arr = mergeArray(str, 0, str.length - 1);
-    printStringArray(arr);
+    // String str[] = { "sun", "earth", "mars", "mercury" };
+    // String[] arr = mergeArray(str, 0, str.length - 1);
+    // printStringArray(arr);
+
+    System.out.println(majorityElement(n, 0, n.length - 1));
   }
 }
