@@ -346,7 +346,8 @@ public class Arrays {
    * Explanation: There is no such sub-array with sum 6.
    */
 
-  // --- This Solution will work for bot Positive and negative---
+  // --- This Solution will work for both Positive and negative--- TC(O(N^2))
+  // SC(O(N))
   public static int getLongestSubarray(int[] a, long k) {
     int n = a.length; // size of the array.
 
@@ -375,6 +376,29 @@ public class Arrays {
       if (!preSumMap.containsKey(sum)) {
         preSumMap.put(sum, i);
       }
+    }
+    return maxLen;
+  }
+
+  // Optimal Solution for only positive and zeros TC(O(2N)) SC(1)
+
+  public static int getLongestSubarray1(int arr[], int N, int K) {
+
+    int maxLen = 0, sum = arr[0];
+
+    int left = 0, right = 0;
+
+    while (right < N) {
+      while (left <= right && sum > K) {
+        sum = sum - arr[left];
+        left++;
+      }
+      if (sum == K) {
+        maxLen = Math.max(maxLen, right - left + 1);
+      }
+      right++;
+      if (right < N)
+        sum += arr[right];
     }
     return maxLen;
   }
