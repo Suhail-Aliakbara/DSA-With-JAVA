@@ -25,19 +25,11 @@ public class Arrays {
   // ----------------------Check if the Array is Sorted-----------------------
 
   /*
-   * Solved this question by seeing and understanding the solution
-   * 
+   * *
    * Rotated and Sorted array
-   * 
    * Input: nums = [3,4,5,1,2]
    * Output: true
-   * Explanation: [1,2,3,4,5] is the original sorted array.
-   * You can rotate the array by x = 3 positions to begin on the the element of
-   * value 3: [3,4,5,1,2].
-   * 
-   * Input: nums = [2,1,3,4]
-   * Output: false
-   * Explanation: There is no sorted array once rotated that can make nums.
+   *
    */
   public boolean check(int[] nums) {
     int k = 0;
@@ -69,8 +61,6 @@ public class Arrays {
    * Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
    * Explanation: Your function should return k = 5, with the first five elements
    * of nums being 0, 1, 2, 3, and 4 respectively.
-   * It does not matter what you leave beyond the returned k (hence they are
-   * underscores).
    */
   public int removeDuplicates(int[] nums) {
     int k = 1;
@@ -92,10 +82,6 @@ public class Arrays {
    * 
    * Input: nums = [1,2,3,4,5,6,7], k = 3
    * Output: [5,6,7,1,2,3,4]
-   * Explanation:
-   * rotate 1 steps to the right: [7,1,2,3,4,5,6]
-   * rotate 2 steps to the right: [6,7,1,2,3,4,5]
-   * rotate 3 steps to the right: [5,6,7,1,2,3,4]
    */
   public static void Rotatetoright(int[] arr, int n, int k) {
     if (n == 0)
@@ -104,14 +90,14 @@ public class Arrays {
     if (k > n)
       return;
     int[] temp = new int[k];
+    for (int i = 0; i < n - k; i++) {
+      temp[i] = arr[i];
+    }
     for (int i = n - k; i < n; i++) {
-      temp[i - n + k] = arr[i];
+      arr[i + k - n] = arr[i];
     }
-    for (int i = n - k - 1; i >= 0; i--) {
-      arr[i + k] = arr[i];
-    }
-    for (int i = 0; i < k; i++) {
-      arr[i] = temp[i];
+    for (int i = k; i < n; i++) {
+      arr[i] = temp[i - k];
     }
   }
 
@@ -136,19 +122,6 @@ public class Arrays {
     // Reverse whole array
     Reverse(arr, 0, n - 1);
   }
-
-  /*
-   * public static void main(String args[]) {
-   * int n = 7;
-   * int[] arr = {1,2,3,4,5,6,7};
-   * int k = 2;
-   * Rotatetoright(arr, n, k);
-   * System.out.println("After Rotating the elements to right ");
-   * for (int i = 0; i < n; i++) {
-   * System.out.print(arr[i] + " ");
-   * }
-   * }
-   */
 
   // -------------------Move Zeros to end of the array------------------------
   /*
@@ -198,12 +171,12 @@ public class Arrays {
   }
 
   public int missingNumber(int[] nums) {
-    int res = nums.length;
+    int xor = nums.length;
     for (int i = 0; i < nums.length; i++) {
-      res ^= i;
-      res ^= nums[i];
+      xor ^= i;
+      xor ^= nums[i];
     }
-    return res;
+    return xor;
   }
 
   // The result will be the missing number because the XOR operation will cancel
@@ -226,11 +199,9 @@ public class Arrays {
     int missingNum = sum - s2;
     return missingNum;
   }
-  // We know that the summation of the first N numbers is (N*(N+1))/2. We can say
-  // this S1. Now, in the given array, every number between 1 to N except one
-  // number is present. So, if we add the numbers of the array (say S2), the
-  // difference between S1 and S2 will be the missing number. Because, while
-  // adding all the numbers of the array, we did not add that particular number
+  // We know that the summation of the first N numbers is (N*(N+1))/2. and while
+  // adding all the numbers of the array, we did not add that particular number in
+  // s2
   // that is missing.
 
   /*
