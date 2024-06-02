@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Arrays {
   // ---------------------------Print All divisor-----------------==-------
@@ -226,5 +227,96 @@ public class Arrays {
   }
   // it will cancell all the element twice hence which element appear once will
   // remain
+
+  /*
+   * A permutation of an array of integers is an arrangement of its members into a
+   * sequence or linear order.
+   * 
+   * For example, for arr = [1,2,3], the following are all the permutations of
+   * arr: [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3,1,2], [3,2,1].
+   * 
+   * Input: nums = [1,2,3]
+   * Output: [1,3,2]
+   * 
+   * Input: nums = [3,2,1]
+   * Output: [1,2,3]
+   */
+
+  public void reverse(int arr[], int si, int ei) { // Reverse function
+    while (si < ei) {
+      int temp = arr[si];
+      arr[si] = arr[ei];
+      arr[ei] = temp;
+      si++;
+      ei--;
+    }
+  }
+
+  public void nextPermutation(int[] arr) {
+    int n = arr.length;
+    int pivot = -1; // storing pivot index
+
+    for (int i = n - 2; i >= 0; i--) { // Backward looping whenever i < i + 1 and break it
+      if (arr[i] < arr[i + 1]) {
+        pivot = i; // store i in pivot
+        break;
+      }
+    }
+    if (pivot == -1) { // if array is sorted in decreasing order then just reverse it
+      reverse(arr, 0, n - 1);
+    } else {
+      for (int i = n - 1; i >= 0; i--) { // if pivot exist swap pivot value with just bigger then pivot value from right
+                                         // side
+        if (arr[pivot] < arr[i]) {
+          int temp = arr[pivot];
+          arr[pivot] = arr[i];
+          arr[i] = temp;
+          break;
+        }
+      }
+      reverse(arr, pivot + 1, n - 1); // Reverse entire right side from pivot + 1 to n-1
+    }
+  }
+
+  /*
+   * Set matrix zeros
+   * 
+   * Given an m x n integer matrix matrix, if an element is 0, set its entire row
+   * and column to 0's.
+   * 
+   * input: matrix = [[1,1,1],[1,0,1],[1,1,1]]
+   * Output: [[1,0,1],[0,0,0],[1,0,1]]
+   * 
+   * Input: matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+   * Output: [[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+   * 
+   */
+
+  public static ArrayList<ArrayList<Integer>> zeroMatrix(ArrayList<ArrayList<Integer>> matrix, int n, int m) {
+    int[] row = new int[n]; // row array
+    int[] col = new int[m]; // col array
+
+    // Traverse the matrix:
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        if (matrix.get(i).get(j) == 0) {
+          // mark ith index of row wih 1:
+          row[i] = 1;
+          // mark jth index of col wih 1:
+          col[j] = 1;
+        }
+      }
+    }
+    // Finally, mark all (i, j) as 0
+    // if row[i] or col[j] is marked with 1.
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        if (row[i] == 1 || col[j] == 1) {
+          matrix.get(i).set(j, 0);
+        }
+      }
+    }
+    return matrix;
+  }
 
 }
