@@ -138,4 +138,60 @@ public class Arrays2D {
     }
   }
 
+  /*
+   * Given an m x n matrix, return all elements of the matrix in spiral order.
+   * 
+   * Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+   * Output: [1,2,3,6,9,8,7,4,5]
+   * 
+   * Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+   * Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+   */
+
+  public List<Integer> spiralOrder(int[][] matrix) {
+    // Get the number of rows and columns in the matrix
+    int n = matrix.length;
+    int m = matrix[0].length;
+
+    // Initialize the result list
+    List<Integer> list = new ArrayList<>();
+
+    // Define the boundaries of the matrix
+    int startRow = 0, endRow = n - 1;
+    int startCol = 0, endCol = m - 1;
+
+    // Loop through the matrix in a spiral order
+    while (startRow <= endRow && startCol <= endCol) {
+      // Traverse the top row from left to right
+      for (int j = startCol; j <= endCol; j++) {
+        list.add(matrix[startRow][j]);
+      }
+      // Traverse the right column from top to bottom
+      for (int i = startRow + 1; i <= endRow; i++) {
+        list.add(matrix[i][endCol]);
+      }
+      // Traverse the bottom row from right to left
+      for (int j = endCol - 1; j >= startCol; j--) {
+        // Check if it is a single row then don't repeat column
+        if (startRow < endRow) {
+          list.add(matrix[endRow][j]);
+        }
+      }
+      // Traverse the left column from bottom to top
+      for (int i = endRow - 1; i > startRow; i--) {
+        // Check if it is a single column then don't repeat row
+        if (startCol < endCol) {
+          list.add(matrix[i][startCol]);
+        }
+      }
+      // Move the boundaries inward
+      startRow++;
+      endRow--;
+      startCol++;
+      endCol--;
+    }
+    // Return the result list
+    return list;
+  }
+
 }
