@@ -263,4 +263,38 @@ public class hashMap {
     }
     return candidate;
   }
+
+  /*
+   * Given an array of integers nums and an integer k, return the total number of
+   * subarrays whose sum equals to k.
+   * 
+   * A subarray is a contiguous non-empty sequence of elements within an array.
+   * 
+   * Input: nums = [1,1,1], k = 2
+   * Output: 2
+   * 
+   * Input: nums = [1,2,3], k = 3
+   * Output: 2
+   */
+  public static int findAllSubarraysWithGivenSum(int arr[], int k) {
+    int n = arr.length; // size of the given array.
+    Map<Integer, Integer> mpp = new HashMap<>();
+    int preSum = 0, cnt = 0;
+
+    mpp.put(0, 1); // Setting 0 in the map.
+    for (int i = 0; i < n; i++) {
+      // add current element to prefix Sum:
+      preSum += arr[i];
+
+      // Calculate x-k:
+      int remove = preSum - k;
+
+      // Add the number of subarrays to be removed:
+      cnt += mpp.getOrDefault(remove, 0);
+
+      // Update the count of prefix sum in the map.
+      mpp.put(preSum, mpp.getOrDefault(preSum, 0) + 1);
+    }
+    return cnt;
+  }
 }
