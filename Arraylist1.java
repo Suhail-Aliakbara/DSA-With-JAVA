@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Arraylist1 {
   /*
    * Pascal triangle
@@ -85,6 +88,40 @@ public class Arraylist1 {
       System.out.print(ans + " ");
     }
     System.out.println();
+  }
+
+  /*
+   * Variation 3: Given the number of rows n. Print the first n rows of Pascal’s
+   * triangle.
+   * // Optimal Approach
+   * 
+   * Time Complexity: O(n2), where n = number of rows(given).
+   * Reason: We are generating a row for each single row. The number of rows is n.
+   * And generating an entire row takes O(n) time complexity.
+   * 
+   * Space Complexity: In this case, we are only using space to store the answer.
+   * That is why space complexity can still be considered as O(1).
+   * 
+   */
+
+  public List<Integer> generateRow(int row) {
+    List<Integer> ans = new ArrayList<>();
+    ans.add(1);
+    int result = 1;
+    for (int col = 1; col < row; col++) {
+      result = result * (row - col);
+      result = result / col;
+      ans.add(result);
+    }
+    return ans;
+  }
+
+  public List<List<Integer>> generate(int numRows) {
+    List<List<Integer>> ans = new ArrayList<>();
+    for (int row = 1; row <= numRows; row++) {
+      ans.add(generateRow(row));
+    }
+    return ans;
   }
 
 }
