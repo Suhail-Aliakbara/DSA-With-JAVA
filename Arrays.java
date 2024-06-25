@@ -273,4 +273,26 @@ public class Arrays {
       reverse(arr, pivot + 1, n - 1); // Reverse entire right side from pivot + 1 to n-1
     }
   }
+
+  /*
+   * Kadane's algorithm
+   * Given an integer array nums, find the subarray
+   * with the largest sum, and return its sum.
+   * 
+   * Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+   * Output: 6
+   * Explanation: The subarray [4,-1,2,1] has the largest sum 6.
+   */
+  class Solution {
+    public int maxSubArray(int[] nums) {
+      int currsum = nums[0];
+      int maxsum = nums[0];
+      for (int i = 1; i < nums.length; i++) {
+        currsum = Math.max(currsum + nums[i], nums[i]);
+        maxsum = Math.max(currsum, maxsum);
+      }
+      return maxsum;
+
+    }
+  }
 }
