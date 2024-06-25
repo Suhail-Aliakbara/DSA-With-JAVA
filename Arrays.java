@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 public class Arrays {
   // ---------------------------Print All divisor-----------------==-------
@@ -24,7 +23,6 @@ public class Arrays {
   }
 
   // ----------------------Check if the Array is Sorted-----------------------
-
   /*
    * *
    * Rotated and Sorted array
@@ -55,8 +53,7 @@ public class Arrays {
   // ---------------------Remove Duplicates from array------------------------
 
   /*
-   * Solved by seeing and understanding the solution (only 1 line was missing in
-   * my code)
+   * Solved by seeing and understanding the solution
    * 
    * Input: nums = [0,0,1,1,1,2,2,3,3,4]
    * Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
@@ -200,10 +197,9 @@ public class Arrays {
     int missingNum = sum - s2;
     return missingNum;
   }
-  // We know that the summation of the first N numbers is (N*(N+1))/2. and while
-  // adding all the numbers of the array, we did not add that particular number in
-  // s2
-  // that is missing.
+  // We know that the summation of the first N numbers is (N*(N+1))/2.
+  // and while adding all the numbers in the s2, we did not add that particular
+  // number in s2 that is missing.
 
   /*
    * Given a non-empty array of integers nums, every element appears twice except
@@ -277,5 +273,4 @@ public class Arrays {
       reverse(arr, pivot + 1, n - 1); // Reverse entire right side from pivot + 1 to n-1
     }
   }
-
 }

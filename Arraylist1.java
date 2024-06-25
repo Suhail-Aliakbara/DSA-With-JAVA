@@ -1,7 +1,10 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 public class Arraylist1 {
+
   /*
    * Pascal triangle
    * Variation 1: Given row number r and column number c. Print the element at
@@ -11,7 +14,6 @@ public class Arraylist1 {
    * Reason: We are running a loop for r times, where r is c-1.
    * 
    * Space Complexity: O(1) as we are not using any extra space.
-   * 
    */
 
   public static long nCr(int n, int r) {
@@ -120,6 +122,78 @@ public class Arraylist1 {
     List<List<Integer>> ans = new ArrayList<>();
     for (int row = 1; row <= numRows; row++) {
       ans.add(generateRow(row));
+    }
+    return ans;
+  }
+
+  // ------------------------Union of two Arrays--------------------
+  /*
+   * Given two sorted arrays of size n and m respectively, find their union
+   * 
+   * Input:
+   * n = 5, arr1[] = {1, 2, 3, 4, 5}
+   * m = 5, arr2 [] = {1, 2, 3, 6, 7}
+   * Output: 1 2 3 4 5 6 7
+   * Explanation:
+   * Distinct elements including both the arrays are: 1 2 3 4 5 6 7.
+   */
+
+  public static ArrayList<Integer> findUnion(int arr1[], int arr2[], int n, int m) {
+    // add your code here
+    HashSet<Integer> union = new HashSet<>();
+
+    for (int nums : arr1) {
+      union.add(nums);
+    }
+
+    for (int nums : arr2) {
+      union.add(nums);
+    }
+
+    ArrayList<Integer> unionArray = new ArrayList<>(union);
+    Collections.sort(unionArray);
+    return unionArray;
+  }
+
+  // Another Solution without using HastSet
+  public static ArrayList<Integer> findUnionWithoutHashSet(int arr1[], int arr2[], int n, int m) {
+    ArrayList<Integer> ans = new ArrayList<>();
+
+    int i = 0, j = 0;
+
+    while (i < n && j < m) {
+      int x = arr1[i];
+      int y = arr2[j];
+
+      if (x < y) {
+        ans.add(x);
+        while (i < n && arr1[i] == x)
+          i++; // Until the current element is not in array
+      } else if (x == y) {
+        ans.add(x);
+        while (i < n && arr1[i] == x)
+          i++;
+        while (j < m && arr2[j] == y)
+          j++;
+      } else {
+        ans.add(y);
+        while (j < m && arr2[j] == y)
+          j++;
+      }
+    }
+
+    while (i < n) {
+      int x = arr1[i];
+      ans.add(x);
+      while (i < n && arr1[i] == x)
+        i++;
+    }
+
+    while (j < m) {
+      int y = arr2[j];
+      ans.add(y);
+      while (j < m && arr2[j] == y)
+        j++;
     }
     return ans;
   }

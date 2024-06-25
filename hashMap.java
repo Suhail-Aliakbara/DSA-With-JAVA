@@ -9,78 +9,6 @@ import java.util.HashMap;
 
 public class hashMap {
 
-  // ------------------------Union of two Arrays--------------------
-  /*
-   * Given two sorted arrays of size n and m respectively, find their union
-   * 
-   * Input:
-   * n = 5, arr1[] = {1, 2, 3, 4, 5}
-   * m = 5, arr2 [] = {1, 2, 3, 6, 7}
-   * Output: 1 2 3 4 5 6 7
-   * Explanation:
-   * Distinct elements including both the arrays are: 1 2 3 4 5 6 7.
-   */
-
-  public static ArrayList<Integer> findUnion(int arr1[], int arr2[], int n, int m) {
-    // add your code here
-    HashSet<Integer> union = new HashSet<>();
-
-    for (int nums : arr1) {
-      union.add(nums);
-    }
-
-    for (int nums : arr2) {
-      union.add(nums);
-    }
-
-    ArrayList<Integer> unionArray = new ArrayList<>(union);
-    Collections.sort(unionArray);
-    return unionArray;
-  }
-
-  // Another Solution without using HastSet
-  public static ArrayList<Integer> findUnionWithoutHashSet(int arr1[], int arr2[], int n, int m) {
-    ArrayList<Integer> ans = new ArrayList<>();
-
-    int i = 0, j = 0;
-
-    while (i < n && j < m) {
-      int x = arr1[i];
-      int y = arr2[j];
-
-      if (x < y) {
-        ans.add(x);
-        while (i < n && arr1[i] == x)
-          i++; // Until the current element is not in array
-      } else if (x == y) {
-        ans.add(x);
-        while (i < n && arr1[i] == x)
-          i++;
-        while (j < m && arr2[j] == y)
-          j++;
-      } else {
-        ans.add(y);
-        while (j < m && arr2[j] == y)
-          j++;
-      }
-    }
-
-    while (i < n) {
-      int x = arr1[i];
-      ans.add(x);
-      while (i < n && arr1[i] == x)
-        i++;
-    }
-
-    while (j < m) {
-      int y = arr2[j];
-      ans.add(y);
-      while (j < m && arr2[j] == y)
-        j++;
-    }
-    return ans;
-  }
-
   /*
    * Given an array containing N integers and an integer K., Your task is to find
    * the length of the longest Sub-Array with the sum of the elements equal to the
@@ -160,20 +88,14 @@ public class hashMap {
    * 
    * You may assume that each input would have exactly one solution, and you may
    * not use the same element twice.
-   * Example 1:
-   * 
+   *
    * Input: nums = [2,7,11,15], target = 9
    * Output: [0,1]
    * Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
-   *
-   * Input: nums = [3,2,4], target = 6
-   * Output: [1,2]
    */
 
   /*
    * Time Complexity: O(N), where N = size of the array.
-   * Reason: The loop runs N times in the worst case and searching in a hashmap
-   * takes O(1) generally. So the time complexity is O(N).
    * 
    * Note: In the worst case(which rarely happens), the unordered_map takes O(N)
    * to find an element. In that case, the time complexity will be O(N2). If we
@@ -196,7 +118,7 @@ public class hashMap {
     return new int[] {};
   }
 
-  // with out using the HashMap TC and SC will be same
+  // with out using the HashMap TC(O(N)) SC(O(1))
   public static int[] twoSum(int n, int[] arr, int target) {
     // Arrays.sort(arr);
     int left = 0, right = n - 1;
@@ -280,10 +202,10 @@ public class hashMap {
    */
   public static int findAllSubarraysWithGivenSum(int arr[], int k) {
     int n = arr.length; // size of the given array.
-    Map<Integer, Integer> mpp = new HashMap<>();
+    Map<Integer, Integer> map = new HashMap<>();
     int preSum = 0, cnt = 0;
 
-    mpp.put(0, 1); // Setting 0 in the map.
+    map.put(0, 1); // Setting 0 in the map.
     for (int i = 0; i < n; i++) {
       // add current element to prefix Sum:
       preSum += arr[i];
@@ -292,17 +214,17 @@ public class hashMap {
       int remove = preSum - k;
 
       // Add the number of subarrays to be removed:
-      cnt += mpp.getOrDefault(remove, 0);
+      cnt += map.getOrDefault(remove, 0);
 
       // Update the count of prefix sum in the map.
-      mpp.put(preSum, mpp.getOrDefault(preSum, 0) + 1);
+      map.put(preSum, map.getOrDefault(preSum, 0) + 1);
     }
     return cnt;
   }
 
   /*
-   * Given an integer array of size n, find all elements that appear more than ⌊
-   * n/3 ⌋ times.
+   * Given an integer array of size n, find all elements that appear more than
+   * ⌊ n/3 ⌋ times.
    * 
    * Input: nums = [3,2,3]
    * Output: [3]
@@ -469,7 +391,7 @@ public class hashMap {
 
   /*
    * Optimal Approach
-   * Time Complexity: O(NlogN)+O(N2), where N = size of the array.
+   * Time Complexity: O(NlogN)+O(2N), where N = size of the array.
    * Reason: The pointer i, is running for approximately N times. And both the
    * pointers j and k combined can run for approximately N times including the
    * operation of skipping duplicates. So the total time complexity will be O(N2).
@@ -484,7 +406,7 @@ public class hashMap {
 
     for (int i = 0; i < n; i++) {
       // remove duplicates:
-      if (i != 0 && arr[i] == arr[i - 1])
+      if (i != 0 && arr[i] == arr[i - 1]) // [0,0,0,1,1,1,2,2,3]
         continue;
 
       // moving 2 pointers:
@@ -507,6 +429,62 @@ public class hashMap {
           while (j < k && arr[k] == arr[k + 1])
             k--;
         }
+      }
+    }
+    return ans;
+  }
+
+  /*
+   * 4sum
+   * Given an array nums of n integers, return an array of all the unique
+   * quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
+   * 
+   * 0 <= a, b, c, d < n
+   * a, b, c, and d are distinct.
+   * nums[a] + nums[b] + nums[c] + nums[d] == target
+   * 
+   * Input: nums = [1,0,-1,0,-2,2], target = 0
+   * Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+   */
+
+  public List<List<Integer>> fourSum(int[] nums, int target) {
+
+    List<List<Integer>> ans = new ArrayList<>();
+    Arrays.sort(nums);
+    int n = nums.length;
+
+    for (int i = 0; i < n - 3; i++) {
+      if (i != 0 && nums[i] == nums[i - 1])
+        continue;
+      int a = i + 1;
+
+      while (a < n - 2) {
+        int j = a + 1;
+        int k = n - 1;
+        while (j < k) {
+          long sum = nums[i] + nums[a];
+          sum += nums[j];
+          sum += nums[k];
+
+          if (sum < target) {
+            j++;
+          } else if (sum > target) {
+            k--;
+          } else {
+            List<Integer> temp = Arrays.asList(nums[i], nums[a], nums[j], nums[k]);
+            // temp.sort(null);
+            ans.add(temp);
+            j++;
+            k--;
+            while (j < k && nums[j] == nums[j - 1])
+              j++;
+            while (j < k && k < n - 1 && nums[k] == nums[k + 1])
+              k--;
+          }
+        }
+        a++;
+        while (a < n && nums[a] == nums[a - 1])
+          a++;
       }
     }
     return ans;
