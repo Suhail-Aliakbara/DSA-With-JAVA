@@ -194,4 +194,51 @@ public class Arrays2D {
     return list;
   }
 
+  /*
+   * Given an array of intervals where intervals[i] = [starti, endi], merge all
+   * overlapping intervals, and return an array of the non-overlapping intervals
+   * that cover all the intervals in the input.
+   * 
+   * Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+   * Output: [[1,6],[8,10],[15,18]]
+   * Explanation: Since intervals [1,3] and [2,6] overlap, merge them into [1,6]
+   * 
+   */
+  public int[][] merge(int[][] intervals) {
+    // Initialize a list to hold the merged intervals
+    List<int[]> res = new ArrayList<>();
+    // If the input array has 0 or 1 interval, no merge is needed
+    if (intervals.length <= 1) {
+      return intervals;
+    }
+
+    // Sort the intervals by their starting points to ensure order
+    Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+
+    // Initialize 'start' and 'end' with the first interval's boundaries
+    int start = intervals[0][0];
+    int end = intervals[0][1];
+
+    // Iterate through each interval
+    for (int[] i : intervals) {
+      // If the current interval's start is less than or equal to 'end', there's an
+      // overlap
+      if (i[0] <= end) {
+        // Merge the intervals by updating 'end' to the maximum end of the overlapping
+        // intervals
+        end = Math.max(end, i[1]);
+      } else {
+        // If no overlap, add the previous interval to the result list
+        res.add(new int[] { start, end });
+        // Update 'start' and 'end' to the current interval's boundaries
+        start = i[0];
+        end = i[1];
+      }
+    }
+    // Add the last interval to the result list
+    res.add(new int[] { start, end });
+    // Convert the list to an array and return
+    return res.toArray(new int[0][]);
+  }
+
 }
