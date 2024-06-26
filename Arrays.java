@@ -348,7 +348,7 @@ public class Arrays {
    * Input: nums = [3,3,3,3,3]
    * Output: 3
    */
-  public int findDuplicate(int[] nums) {
+  public int findDuplicate(int[] nums) { // TC(O(NlogN))
     int n = nums.length;
     int low = 1;
     int high = n;
@@ -367,4 +367,24 @@ public class Arrays {
     }
     return low;
   }
+
+  // Fast-Slow Pointers // Optimal approach TC(O(N))
+
+  public int findDuplicate1(int[] nums) {
+    int slow = nums[0];
+    int fast = nums[0];
+
+    do {
+      slow = nums[slow];
+      fast = nums[nums[fast]];
+    } while (slow != fast);
+
+    slow = nums[0];
+    while (slow != fast) {
+      slow = nums[slow];
+      fast = nums[fast];
+    }
+    return slow;
+  }
+
 }
