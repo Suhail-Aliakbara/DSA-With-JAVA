@@ -466,4 +466,60 @@ public class Arrays {
     return ans;
   }
 
+  public static int[] findMissingRepeatingNumbers2(int[] a) { // 2nd optimal solution. Same Time Complexity (TC), Space
+                                                              // Complexity (SC)
+    int n = a.length; // size of the array
+    int xr = 0;
+
+    // Step 1: Find XOR of all elements and their indices:
+    for (int i = 0; i < n; i++) {
+      xr = xr ^ a[i]; // XOR with array element
+      xr = xr ^ (i + 1); // XOR with index (1-based)
+    }
+
+    // Step 2: Find the rightmost set bit (differentiating bit):
+    /*
+     * int bitno = 0; // wherever there is number put bitno
+     * while (true) {
+     * if ((xr & (1 << bitno)) != 0) {
+     * break;
+     * }
+     * bitno++;
+     * }
+     */
+    int number = (xr & ~(xr - 1)); // Isolates the rightmost set bit
+
+    // Step 3: Group the numbers based on the set bit:
+    int zero = 0; // XOR of elements where the set bit is not set
+    int one = 0; // XOR of elements where the set bit is set
+    for (int i = 0; i < n; i++) {
+      if ((a[i] & number) != 0) { // If set bit is set in the current element
+        one = one ^ a[i];
+      } else { // If set bit is not set in the current element
+        zero = zero ^ a[i];
+      }
+    }
+
+    // XOR with all possible numbers (1 to n) to find the missing and repeating:
+    for (int i = 1; i <= n; i++) {
+      if ((i & number) != 0) { // If set bit is set in the index
+        one = one ^ i;
+      } else { // If set bit is not set in the index
+        zero = zero ^ i;
+      }
+    }
+
+    // Last step: Identify which is the missing and which is the repeating number:
+    int cnt = 0; // Count how many times the 'zero' number appears in the array
+    for (int i = 0; i < n; i++) {
+      if (a[i] == zero)
+        cnt++;
+    }
+
+    // If 'zero' appears twice, it is the repeating number; otherwise, 'one' is:
+    if (cnt == 2)
+      return new int[] { zero, one }; // 'zero' is repeating
+    return new int[] { one, zero }; // 'one' is repeating
+  }
+
 }
