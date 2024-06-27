@@ -283,17 +283,15 @@ public class Arrays {
    * Output: 6
    * Explanation: The subarray [4,-1,2,1] has the largest sum 6.
    */
-  class Solution {
-    public int maxSubArray(int[] nums) {
-      int currsum = nums[0];
-      int maxsum = nums[0];
-      for (int i = 1; i < nums.length; i++) {
-        currsum = Math.max(currsum + nums[i], nums[i]);
-        maxsum = Math.max(currsum, maxsum);
-      }
-      return maxsum;
 
+  public int maxSubArray(int[] nums) {
+    int currsum = nums[0];
+    int maxsum = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+      currsum = Math.max(currsum + nums[i], nums[i]);
+      maxsum = Math.max(currsum, maxsum);
     }
+    return maxsum;
   }
 
   /*
@@ -348,43 +346,124 @@ public class Arrays {
    * Input: nums = [3,3,3,3,3]
    * Output: 3
    */
+
   public int findDuplicate(int[] nums) { // TC(O(NlogN))
     int n = nums.length;
-    int low = 1;
-    int high = n;
-    int mid;
+    int low = 1; // The lower bound of the search space
+    int high = n; // The upper bound of the search space, inclusive
+    int mid; // The midpoint of the current search space
+
+    // Binary search to find the duplicate
     while (low < high) {
-      mid = (low + high) / 2;
-      int count = 0;
+      mid = (low + high) / 2; // Calculate the midpoint
+      int count = 0; // Counter for the number of elements less than or equal to mid
+
+      // Count how many numbers are less than or equal to mid
       for (int num : nums) {
         if (num <= mid)
           count++;
       }
+
+      // If count is more than mid, the duplicate is in the lower half
       if (count > mid)
-        high = mid;
+        high = mid; // Narrow the search space to the lower half
       else
-        low = mid + 1;
+        low = mid + 1; // Narrow the search space to the upper half
     }
+
+    // low (or high) is the duplicate number
     return low;
   }
 
   // Fast-Slow Pointers // Optimal approach TC(O(N))
 
   public int findDuplicate1(int[] nums) {
+    // Initialize two pointers, slow and fast, both starting at the first element
     int slow = nums[0];
     int fast = nums[0];
 
+    // Phase 1: Find the intersection point of the two runners.
     do {
+      // Move slow pointer by one step
       slow = nums[slow];
+      // Move fast pointer by two steps
       fast = nums[nums[fast]];
-    } while (slow != fast);
+    } while (slow != fast); // Continue until they meet
 
+    // Phase 2: Find the entrance to the cycle (duplicate number).
+    // Reset slow to the beginning
     slow = nums[0];
-    while (slow != fast) {
+    while (slow != fast) { // Move slow and fast at the same pace
+      // Move each pointer by one step
       slow = nums[slow];
       fast = nums[fast];
     }
+    // When they meet again, slow (or fast) is pointing to the duplicate number
     return slow;
+  }
+
+  /*
+   * You are given a read only array of n integers from 1 to n.
+   * Each integer appears exactly once except A which appears twice and B which is
+   * missing.
+   * Return A and B.
+   * 
+   * Input:[3 1 2 5 3]*
+   * Output:[3, 4]
+   */
+  public static int[] findMissingRepeatingNumbers(int[] a) { // TC(O(2N)) SC(O(N))
+    int n = a.length; // size of the array
+    int[] hash = new int[n + 1]; // hash array
+
+    // update the hash array:
+    for (int i = 0; i < n; i++) {
+      hash[a[i]]++;
+    }
+
+    // Find the repeating and missing number:
+    int repeating = -1, missing = -1;
+    for (int i = 1; i <= n; i++) {
+      if (hash[i] == 2)
+        repeating = i;
+      else if (hash[i] == 0)
+        missing = i;
+
+      if (repeating != -1 && missing != -1)
+        break;
+    }
+    int[] ans = { repeating, missing };
+    return ans;
+  }
+
+  public static int[] findMissingRepeatingNumbers1(int[] a) { // TC(O(N)) SC(1)
+    long n = a.length; // size of the array
+    // Find Sn and S2n:
+    long SN = (n * (n + 1)) / 2;
+    long S2N = (n * (n + 1) * (2 * n + 1)) / 6;
+
+    // Calculate S and S2:
+    long S = 0, S2 = 0;
+    for (int i = 0; i < n; i++) {
+      S += a[i];
+      S2 += (long) a[i] * (long) a[i];
+    }
+
+    // S-Sn = X-Y:
+    long val1 = S - SN;
+
+    // S2-S2n = X^2-Y^2:
+    long val2 = S2 - S2N;
+
+    // Find X+Y = (X^2-Y^2)/(X-Y):
+    val2 = val2 / val1;
+
+    // Find X and Y: X = ((X+Y)+(X-Y))/2 and Y = X-(X-Y),
+    // Here, X-Y = val1 and X+Y = val2:
+    long x = (val1 + val2) / 2;
+    long y = x - val1;
+
+    int[] ans = { (int) x, (int) y };
+    return ans;
   }
 
 }
