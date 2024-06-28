@@ -550,4 +550,34 @@ public class Arrays {
       ans = (double) (1.0) / (double) (ans); // If original n was negative, invert the answer
     return ans; // Return the computed power
   }
+
+  /*
+   * 62. Unique Paths
+   * Given the two integers m and n, return the number of possible unique paths
+   * that the robot can take to reach the bottom-right corner.
+   * 
+   * Input: m = 3, n = 7
+   * Output: 28
+   * 
+   * Input: m = 3, n = 2
+   * Output: 3
+   * Explanation: From the top-left corner, there are a total of 3 ways to reach
+   * the bottom-right corner:
+   * 1. Right -> Down -> Down
+   * 2. Down -> Down -> Right
+   * 3. Down -> Right -> Down
+   */
+  public int uniquePaths(int m, int n) {
+    int steps = n + m - 2; // Total steps needed to go from top-left to bottom-right
+    int r = m - 1; // Number of steps down (or right, depending on perspective)
+    double result = 1; // Initialize result to 1 for multiplication
+
+    for (int i = 1; i <= r; i++) {
+      // Calculate the number of unique paths using the formula for combinations
+      // C(steps, r) = (steps! / (r! * (steps-r)!))
+      // This loop incrementally calculates the combination to avoid overflow
+      result = result * (steps - r + i) / i;
+    }
+    return (int) result; // Cast the result to int and return
+  }
 }
