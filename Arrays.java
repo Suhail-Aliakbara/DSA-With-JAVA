@@ -522,4 +522,32 @@ public class Arrays {
     return new int[] { one, zero }; // 'one' is repeating
   }
 
+  /*
+   * Pow(x, n)
+   * Input: x = 2.00000, n = 10
+   * Output: 1024.00000
+   * 
+   * Input: x = 2.00000, n = -2
+   * Output: 0.25000
+   * Explanation: 2-2 = 1/22 = 1/4 = 0.25
+   */
+  public static double myPow(double x, int n) {
+    double ans = 1.0; // Initialize answer to 1.0 as anything power 0 is 1
+    long nn = n; // Convert n to long to handle cases when n is Integer.MIN_VALUE
+    if (nn < 0)
+      nn = -1 * nn; // If n is negative, make it positive for now and invert the answer later
+
+    while (nn > 0) { // Loop until nn becomes 0
+      if (nn % 2 == 1) { // If nn is odd
+        ans = ans * x; // Multiply current answer by x
+        nn = nn - 1; // Decrement nn by 1 to make it even
+      } else { // If nn is even
+        x = x * x; // Square x
+        nn = nn / 2; // Divide nn by 2
+      }
+    }
+    if (n < 0)
+      ans = (double) (1.0) / (double) (ans); // If original n was negative, invert the answer
+    return ans; // Return the computed power
+  }
 }
