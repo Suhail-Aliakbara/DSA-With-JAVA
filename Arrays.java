@@ -556,9 +556,6 @@ public class Arrays {
    * Given the two integers m and n, return the number of possible unique paths
    * that the robot can take to reach the bottom-right corner.
    * 
-   * Input: m = 3, n = 7
-   * Output: 28
-   * 
    * Input: m = 3, n = 2
    * Output: 3
    * Explanation: From the top-left corner, there are a total of 3 ways to reach

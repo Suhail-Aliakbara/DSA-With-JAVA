@@ -489,4 +489,44 @@ public class hashMap {
     }
     return ans;
   }
+
+  /*
+   * 128. Longest Consecutive Sequence
+   * Given an unsorted array of integers nums, return the length of the longest
+   * consecutive elements sequence.
+   * 
+   * You must write an algorithm that runs in O(n) time.
+   * Input: nums = [100,4,200,1,3,2]
+   * Output: 4
+   * Explanation: The longest consecutive elements sequence is [1, 2, 3, 4].
+   * Therefore its length is 4.
+   */
+  // BETTER APPROACH TC(O(NlogN + N) SC(O(1))
+  public static int longestSuccessiveElements(int[] a) {
+    int n = a.length;
+    if (n == 0)
+      return 0;
+
+    // sort the array:
+    Arrays.sort(a);
+    int lastSmaller = Integer.MIN_VALUE;
+    int cnt = 0;
+    int longest = 1;
+
+    // find longest sequence:
+    for (int i = 0; i < n; i++) {
+      if (a[i] - 1 == lastSmaller) {
+        // a[i] is the next element of the
+        // current sequence.
+        cnt += 1;
+        lastSmaller = a[i];
+      } else if (a[i] != lastSmaller) {
+        cnt = 1;
+        lastSmaller = a[i];
+      }
+      longest = Math.max(longest, cnt);
+    }
+    return longest;
+  }
+
 }
