@@ -25,8 +25,18 @@ public class hashMap {
    * Explanation: There is no such sub-array with sum 6.
    */
 
-  // --- This Solution will work for both Positive and negative--- TC(O(N^2))
-  // SC(O(N))
+  // --- This Solution will work for both Positive and negative---
+  /*
+   * Time Complexity: O(N) or O(N*logN) depending on which map data structure we
+   * are using, where N = size of the array.
+   * Reason: For example, if we are using an unordered_map data structure in C++
+   * the time complexity will be O(N)(though in the worst case, unordered_map
+   * takes O(N) to find an element and the time complexity becomes O(N2)) but if
+   * we are using a map data structure, the time complexity will be O(N*logN). The
+   * least complexity will be O(N) as we are using a loop to traverse the array.
+   * SC(O(N))
+   */
+
   public static int getLongestSubarray(int[] a, long k) {
     int n = a.length; // size of the array.
 
@@ -525,6 +535,46 @@ public class hashMap {
         lastSmaller = a[i];
       }
       longest = Math.max(longest, cnt);
+    }
+    return longest;
+  }
+
+  // OPTIMAL SOLUTION TC(O(N + 2N ~ 3N)) SC(O(N))
+  /*
+   * Note: The time complexity is computed under the assumption that we are using
+   * unordered_set and it is taking O(1) for the set operations.
+   * 
+   * If we consider the worst case the set operations will take O(N) in that case
+   * and the total time complexity will be approximately O(N2).
+   * And if we use the set instead of unordered_set, the time complexity for the
+   * set operations will be O(logN) and the total time complexity will be
+   * O(NlogN).
+   */
+  public static int longestSuccessiveElements1(int[] a) {
+    int n = a.length;
+    if (n == 0)
+      return 0;
+
+    int longest = 1;
+    Set<Integer> set = new HashSet<>();
+
+    // put all the array elements into set
+    for (int i = 0; i < n; i++) {
+      set.add(a[i]);
+    }
+    // Find the longest sequence
+    for (int it : set) {
+      // if 'it' is a starting number
+      if (!set.contains(it - 1)) {
+        // find consecutive numbers
+        int cnt = 1;
+        int x = it;
+        while (set.contains(x + 1)) {
+          x = x + 1;
+          cnt = cnt + 1;
+        }
+        longest = Math.max(longest, cnt);
+      }
     }
     return longest;
   }
