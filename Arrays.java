@@ -592,7 +592,7 @@ public class Arrays {
    * (3, 4) --> nums[3] = 3, nums[4] = 1, 3 > 2 * 1
    */
 
-  // TC(O(N+N+logN)) SC(O(N))
+  // TC(O(2N*logN)) SC(O(N))
   // Method to perform merge sort and count reverse pairs
   public int mergeSort(int[] arr, int si, int ei) {
     int cnt = 0; // Initialize count of reverse pairs to 0
@@ -655,4 +655,38 @@ public class Arrays {
     int n = nums.length; // Length of the array
     return mergeSort(nums, 0, n - 1); // Perform merge sort and count reverse pairs
   }
+
+  // BY Striver same TC and SC
+  public static int countPairs(int[] arr, int low, int mid, int high) {
+    // Initialize the pointer for the right half of the array
+    int right = mid + 1;
+    // Initialize the counter for reverse pairs
+    int cnt = 0;
+    // Iterate through the left half of the array
+    for (int i = low; i <= mid; i++) {
+      // Move the right pointer as long as the condition for a reverse pair is met
+      while (right <= high && arr[i] > 2 * arr[right])
+        right++;
+      // Count the number of reverse pairs for the current element in the left half
+      // by calculating the distance between the current position of the right pointer
+      // and its initial position
+      cnt += (right - (mid + 1));
+    }
+    // Return the total count of reverse pairs found in this segment of the array
+    return cnt;
+  }
+
+  public static int mergeSort1(int[] arr, int low, int high) {
+    int cnt = 0;
+    if (low >= high)
+      return cnt;
+    int mid = (low + high) / 2;
+    cnt += mergeSort1(arr, low, mid); // left half
+    cnt += mergeSort1(arr, mid + 1, high); // right half
+    cnt += countPairs(arr, low, mid, high); // Modification
+    // merge(arr, low, mid, high); // merging sorted halves
+    // same as origninal merge function
+    return cnt;
+  }
+
 }
