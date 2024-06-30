@@ -545,7 +545,7 @@ public class hashMap {
    * unordered_set and it is taking O(1) for the set operations.
    * 
    * If we consider the worst case the set operations will take O(N) in that case
-   * and the total time complexity will be approximately O(N2).
+   * and the total time complexity will be approximately O(N^2).
    * And if we use the set instead of unordered_set, the time complexity for the
    * set operations will be O(logN) and the total time complexity will be
    * O(NlogN).
@@ -578,5 +578,7 @@ public class hashMap {
     }
     return longest;
   }
+
+  
 
 }

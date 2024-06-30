@@ -577,4 +577,82 @@ public class Arrays {
     }
     return (int) result; // Cast the result to int and return
   }
+
+  /*
+   * 493. Reverse Pairs
+   * Given an integer array nums, return the number of reverse pairs in the array.
+   * A reverse pair is a pair (i, j) where:
+   * 0 <= i < j < nums.length and
+   * nums[i] > 2 * nums[j].
+   * 
+   * Input: nums = [1,3,2,3,1]
+   * Output: 2
+   * Explanation: The reverse pairs are:
+   * (1, 4) --> nums[1] = 3, nums[4] = 1, 3 > 2 * 1
+   * (3, 4) --> nums[3] = 3, nums[4] = 1, 3 > 2 * 1
+   */
+
+  // TC(O(N+N+logN)) SC(O(N))
+  // Method to perform merge sort and count reverse pairs
+  public int mergeSort(int[] arr, int si, int ei) {
+    int cnt = 0; // Initialize count of reverse pairs to 0
+    if (si >= ei) { // Base case: if start index is greater or equal to end index
+      return cnt;
+    }
+    int mid = (si + ei) / 2; // Find the middle index of the array
+    cnt += mergeSort(arr, si, mid); // Recursively sort the first half and count reverse pairs
+    cnt += mergeSort(arr, mid + 1, ei); // Recursively sort the second half and count reverse pairs
+    cnt += merge(arr, si, mid, ei); // Merge the two halves and count reverse pairs during merging
+    return cnt; // Return total count of reverse pairs
+  }
+
+  // Method to merge two sorted halves of an array and count reverse pairs
+  public int merge(int arr[], int si, int mid, int ei) {
+    long temp[] = new long[ei - si + 1]; // Temporary array to store merged result
+    int i = si; // Pointer for the first half
+    int j = mid + 1; // Pointer for the second half
+    int k = 0; // Pointer for the temporary array
+    int cnt = 0; // Initialize count of reverse pairs to 0
+
+    // Loop through both halves to find reverse pairs
+    while (i <= mid && j <= ei) {
+      if ((long) arr[i] > (long) arr[j] * 2) { // If reverse pair found
+        cnt += mid - i + 1; // Count all possible reverse pairs from current i
+        j++; // Move pointer in the second half
+      } else {
+        i++; // Move pointer in the first half
+      }
+    }
+    // Reset pointers to start positions for merging
+    i = si;
+    j = mid + 1;
+    // Merge the two halves into the temporary array
+    while (i <= mid && j <= ei) {
+      if (arr[i] <= arr[j]) {
+        temp[k++] = arr[i++];
+      } else {
+        temp[k++] = arr[j++];
+      }
+    }
+    // Copy any remaining elements from the first half
+    while (i <= mid) {
+      temp[k++] = arr[i++];
+    }
+    // Copy any remaining elements from the second half
+    while (j <= ei) {
+      temp[k++] = arr[j++];
+    }
+
+    // Copy the merged elements back into the original array
+    for (i = si; i <= ei; i++) {
+      arr[i] = (int) temp[i - si];
+    }
+    return cnt; // Return count of reverse pairs found during merging
+  }
+
+  // Method to count reverse pairs in an array
+  public int reversePairs(int[] nums) {
+    int n = nums.length; // Length of the array
+    return mergeSort(nums, 0, n - 1); // Perform merge sort and count reverse pairs
+  }
 }
