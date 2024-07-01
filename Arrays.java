@@ -723,4 +723,35 @@ public class Arrays {
     return cnt; // Return the count of subarrays with XOR equal to B
   }
 
+  /*
+   * 3. Longest Substring Without Repeating Characters
+   * Given a string s, find the length of the longest substring
+   * without repeating characters.
+   * Input: s = "abcabcbb"
+   * Output: 3
+   * Explanation: The answer is "abc", with the length of 3.
+   */
+  public int lengthOfLongestSubstring(String s) {
+    int n = s.length();
+    HashMap<Character, Integer> mpp = new HashMap<Character, Integer>();
+    int left = 0;
+    int right = 0;
+    int len = 0;
+
+    while (right < n) { // Iterate through the string with the right pointer
+      if (mpp.containsKey(s.charAt(right))) { // If the current character is already in the hashmap
+        // Move the left pointer to the right of the last index of the current character
+        // to avoid repeating characters
+        left = Math.max(mpp.get(s.charAt(right)) + 1, left);
+      }
+      // Update the current character's latest index in the hashmap
+      mpp.put(s.charAt(right), right);
+
+      // Calculate the length of the current substring without repeating characters
+      // and update the maximum length
+      len = Math.max(len, right - left + 1);
+      right++; // Move the right pointer to the next character
+    }
+    return len;
+  }
 }
