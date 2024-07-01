@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Arrays {
   // ---------------------------Print All divisor-----------------==-------
@@ -687,6 +689,38 @@ public class Arrays {
     // merge(arr, low, mid, high); // merging sorted halves
     // same as origninal merge function
     return cnt;
+  }
+
+  /*
+   * Subarray with given XOR
+   * Given an array of integers A and an integer B.
+   * Find the total number of subarrays having bitwise XOR of all elements equals
+   * to B.
+   * 
+   * intput : A = [4, 2, 2, 6, 4]
+   * B = 6
+   * output: 4
+   * Explanation: [4, 2], [4, 2, 2, 6, 4], [2, 2, 6], [6]
+   */
+
+  public int solve(ArrayList<Integer> A, int B) {
+
+    int n = A.size(); // Get the size of the arraylist
+    HashMap<Integer, Integer> map = new HashMap<>(); // Create a hashmap to store XOR values and their counts
+    int xor = 0; // Initialize XOR to 0
+    map.put(0, 1); // Put the initial value in the map to handle the case where subarray starts
+                   // from index 0
+    int cnt = 0; // Initialize count of subarrays with XOR equal to B
+
+    for (int i = 0; i < n; i++) { // Iterate through the arraylist
+      xor = xor ^ A.get(i); // Calculate the cumulative XOR from start to the current index
+      int x = xor ^ B; // Calculate the value needed to achieve XOR = B
+
+      cnt += map.getOrDefault(x, 0); // If x is found in map, it means there are subarrays ending at i with XOR = B
+
+      map.put(xor, map.getOrDefault(xor, 0) + 1); // Update the map with the current XOR value and its count
+    }
+    return cnt; // Return the count of subarrays with XOR equal to B
   }
 
 }
