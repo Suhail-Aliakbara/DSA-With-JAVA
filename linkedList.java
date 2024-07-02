@@ -169,4 +169,32 @@ public class linkedList {
     // Return the head of the modified list
     return head;
   }
+
+  // OPTIMAL SOLUTION
+  // Function to delete the Nth node from the end of the linked list
+  public static Node DeleteNthNodefromEnd(Node head, int N) {
+    // Create two pointers, fastp and slowp
+    Node fastp = head;
+    Node slowp = head;
+
+    // Move the fastp pointer N nodes ahead
+    for (int i = 0; i < N; i++)
+      fastp = fastp.next;
+
+    // If fastp becomes null, the Nth node from the end is the head
+    if (fastp == null)
+      return head.next;
+
+    // Move both pointers until fastp reaches the end
+    while (fastp.next != null) {
+      fastp = fastp.next;
+      slowp = slowp.next;
+    }
+
+    // Delete the Nth node from the end
+    Node delNode = slowp.next;
+    slowp.next = slowp.next.next;
+    delNode = null;
+    return head;
+  }
 }
