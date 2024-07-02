@@ -91,4 +91,82 @@ public class linkedList {
     // Return the 'newHead,' which is the new head of the reversed linked list.
     return newHead;
   }
+
+  /*
+   * 21. Merge Two Sorted Lists
+   * You are given the heads of two sorted linked lists list1 and list2.
+   * Merge the two lists into one sorted list. The list should be made by splicing
+   * together the nodes of the first two lists.
+   * 
+   * Input: list1 = [1,2,4], list2 = [1,3,4]
+   * Output: [1,1,2,3,4,4]
+   */
+  static Node sortTwoLinkedLists(Node list1, Node list2) {
+    // Create a dummy node to serve as the head of the merged list
+    Node dummyNode = new Node(-1);
+    Node temp = dummyNode;
+
+    // Traverse both lists simultaneously
+    while (list1 != null && list2 != null) {
+      // Compare elements of both lists and
+      // link the smaller node to the merged list
+      if (list1.data <= list2.data) {
+        temp.next = list1;
+        list1 = list1.next;
+      } else {
+        temp.next = list2;
+        list2 = list2.next;
+      }
+      // Move the temporary pointer to the next node
+      temp = temp.next;
+    }
+
+    // If any list still has remaining elements, append them to the merged list
+    if (list1 != null) {
+      temp.next = list1;
+    } else {
+      temp.next = list2;
+    }
+    // Return the merged list starting from the next of the dummy node
+    return dummyNode.next;
+  }
+
+  /*
+   * 19. Remove Nth Node From End of List
+   * Given the head of a linked list, remove the nth node from the end of the list
+   * and return its head.
+   * Input: head = [1,2,3,4,5], n = 2
+   * Output: [1,2,3,5]
+   */
+  public Node removeNthFromEnd(Node head, int n) {
+    int size = 0;
+    Node temp = head;
+    while (temp != null) {
+      size++;
+      temp = temp.next;
+    }
+
+    // If the node to remove is the head, update head to the next node
+    if (size == n) {
+      head = head.next;
+      return head;
+    }
+
+    // Initialize counter to traverse the list up to the node before the one to be
+    // removed
+    int i = 1;
+    // Calculate the position of the node just before the one to be removed
+    int iToFind = size - n;
+    Node prev = head;
+
+    // Traverse the list until reaching the node just before the one to be removed
+    while (i < iToFind) {
+      i++;
+      prev = prev.next;
+    }
+    // Remove the nth node from the end by skipping over it
+    prev.next = prev.next.next;
+    // Return the head of the modified list
+    return head;
+  }
 }
