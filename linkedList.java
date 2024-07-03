@@ -325,4 +325,68 @@ public class linkedList {
     return d1;
   }
 
+  /*
+   * 25. Reverse Nodes in k-Group
+   * Given the head of a linked list, reverse the nodes of the list k at a time,
+   * and return the modified list.
+   * 
+   * k is a positive integer and is less than or equal to the length of the linked
+   * list. If the number of nodes is not a multiple of k then left-out nodes, in
+   * the end, should remain as it is.
+   * 
+   * Input: head = [1,2,3,4,5], k = 2
+   * Output: [2,1,4,3,5]
+   * 
+   * Input: head = [1,2,3,4,5], k = 3
+   * Output: [3,2,1,4,5]
+   */
+  // Function to get the kth node from the current node
+  public Node getKthNode(Node temp, int k) {
+    k -= 1; // Adjust for 0-based indexing
+    while (temp != null && k > 0) { // Traverse until the kth node or end of list
+      k--;
+      temp = temp.next;
+    }
+    return temp; // Return the kth node
+  }
+
+  // Function to reverse a linked list from the current node
+  public Node reverse(Node temp) {
+    Node curr = temp; // Current node
+    Node prev = null; // Previous node initialized to null
+    while (curr != null) { // Traverse the list
+      Node next = curr.next; // Store next node
+      curr.next = prev; // Reverse current node's pointer
+      prev = curr; // Move prev to current node
+      curr = next; // Move to next node
+    }
+    return prev; // Return the new head of the reversed list
+  }
+
+  // Function to reverse nodes of a linked list k at a time
+  public Node reverseKGroup(Node head, int k) {
+    Node temp = head; // Temporary pointer for traversal
+    Node prev = null; // Previous node to connect with reversed list
+
+    while (temp != null) {
+      Node kthNode = getKthNode(temp, k); // Get the kth node from temp
+      if (kthNode == null) { // If kth node is null, not enough nodes to reverse
+        if (prev != null)
+          prev.next = temp; // Connect previous part with remaining nodes
+        break; // Break the loop as we are done
+      }
+      Node nextNode = kthNode.next; // Store next node after kth node
+      kthNode.next = null; // Disconnect kth node from the rest of the list
+      reverse(temp); // Reverse the k-group
+      if (temp == head) { // If reversing the first k-group then update head
+        head = kthNode;
+      } else { // Otherwise, connect previous part with reversed k-group
+        prev.next = kthNode;
+      }
+      prev = temp; // Update prev to the last node of reversed k-group
+      temp = nextNode; // Move temp to the next segment
+    }
+    return head; // Return the modified list
+  }
+
 }
