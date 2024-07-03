@@ -10,8 +10,7 @@ class Node {
   Node() {
   };
 
-  // Constructor with both data
-  // and next node as parameters
+  // Constructor with both data and next node as parameters
   Node(int data, Node next) {
     this.data = data;
     this.next = next;
@@ -43,28 +42,28 @@ public class linkedList {
    * Output: [5,4,3,2,1]
    */
 
-  public static Node ReverseLinkedListUsingStack(Node head) { // TC(O(N)) SC(O(1))
+  public static Node ReverseLinkedList(Node head) { // TC(O(N)) SC(O(1))
 
     // Initialize'temp' at head of linked list
-    Node temp = head;
+    Node curr = head;
 
     // Initialize pointer 'prev' to NULL, representing the previous node
     Node prev = null;
 
-    // Traverse the list, continue till 'temp' reaches the end (NULL)
-    while (temp != null) {
+    // Traverse the list, continue till 'curr' reaches the end (NULL)
+    while (curr != null) {
       // Store the next node in 'front' to preserve the reference
-      Node front = temp.next;
+      Node front = curr.next;
 
       // Reverse the direction of the current node's 'next' pointer
       // to point to 'prev'
-      temp.next = prev;
+      curr.next = prev;
 
       // Move 'prev' to the current node for the next iteration
-      prev = temp;
+      prev = curr;
 
-      // Move 'temp' to the 'front' node advancing the traversal
-      temp = front;
+      // Move 'curr' to the 'front' node advancing the traversal
+      curr = front;
     }
 
     // Return the new head of the reversed linked list
@@ -141,7 +140,7 @@ public class linkedList {
    * Input: head = [1,2,3,4,5], n = 2
    * Output: [1,2,3,5]
    */
-  public Node removeNthFromEnd(Node head, int n) {
+  public Node removeNthFromEnd(Node head, int n) { // TC(O(2N))
     int size = 0;
     Node temp = head;
     while (temp != null) {
@@ -237,4 +236,93 @@ public class linkedList {
     }
     return dummy.next;
   }
+
+  /*
+   * 160. Intersection of Two Linked Lists
+   * Input: intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA =
+   * 2, skipB = 3
+   * Output: Intersected at '8'
+   */
+  // utility function to insert node at the end of the linked list
+  static Node insertNode(Node head, int val) { // TC(O(N1 + 2 N2))
+    Node newNode = new Node(val);
+
+    if (head == null) {
+      head = newNode;
+      return head;
+    }
+
+    Node temp = head;
+    while (temp.next != null)
+      temp = temp.next;
+
+    temp.next = newNode;
+    return head;
+  }
+
+  static int getDifference(Node head1, Node head2) {
+    int len1 = 0, len2 = 0;
+    while (head1 != null || head2 != null) {
+      if (head1 != null) {
+        ++len1;
+        head1 = head1.next;
+      }
+      if (head2 != null) {
+        ++len2;
+        head2 = head2.next;
+      }
+
+    }
+    return len1 - len2;// if difference is neg-> length of list2 > length of list1 else vice-versa
+  }
+
+  // utility function to check presence of intersection
+  static Node intersectionPresent(Node head1, Node head2) {
+    int diff = getDifference(head1, head2);
+    if (diff < 0)
+      while (diff++ != 0)
+        head2 = head2.next;
+    else
+      while (diff-- != 0)
+        head1 = head1.next;
+    while (head1 != null) {
+      if (head1 == head2)
+        return head1;
+      head2 = head2.next;
+      head1 = head1.next;
+    }
+    return head1;
+  }
+
+  // utility function to insert node at the end of the linked list // OPTIMIMAL
+  // SOLUTION
+  static Node insertNode1(Node head, int val) {
+    Node newNode = new Node(val);
+
+    if (head == null) {
+      head = newNode;
+      return head;
+    }
+
+    Node temp = head;
+    while (temp.next != null)
+      temp = temp.next;
+
+    temp.next = newNode;
+    return head;
+  }
+
+  // utility function to check presence of intersection
+  static Node intersectionPresent1(Node head1, Node head2) {
+    Node d1 = head1;
+    Node d2 = head2;
+
+    while (d1 != d2) {
+      d1 = d1 == null ? head2 : d1.next;
+      d2 = d2 == null ? head1 : d2.next;
+    }
+
+    return d1;
+  }
+
 }
