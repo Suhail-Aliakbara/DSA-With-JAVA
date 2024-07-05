@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.LinkedList;
 
 class Node {
@@ -24,6 +25,13 @@ class Node {
     this.next = null;
   }
 
+  /*
+   * Node(int data) {
+   * this.data = x;
+   * this.next = null;
+   * this.bottom = null;
+   * }
+   */
   Node(int data, Node next, Node bottom) {
     this.data = data;
     this.next = next;
@@ -454,5 +462,31 @@ public class linkedList {
   Node flatten(Node root) {
     // Your code here
     return mergeSort(root);
+  }
+
+  /*
+   * 138. Copy List with Random Pointer
+   * A linked list of length n is given such that each node contains an additional
+   * random pointer, which could point to any node in the list, or null.
+   * Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+   * Output: [[7,null],[13,0],[11,4],[10,2],[1,0]]
+   */
+  public Node copyRandomList(Node head) {
+    Node temp = head;
+    HashMap<Node, Node> map = new HashMap<>();
+
+    while (temp != null) {
+      Node newNode = new Node(temp.val);
+      map.put(temp, newNode);
+      temp = temp.next;
+    }
+    temp = head;
+    while (temp != null) {
+      Node copyNode = map.get(temp);
+      copyNode.next = map.get(temp.next);
+      // copyNode.random = map.get(temp.random); //random pointer
+      temp = temp.next;
+    }
+    return map.get(head);
   }
 }
