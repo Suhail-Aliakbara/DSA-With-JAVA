@@ -1,5 +1,4 @@
 import java.util.HashMap;
-import java.util.LinkedList;
 
 class Node {
   // Data stored in the node
@@ -8,6 +7,7 @@ class Node {
   // node in the list
   Node next;
   Node bottom;
+  Node random; // for copy Node question
 
   Node() {
   };
@@ -32,10 +32,19 @@ class Node {
    * this.bottom = null;
    * }
    */
-  Node(int data, Node next, Node bottom) {
-    this.data = data;
-    this.next = next;
-    this.bottom = bottom;
+  /*
+   * Node(int data, Node next, Node bottom) {
+   * this.data = data;
+   * this.next = next;
+   * this.bottom = bottom;
+   * }
+   */
+  Node(int x, Node nextNode, Node randomNode) {
+    // Constructor with data,
+    // next, and random pointers
+    this.data = x;
+    this.next = nextNode;
+    this.random = randomNode;
   }
 }
 
@@ -460,7 +469,6 @@ public class linkedList {
   }
 
   Node flatten(Node root) {
-    // Your code here
     return mergeSort(root);
   }
 
@@ -471,12 +479,12 @@ public class linkedList {
    * Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
    * Output: [[7,null],[13,0],[11,4],[10,2],[1,0]]
    */
-  public Node copyRandomList(Node head) {
+  public Node copyRandomList(Node head) { // TC(O(2N)) SC(O(N * N))
     Node temp = head;
     HashMap<Node, Node> map = new HashMap<>();
 
     while (temp != null) {
-      Node newNode = new Node(temp.val);
+      Node newNode = new Node(temp.data);
       map.put(temp, newNode);
       temp = temp.next;
     }
@@ -489,4 +497,81 @@ public class linkedList {
     }
     return map.get(head);
   }
+
+  // OPTIMAL SOLUTION TC(O(3N)) SC(O(N))
+  // Function to insert a copy of each node in between the original nodes
+  void insertCopyInBetween(Node head) {
+    Node temp = head;
+    while (temp != null) {
+      Node nextElement = temp.next;
+      // Create a new node with the same data
+      Node copy = new Node(temp.data);
+
+      // Point the copy's next to the original node's next
+      copy.next = nextElement;
+
+      // Point the original node's next to the copy
+      temp.next = copy;
+
+      // Move to the next original node
+      temp = nextElement;
+    }
+  }
+
+  // Function to connect random pointers of the copied nodes
+  void connectRandomPointers(Node head) {
+    Node temp = head;
+    while (temp != null) {
+      // Access the copied node
+      Node copyNode = temp.next;
+
+      // If the original node has a random pointer
+      if (temp.random != null) {
+        // Point the copied node's random to the corresponding copied random node
+        copyNode.random = temp.random.next;
+      } else {
+        // Set the copied node's random to null if the original random is null
+        copyNode.random = null;
+      }
+      // Move to the next original node
+      temp = temp.next.next;
+    }
+  }
+
+  // Function to retrieve the deep copy of the linked list
+  Node getDeepCopyList(Node head) {
+    Node temp = head;
+    // Create a dummy node
+    Node dummyNode = new Node(-1);
+    // Initialize a result pointer
+    Node res = dummyNode;
+
+    while (temp != null) {
+      // Creating a new List by pointing to copied nodes
+      res.next = temp.next;
+      res = res.next;
+
+      // Disconnect and revert back to the initial state of the original linked list
+      temp.next = temp.next.next;
+      temp = temp.next;
+    }
+
+    // Return the deep copy of the list starting from the dummy node
+    return dummyNode.next;
+  }
+
+  // Function to clone the linked list
+  Node cloneLL(Node head) {
+    // If the original list is empty, return null
+    if (head == null)
+      return null;
+
+    // Step 1: Insert copy of nodes in between
+    insertCopyInBetween(head);
+    // Step 2: Connect random pointers of copied nodes
+    connectRandomPointers(head);
+    // Step 3: Retrieve the deep copy of the linked list
+    return getDeepCopyList(head);
+  }
+
 }
