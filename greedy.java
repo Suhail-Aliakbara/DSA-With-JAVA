@@ -35,4 +35,40 @@ public class greedy {
     }
     return maxActivity;
   }
+
+  /*
+   * Minimum Platforms
+   * 
+   * Input: n = 6, arr[] = {0900, 0940, 0950, 1100, 1500, 1800},
+   * dep[] = {0910, 1200, 1120, 1130, 1900, 2000}
+   * Output: 3
+   * Explanation: There are three trains during the time 0940 to 1200. So we need
+   * minimum 3 platforms.
+   */
+
+  static int findPlatform(int arr[], int dep[], int n) {
+    Arrays.sort(arr);
+    Arrays.sort(dep);
+
+    int plat_needed = 1, result = 1;
+    int i = 1, j = 0;
+
+    while (i < n && j < n) {
+
+      if (arr[i] <= dep[j]) {
+        plat_needed++;
+        i++;
+      }
+
+      else if (arr[i] > dep[j]) {
+        plat_needed--;
+        j++;
+      }
+
+      if (plat_needed > result)
+        result = plat_needed;
+    }
+
+    return result;
+  }
 }
