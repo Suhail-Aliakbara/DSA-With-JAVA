@@ -71,4 +71,47 @@ public class greedy {
 
     return result;
   }
+  /*
+   * Fractional Knapsack
+   * Given weights and values of n items, we need to put these items in a knapsack
+   * of capacity w to get the maximum total value in the knapsack. Return a double
+   * value representing the maximum value in knapsack.
+   * 
+   * Input: n = 3, w = 50, value[] = [60,100,120], weight[] = [10,20,30]
+   * Output: 240.000000
+   * Explanation: Take the item with value 60 and weight 10, value 100 and weight
+   * 20 and split the third item with value 120 and weight 30, to fit it into
+   * weight 20. so it becomes (120/30)*20=80, so the total value becomes
+   * 60+100+80.0=240.0 Thus, total maximum value of item we can have is 240.00
+   * from the given capacity of sack.
+   */
+
+  double fractionalKnapsack(int w, Item arr[], int n) {
+    // Your code here
+    double ratio[][] = new double[n][2];
+    for (int i = 0; i < n; i++) {
+      ratio[i][0] = i;
+      ratio[i][1] = arr[i].value / (double) arr[i].weight;
+    }
+
+    Arrays.sort(ratio, (a, b) -> Double.compare(a[1], b[1]));
+
+    int capacity = w;
+    double finalValue = 0;
+
+    for (int i = n - 1; i >= 0; i--) {
+      int idx = (int) ratio[i][0];
+
+      if (capacity >= arr[idx].weight) {
+        finalValue += arr[idx].value;
+        capacity -= arr[idx].weight;
+      } else {
+        finalValue += ((double) ratio[i][1] * capacity);
+        capacity = 0;
+        break;
+      }
+    }
+    return finalValue;
+  }
+
 }
