@@ -154,4 +154,44 @@ public class recursionLC {
     findComb2(candidates, target, ans, 0, new ArrayList<>());
     return ans;
   }
+
+  /*
+   * 131. Palindrome Partitioning
+   * Given a string s, partition s such that every substring of
+   * the partition is a palindromeReturn
+   * all possible palindrome partitioning of s.
+   * 
+   * Input: s = "aab"
+   * Output: [["a","a","b"],["aa","b"]]
+   */
+
+  boolean isPalindrome(String str, int start, int end) {
+    while (start <= end) {
+      if (str.charAt(start++) != str.charAt(end--)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void paliPartition(int idx, String str, List<List<String>> ans, List<String> ds) {
+    if (idx == str.length()) {
+      ans.add(new ArrayList<>(ds));
+      return;
+    }
+    for (int i = idx; i < str.length(); i++) {
+      if (isPalindrome(str, idx, i)) {
+        ds.add(str.substring(idx, i + 1));
+        paliPartition(i + 1, str, ans, ds);
+        ds.remove(ds.size() - 1);
+      }
+    }
+  }
+
+  public List<List<String>> partition(String s) {
+    List<List<String>> ans = new ArrayList<>();
+    paliPartition(0, s, ans, new ArrayList<>());
+    return ans;
+  }
+
 }
