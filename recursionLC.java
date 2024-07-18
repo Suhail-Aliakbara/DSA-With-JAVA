@@ -103,6 +103,7 @@ public class recursionLC {
     funComb(candidates, target, ans, 0, new ArrayList<>());
     return ans;
   }
+
   /*
    * Time Complexity: O(2^t * k) where t is the target, k is the average length
    * 
@@ -119,4 +120,38 @@ public class recursionLC {
    * Space Complexity: O(k*x), k is the average length and x is the no. of
    * combinationsś
    */
+  /*
+   * 40. Combination Sum II
+   * Given a collection of candidate numbers (candidates) and a target number
+   * (target), find all unique combinations in candidates where the candidate
+   * numbers sum to target.
+   * Each number in candidates may only be used once in the combination.
+   * Note: The solution set must not contain duplicate combinations.
+   * 
+   * Input: candidates = [10,1,2,7,6,1,5], target = 8
+   * Output:[ [1,1,6], [1,2,5], [1,7], [2,6] ]
+   */
+  public void findComb2(int[] candidates, int target, List<List<Integer>> ans, int idx, List<Integer> ds) {
+    int n = candidates.length;
+    if (target == 0) {
+      ans.add(new ArrayList<>(ds));
+      return;
+    }
+    for (int i = idx; i < n; i++) {
+      if (i != idx && candidates[i] == candidates[i - 1])
+        continue;
+      if (candidates[i] > target)
+        break;
+      ds.add(candidates[i]);
+      findComb2(candidates, target - candidates[i], ans, i + 1, ds);
+      ds.remove(ds.size() - 1);
+    }
+  }
+
+  public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+    Arrays.sort(candidates);
+    List<List<Integer>> ans = new ArrayList<>();
+    findComb2(candidates, target, ans, 0, new ArrayList<>());
+    return ans;
+  }
 }
