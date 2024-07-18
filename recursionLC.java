@@ -15,7 +15,6 @@ public class recursionLC {
    * 0 1 2 3 5 6 7 8
    */
 
-  // Recursive function to calculate subset sums
   public void subSum(ArrayList<Integer> arr, int n, int i, ArrayList<Integer> ans, int sum) {
     if (i == n) {
       ans.add(sum);
@@ -25,7 +24,6 @@ public class recursionLC {
     subSum(arr, n, i + 1, ans, sum); // Exclude current element from the sum
   }
 
-  // Function to calculate subset sums
   ArrayList<Integer> subsetSums(ArrayList<Integer> arr, int n) {
     ArrayList<Integer> ans = new ArrayList<>();
     subSum(arr, n, 0, ans, 0);
@@ -49,7 +47,6 @@ public class recursionLC {
    * Input: nums = [1,2,2]
    * Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
    */
-  // Recursive function to find all subsets without duplicates
   void findSubset(int idx, int[] nums, List<Integer> ds, List<List<Integer>> ansList) {
     ansList.add(new ArrayList<>(ds)); // Add current subset to the answer list
     for (int i = idx; i < nums.length; i++) {
@@ -61,7 +58,6 @@ public class recursionLC {
     }
   }
 
-  // Function to find all subsets without duplicates
   public List<List<Integer>> subsetsWithDup(int[] nums) {
     Arrays.sort(nums); // Sort the array to handle duplicates
     List<List<Integer>> ansList = new ArrayList<>();
@@ -75,5 +71,52 @@ public class recursionLC {
    * 
    * Space Complexity: O(2^n * k) to store every subset of average length k.
    * Auxiliary space is O(n) if n is the depth of the recursion tree.
+   */
+
+  /*
+   * 39. Combination Sum
+   * Given an array of distinct integers candidates and a target integer target,
+   * return a list of all unique combinations of candidates where the chosen
+   * numbers sum to target. You may return the combinations in any order.
+   *
+   * Input: candidates = [2,3,6,7], target = 7
+   * Output: [[2,2,3],[7]]
+   */
+  void funComb(int[] candidates, int target, List<List<Integer>> ans, int idx, List<Integer> ds) {
+    if (idx == candidates.length) {
+      return;
+    }
+    if (target == 0) {
+      ans.add(new ArrayList<>(ds));
+      return;
+    }
+    if (candidates[idx] <= target) {
+      ds.add(candidates[idx]);
+      funComb(candidates, target - candidates[idx], ans, idx, ds);
+      ds.remove(ds.size() - 1);
+    }
+    funComb(candidates, target, ans, idx + 1, ds);
+  }
+
+  public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    List<List<Integer>> ans = new ArrayList<>();
+    funComb(candidates, target, ans, 0, new ArrayList<>());
+    return ans;
+  }
+  /*
+   * Time Complexity: O(2^t * k) where t is the target, k is the average length
+   * 
+   * Reason: Assume if you were not allowed to pick a single element multiple
+   * times, every element will have a couple of options: pick or not pick which is
+   * 2^n different recursion calls, also assuming that the average length of every
+   * combination generated is k. (to put length k data structure into another data
+   * structure)
+   * 
+   * Why not (2^n) but (2^t) (where n is the size of an array)?
+   * Assume that there is 1 and the target you want to reach is 10 so 10 times you
+   * can “pick or not pick” an element.
+   * 
+   * Space Complexity: O(k*x), k is the average length and x is the no. of
+   * combinationsś
    */
 }
