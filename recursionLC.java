@@ -193,5 +193,50 @@ public class recursionLC {
     paliPartition(0, s, ans, new ArrayList<>());
     return ans;
   }
+  /*
+   * Time Complexity: O( (2^n) *k*(n/2) )
+   * Reason: O(2^n) to generate every substring and O(n/2) to check if the
+   * substring generated is a palindrome. O(k) is for inserting the palindromes in
+   * another data structure, where k is the average length of the palindrome list.
+   * 
+   * Space Complexity: O(k * x)
+   * Reason: The space complexity can vary depending upon the length of the
+   * answer. k is the average length of the list of palindromes and if we have x
+   * such list of palindromes in our final answer. The depth of the recursion tree
+   * is n, so the auxiliary space required is equal to the O(n)
+   */
+  /*
+   * 60. Permutation Sequence
+   * The set [1, 2, 3, ..., n] contains a total of n! unique permutations.
+   * By listing and labeling all of the permutations in order, we get the
+   * following sequence for
+   * n = 3: "123" "132" "213" "231" "312" "321"
+   * Given n and k, return the kth permutation sequence.
+   * 
+   * Input: n = 3, k = 3
+   * Output: "213"
+   */
+
+  public String getPermutation(int n, int k) {
+    int fact = 1;
+    ArrayList<Integer> ans = new ArrayList<>();
+    for (int i = 1; i < n; i++) {
+      fact *= i;
+      ans.add(i);
+    }
+    ans.add(n);
+    k = k - 1;
+    String str = "";
+    while (true) {
+      str += ans.get(k / fact);
+      ans.remove(k / fact);
+      if (ans.isEmpty()) {
+        break;
+      }
+      k = k % fact;
+      fact = fact / ans.size();
+    }
+    return str;
+  }
 
 }
