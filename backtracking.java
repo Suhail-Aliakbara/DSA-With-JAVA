@@ -134,10 +134,60 @@ public class backtracking {
     nQueens(n, ans, board, 0);
     return ans;
   }
+
   /*
    * Optimal Solution
    * Time Complexity: Exponential in nature since we are trying out all ways, to
    * be precise its O(N! * N).
    * Space Complexity: O(N)
    */
+  public static List<String> convertToList1(char[][] array) {
+    List<String> list = new ArrayList<>();
+    for (char[] row : array) {
+      list.add(new String(row));
+    }
+    return list;
+  }
+
+  public void nQueens(int n, int row, List<List<String>> ans, char[][] board, int[] upperCol, int[] leftUpperDiagonal,
+      int[] rightUpperDiagonal) {
+
+    if (row == n) {
+      ans.add(convertToList1(board));
+      return;
+    }
+
+    for (int col = 0; col < n; col++) {
+      if (upperCol[col] == 0 && leftUpperDiagonal[n - 1 + row - col] == 0 && rightUpperDiagonal[row + col] == 0) {
+        upperCol[col] = 1;
+        leftUpperDiagonal[n - 1 + row - col] = 1;
+        rightUpperDiagonal[row + col] = 1;
+
+        board[row][col] = 'Q';
+        nQueens(n, row + 1, ans, board, upperCol, leftUpperDiagonal, rightUpperDiagonal);
+        board[row][col] = '.';
+
+        upperCol[col] = 0;
+        leftUpperDiagonal[n - 1 + row - col] = 0;
+        rightUpperDiagonal[row + col] = 0;
+      }
+    }
+  }
+
+  public List<List<String>> solveNQueens1(int n) {
+    List<List<String>> ans = new ArrayList<>();
+    char[][] board = new char[n][n];
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        board[i][j] = '.';
+      }
+    }
+
+    int upperCol[] = new int[n];
+    int leftUpperDiagonal[] = new int[2 * n - 1];
+    int rightUpperDiagonal[] = new int[2 * n - 1];
+
+    nQueens(n, 0, ans, board, upperCol, leftUpperDiagonal, rightUpperDiagonal);
+    return ans;
+  }
 }
