@@ -205,4 +205,51 @@ public class backtracking {
    * }
    */
 
+  /*
+   * M-Coloring Problem
+   * Given an undirected graph and an integer M. The task is to determine if the
+   * graph can be colored with at most M colors such that no two adjacent vertices
+   * of the graph are colored with the same color. Here coloring of a graph means
+   * the assignment of colors to all vertices. Print 1 if it is possible to colour
+   * vertices and 0 otherwise.
+   * 
+   */
+  // Check if it is possible to assign color 'clr' to 'vertex' considering its
+  // adjacency
+  public boolean isPossible(boolean graph[][], int colors[], int n, int clr, int vertex) {
+    for (int i = 0; i < n; i++) {
+      // If there is an edge between vertex and i, and i is already colored with clr,
+      // return false
+      if (graph[vertex][i] && colors[i] == clr) {
+        return false;
+      }
+    }
+    return true; // If no adjacent vertex is colored with clr, return true
+  }
+
+  // Recursive function to solve the graph coloring problem
+  public boolean solve(boolean[][] graph, int colors[], int m, int n, int vertex) {
+    // If all vertices are assigned a color, return true
+    if (vertex == n) {
+      return true;
+    }
+    // Try assigning each color from 1 to m to the vertex
+    for (int clr = 1; clr <= m; clr++) {
+      if (isPossible(graph, colors, n, clr, vertex)) {
+        colors[vertex] = clr;
+        if (solve(graph, colors, m, n, vertex + 1)) {
+          return true; // If successful, return true
+        }
+        // If coloring the vertex with clr doesn't lead to a solution, backtrack
+        colors[vertex] = 0;
+      }
+    }
+    // If no color can be assigned to this vertex, return false
+    return false;
+  }
+
+  public boolean graphColoring(boolean graph[][], int m, int n) {
+    int colors[] = new int[n]; // Array to store colors assigned to vertices
+    return solve(graph, colors, m, n, 0); // Start the problem with vertex 0
+  }
 }
