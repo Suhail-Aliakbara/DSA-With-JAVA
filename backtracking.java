@@ -252,4 +252,63 @@ public class backtracking {
     int colors[] = new int[n]; // Array to store colors assigned to vertices
     return solve(graph, colors, m, n, 0); // Start the problem with vertex 0
   }
+
+  /*
+   * Rat in a Maze Problem - I
+   * Consider a rat placed at (0, 0) in a square matrix mat of order n* n. It has
+   * to reach the destination at (n - 1, n - 1).
+   * Find all possible paths that the rat can take to reach from source to
+   * destination. The directions in which the rat can move are 'U'(up), 'D'(down),
+   * 'L' (left), 'R' (right).
+   * Value 0 at a cell in the matrix represents that it is blocked and rat cannot
+   * move to it while value 1 at a cell in the matrix represents that rat can be
+   * travel through it.
+   * 
+   * Input: mat[][] = {{1, 0, 0, 0},
+   * {1, 1, 0, 1},
+   * {1, 1, 0, 0},
+   * {0, 1, 1, 1}}
+   * Output: DDRDRR DRDDRR
+   * 
+   */
+  /*
+   * for many cases and for interview
+   */
+
+  private void ratInMaze(int[][] mat, List<String> ans, StringBuilder str, int m, int n, int[] di, int[] dj) {
+    int len = mat.length;
+    if (m == len - 1 && n == len - 1) {
+      ans.add(str.toString());
+      return;
+    }
+
+    String direction = "DLRU";
+    for (int i = 0; i < 4; i++) {
+      int nexti = m + di[i];
+      int nextj = n + dj[i];
+      if (nexti >= 0 && nextj >= 0 && nexti < len && nextj < len && mat[nexti][nextj] == 1) {
+        mat[nexti][nextj] = 0;
+        str.append(direction.charAt(i));
+        ratInMaze(mat, ans, str, nexti, nextj, di, dj);
+        str.deleteCharAt(str.length() - 1);
+        mat[nexti][nextj] = 1;
+      }
+    }
+  }
+
+  public ArrayList<String> findPath(int[][] mat) {
+    ArrayList<String> ans = new ArrayList<>();
+    int[] di = { 1, 0, 0, -1 };
+    int[] dj = { 0, -1, 1, 0 };
+    if (mat[0][0] == 1) {
+      mat[0][0] = 0; // mark the starting cell as visited
+      ratInMaze(mat, ans, new StringBuilder(), 0, 0, di, dj);
+      mat[0][0] = 1; // unmark the starting cell after the search
+    }
+    return ans;
+  }
+
+  /*
+   * nnnn
+   */
 }
