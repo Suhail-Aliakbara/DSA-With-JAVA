@@ -309,6 +309,39 @@ public class backtracking {
   }
 
   /*
-   * nnnn
+   * Word break 2
+   * You are given a non-empty string S containing no spaces’ and a dictionary of
+   * non-empty strings (say the list of words).
+   * You are supposed to construct and return all possible sentences after adding
+   * spaces in the originally given string ‘S’, such that each word in a sentence
+   * exists in the given dictionary.
+   * Sample Input 1: 6 1
+   * god is now no where here
+   * godisnowherenowhere
+   * Sample Output 1:
+   * god is no where no where
+   * god is no where now here
+   * god is now here no where
+   * god is now here now here
    */
+  public static void solveWordBreak(String s, ArrayList<String> dictionary, ArrayList<String> ans, String str) {
+    if (s.length() == 0) {
+      ans.add(str);
+      return;
+    }
+    for (int i = 0; i < s.length(); i++) {
+      String sub = s.substring(0, i + 1);
+      if (dictionary.contains(sub)) {
+        String remaning = s.substring(i + 1);
+        solveWordBreak(remaning, dictionary, ans, str + sub + " ");
+      }
+    }
+  }
+
+  public static ArrayList<String> wordBreak(String s, ArrayList<String> dictionary) {
+    // Write your code here.
+    ArrayList<String> ans = new ArrayList<>();
+    solveWordBreak(s, dictionary, ans, "");
+    return ans;
+  }
 }
