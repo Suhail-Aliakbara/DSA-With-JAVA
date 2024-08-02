@@ -344,4 +344,12 @@ public class backtracking {
     solveWordBreak(s, dictionary, ans, "");
     return ans;
   }
+  /*
+   * Time complextiy : O(n + 2^n) n→ for string length and 2^n for all possible
+   * partition
+   * space complexity : O(n*2^n) stack space and for extra ArrayList
+   */
+  /*
+   * nnn
+   */
 }
