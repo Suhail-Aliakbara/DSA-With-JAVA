@@ -230,4 +230,56 @@ public class binarySearch {
     return (double) ((double) (ind1el + ind2el)) / 2.0;
   }
 
+  // OPTIMAL APPROACH
+  public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+    int n1 = nums1.length; // Length of the first array
+    int n2 = nums2.length; // Length of the second array
+
+    // Ensure that nums1 is the smaller array to minimize the number of operations
+    if (n1 > n2)
+      return findMedianSortedArrays(nums2, nums1);
+
+    int leftEl = (n1 + n2 + 1) / 2; // Calculate the number of elements on the left side of the partition
+    int n = n1 + n2; // Total number of elements in both arrays
+    int low = 0, high = n1; // Initialize the binary search range for nums1
+
+    // Binary search to find the correct partition
+    while (low <= high) {
+      int mid1 = (low + high) / 2; // Mid index for the partition in nums1
+      int mid2 = leftEl - mid1; // Mid index for the partition in nums2, based on the total left elements
+
+      // Elements just after the partition in nums1 and nums2
+      int r1 = mid1 < n1 ? nums1[mid1] : Integer.MAX_VALUE; // Right element in nums1 or positive infinity if out of
+                                                            // bounds
+      int r2 = mid2 < n2 ? nums2[mid2] : Integer.MAX_VALUE; // Right element in nums2 or positive infinity if out of
+                                                            // bounds
+
+      // Elements just before the partition in nums1 and nums2
+      int l1 = mid1 - 1 >= 0 ? nums1[mid1 - 1] : Integer.MIN_VALUE; // Left element in nums1 or negative infinity if out
+                                                                    // of bounds
+      int l2 = mid2 - 1 >= 0 ? nums2[mid2 - 1] : Integer.MIN_VALUE; // Left element in nums2 or negative infinity if out
+                                                                    // of bounds
+
+      // Check if we have found the correct partition
+      if (l1 <= r2 && l2 <= r1) {
+        // If total number of elements is odd, return the max of the left partition
+        if (n % 2 == 1) {
+          return Math.max(l1, l2);
+        } else {
+          // If total number of elements is even, return the average of the middle two
+          // elements
+          return ((double) (Math.max(l1, l2) + Math.min(r1, r2)) / 2.0);
+        }
+      } else if (l1 > r2) {
+        // If l1 is greater than r2, move the partition in nums1 to the left
+        high = mid1 - 1;
+      } else {
+        // If l2 is greater than r1, move the partition in nums1 to the right
+        low = mid1 + 1;
+      }
+    }
+
+    return 0; // This line should never be reached, added to satisfy the return type
+  }
+
 }
