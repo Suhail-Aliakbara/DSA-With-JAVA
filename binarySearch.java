@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class binarySearch {
 
   /*
@@ -120,5 +122,43 @@ public class binarySearch {
    * if i am in right half -> 1st instance == odd && 2nd instance == even of
    * currElement
    */
+
+  /*
+   * 33. Search in Rotated Sorted Array
+   * Input: nums = [4,5,6,7,0,1,2], target = 0
+   * Output: 4
+   * Input: nums = [1], target = 0
+   * Output: -1
+   */
+  public static int search(ArrayList<Integer> arr, int n, int k) {
+    int low = 0, high = n - 1;
+    while (low <= high) {
+      int mid = (low + high) / 2;
+
+      // if mid points to the target
+      if (arr.get(mid) == k)
+        return mid;
+
+      // if left part is sorted
+      if (arr.get(low) <= arr.get(mid)) {
+        if (arr.get(low) <= k && k <= arr.get(mid)) {
+          // element exists
+          high = mid - 1;
+        } else {
+          // element does not exist
+          low = mid + 1;
+        }
+      } else { // if right part is sorted
+        if (arr.get(mid) <= k && k <= arr.get(high)) {
+          // element exists
+          low = mid + 1;
+        } else {
+          // element does not exist
+          high = mid - 1;
+        }
+      }
+    }
+    return -1;
+  }
 
 }
