@@ -329,4 +329,62 @@ public class binarySearch {
     }
     return 1;
   }
+
+  /*
+   * Allocate Books
+   * Input 1: A = [12, 34, 67, 90]
+   * B = 2
+   * Output 1: 113
+   * Explanation 1:
+   * There are two students. Books can be distributed in following fashion :
+   * 1) [12] and [34, 67, 90]
+   * Max number of pages is allocated to student 2 with 34 + 67 + 90 = 191 pages
+   * 2) [12, 34] and [67, 90]
+   * Max number of pages is allocated to student 2 with 67 + 90 = 157 pages
+   * 3) [12, 34, 67] and [90]
+   * Max number of pages is allocated to student 1 with 12 + 34 + 67 = 113 pages
+   * Of the 3 cases, Option 3 has the minimum pages = 113.
+   */
+  public int countstd(int pages, int[] arr) {
+    long pageStudent = 0;
+    int n = arr.length;
+    int std = 1;
+
+    for (int i = 0; i < n; i++) {
+      if (pageStudent + arr[i] <= pages) {
+        pageStudent += arr[i];
+      } else {
+        std++;
+        pageStudent = arr[i];
+      }
+    }
+    return std;
+  }
+
+  public int books(int[] A, int B) {
+    int n = A.length;
+
+    if (n < B) {
+      return -1;
+    }
+    int low = A[0];
+    int high = 0;
+    for (int i = 0; i < n; i++) {
+      if (low < A[i]) {
+        low = A[i];
+      }
+      high += A[i];
+    }
+    while (low <= high) {
+      int mid = (low + high) / 2;
+      int count = countstd(mid, A);
+
+      if (count > B) {
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+    return low;
+  }
 }
