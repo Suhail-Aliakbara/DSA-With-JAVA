@@ -76,7 +76,7 @@ public class binarySearch {
     return low;
   }
   /*
-   * O(log(10^9)) * O(M(logN)), where M = number of rows in the given matrix, N =
+   * O(log(109)) * O(M(logN)), where M = number of rows in the given matrix, N =
    * number of columns in the given matrix
    * 
    * Reason: Our search space lies between [0, 109] as the min(matrix) can be 0
@@ -231,6 +231,12 @@ public class binarySearch {
   }
 
   // OPTIMAL APPROACH
+  /*
+   * Time Complexity: O(log(min(n1,n2))), where n1 and n2 are the sizes of two
+   * given arrays.
+   * Reason: We are applying binary search on the range [0, min(n1, n2)].
+   * Space Complexity: O(1) as no extra space is used.
+   */
   public double findMedianSortedArrays(int[] nums1, int[] nums2) {
     int n1 = nums1.length; // Length of the first array
     int n2 = nums2.length; // Length of the second array
@@ -239,14 +245,14 @@ public class binarySearch {
     if (n1 > n2)
       return findMedianSortedArrays(nums2, nums1);
 
-    int leftEl = (n1 + n2 + 1) / 2; // Calculate the number of elements on the left side of the partition
+    int leftTotalPartitionEl = (n1 + n2 + 1) / 2; // Calculate the number of elements on the left side of the partition
     int n = n1 + n2; // Total number of elements in both arrays
     int low = 0, high = n1; // Initialize the binary search range for nums1
 
     // Binary search to find the correct partition
     while (low <= high) {
       int mid1 = (low + high) / 2; // Mid index for the partition in nums1
-      int mid2 = leftEl - mid1; // Mid index for the partition in nums2, based on the total left elements
+      int mid2 = leftTotalPartitionEl - mid1; // Mid index for the partition in nums2, based on the total left elements
 
       // Elements just after the partition in nums1 and nums2
       int r1 = mid1 < n1 ? nums1[mid1] : Integer.MAX_VALUE; // Right element in nums1 or positive infinity if out of
@@ -282,4 +288,45 @@ public class binarySearch {
     return 0; // This line should never be reached, added to satisfy the return type
   }
 
+  /*
+   * K-th element of two Arrays
+   * Given two sorted arrays arr1 and arr2 and an element k. The task is to find
+   * the element that would be at the kth position of the combined sorted array.
+   * Input: k = 5, arr1[] = [2, 3, 6, 7, 9], arr2[] = [1, 4, 8, 10]
+   * Output: 6
+   * Explanation: The final combined sorted array would be - 1, 2, 3, 4, 6, 7, 8,
+   * 9, 10. The 5th element of this array is 6.
+   */
+  public long kthElement(int k, int arr1[], int arr2[]) {
+    int n1 = arr1.length;
+    int n2 = arr2.length;
+
+    if (n1 > n2)
+      return kthElement(k, arr2, arr1);
+
+    int low = Math.max(0, k - n2);
+    int high = Math.min(k, n1);
+
+    while (low <= high) {
+      int mid1 = (low + high) / 2;
+      int mid2 = k - mid1;
+
+      int l1 = mid1 - 1 >= 0 ? arr1[mid1 - 1] : Integer.MIN_VALUE;
+      int l2 = mid2 - 1 >= 0 ? arr2[mid2 - 1] : Integer.MIN_VALUE;
+
+      int r1 = mid1 < n1 ? arr1[mid1] : Integer.MAX_VALUE;
+      int r2 = mid2 < n2 ? arr2[mid2] : Integer.MAX_VALUE;
+
+      if (l1 <= r2 && l2 <= r1) {
+        return (long) Math.max(l1, l2);
+
+      } else if (l1 > r2) {
+        high = mid1 - 1;
+
+      } else {
+        low = mid1 + 1;
+      }
+    }
+    return 1;
+  }
 }
