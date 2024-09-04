@@ -29,8 +29,38 @@ public class stackQueue {
     return queue.isEmpty();
   }
 
-  //
+  // Using 2 queue
 
+  // using two queue. The push is inefficient.
+  private Queue<Integer> q1 = new LinkedList<Integer>();
+  private Queue<Integer> q2 = new LinkedList<Integer>();
+
+  public void pushed(int x) {
+    if (q1.isEmpty()) {
+      q1.add(x);
+      for (int i = 0; i < q2.size(); i++)
+        q1.add(q2.poll());
+    } else {
+      q2.add(x);
+      for (int i = 0; i < q1.size(); i++)
+        q2.add(q1.poll());
+    }
+  }
+
+  public void poped() {
+    if (!q1.isEmpty())
+      q1.poll();
+    else
+      q2.poll();
+  }
+
+  public int toped() {
+    return q1.isEmpty() ? q2.peek() : q1.peek();
+  }
+
+  public boolean emptyy() {
+    return q1.isEmpty() && q2.isEmpty();
+  }
   /*
    * 20. Valid Parentheses
    * Given a string s containing just the characters '(', ')', '{', '}', '[' and
