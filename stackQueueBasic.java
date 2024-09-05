@@ -191,4 +191,29 @@ public class stackQueueBasic {
     }
     return s.peek();
   }
+
+  /*
+   * Postfix to Prefix Conversion
+   * Input: ABC/-AK/L-*
+   * Output: *-A/BC-/AKL
+   */
+  public static String postToPre(String post_exp) {
+    // code here
+    int i = 0;
+    int n = post_exp.length();
+    Stack<String> s = new Stack<>();
+
+    while (i < n) {
+      char ch = post_exp.charAt(i);
+      if (Character.isLetterOrDigit(ch)) {
+        s.push(ch + "");
+      } else {
+        String t1 = s.pop();
+        String t2 = s.pop();
+        s.push(ch + t2 + t1);
+      }
+      i++;
+    }
+    return s.peek();
+  }
 }
