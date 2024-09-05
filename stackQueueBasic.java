@@ -143,6 +143,27 @@ public class stackQueueBasic {
   } // TC(O(n)) SC(O(n))
 
   /*
-   * 
+   * Postfix to Infix Conversion
+   * Input: ab*c+
+   * Output: ((a*b)+c)
    */
+  static String postToInfix(String exp) {
+    // code here
+    int n = exp.length();
+    Stack<String> s = new Stack<>();
+    int i = 0;
+
+    while (i < n) {
+      char ch = exp.charAt(i);
+      if (Character.isLetterOrDigit(ch)) {
+        s.push(ch + "");
+      } else {
+        String t1 = s.pop();
+        String t2 = s.pop();
+        s.push("(" + t2 + ch + t1 + ")");
+      }
+      i++;
+    }
+    return s.peek();
+  }
 }
