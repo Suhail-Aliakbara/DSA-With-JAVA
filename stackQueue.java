@@ -62,6 +62,36 @@ public class stackQueue {
     return q1.isEmpty() && q2.isEmpty();
   }
   /*
+   * 232. Implement Queue using Stacks
+   * 
+   */
+
+  Stack<Integer> s1 = new Stack<>();
+  Stack<Integer> s2 = new Stack<>();
+
+  public void push1(int x) {
+    s1.push(x);
+  }
+
+  public int pop1() {
+    // peek(); //important
+    return s2.pop();
+  }
+
+  public int peek1() {
+    if (s2.isEmpty()) {
+      while (!s1.isEmpty()) {
+        s2.add(s1.pop());
+      }
+    }
+    return s2.peek();
+
+  }
+
+  public boolean empty1() {
+    return s1.isEmpty() && s2.isEmpty();
+  }
+  /*
    * 20. Valid Parentheses
    * Given a string s containing just the characters '(', ')', '{', '}', '[' and
    * ']', determine if the input string is valid.
