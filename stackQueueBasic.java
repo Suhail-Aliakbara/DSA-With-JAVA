@@ -166,4 +166,29 @@ public class stackQueueBasic {
     }
     return s.peek();
   }
+
+  /*
+   * Prefix to Infix Conversion
+   * Input: *-A/BC-/AKL
+   * Output: ((A-(B/C))*((A/K)-L))
+   */
+  static String preToInfix(String pre_exp) { // Almost same as postToInfix conversion
+    // code here
+    int n = pre_exp.length();
+    int i = n - 1;
+    Stack<String> s = new Stack<>();
+
+    while (i >= 0) { // loop backward
+      char ch = pre_exp.charAt(i);
+      if (Character.isLetterOrDigit(ch)) {
+        s.push(ch + "");
+      } else {
+        String t1 = s.pop();
+        String t2 = s.pop();
+        s.push("(" + t1 + ch + t2 + ")"); // second element then first element from stack
+      }
+      i--;
+    }
+    return s.peek();
+  }
 }
