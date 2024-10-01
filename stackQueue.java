@@ -1,4 +1,6 @@
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -79,4 +81,38 @@ public class stackQueue {
    * int param_3 = obj.top();
    * int param_4 = obj.getMin();
    */
+
+  /*
+   * 496. Next Greater Element I
+   * The next greater element of some element x in an array is the first greater
+   * element that is to the right of x in the same array.
+   * 
+   * Input: nums1 = [4,1,2], nums2 = [1,3,4,2]
+   * Output: [-1,3,-1]
+   * 
+   * Input: nums1 = [2,4], nums2 = [1,2,3,4]
+   * Output: [3,-1]
+   */
+  public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+
+    int n = nums2.length;
+    Map<Integer, Integer> nge = new HashMap<>();
+    Stack<Integer> st = new Stack<>();
+
+    for (int i = n - 1; i >= 0; i--) {
+      while (!st.isEmpty() && nums2[i] >= st.peek()) {
+        st.pop();
+      }
+      if (st.isEmpty()) {
+        nge.put(nums2[i], -1);
+      } else {
+        nge.put(nums2[i], st.peek());
+      }
+      st.push(nums2[i]);
+    }
+    for (int i = 0; i < nums1.length; i++) {
+      nums1[i] = nge.get(nums1[i]);
+    }
+    return nums1;
+  }
 }
