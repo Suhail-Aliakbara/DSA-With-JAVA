@@ -115,4 +115,61 @@ public class stackQueue {
     }
     return nums1;
   }
+
+  /*
+   * Sort a Stack
+   * Sample Input: 5 -2 9 -7 3
+   * Sample Output: 9 5 3 -2 -7
+   */
+  public static void sortedInsert(Stack<Integer> stack, int n) {
+    if (stack.isEmpty() || stack.peek() <= n) {
+      stack.push(n);
+      return;
+    }
+
+    int removeBig = stack.peek();
+    stack.pop();
+
+    sortedInsert(stack, n);
+    stack.push(removeBig);
+  }
+
+  public static void sortStack(Stack<Integer> stack) {
+    // Write your code here.
+    if (stack.isEmpty()) {
+      return;
+    }
+
+    int top = stack.peek();
+    stack.pop();
+
+    sortStack(stack);
+
+    sortedInsert(stack, top);
+  }
+
+  /*
+   * Nearest Smaller Element
+   * input 1: A = [4, 5, 2, 10, 8]
+   * Output 1: G = [-1, 4, -1, 2, 2]
+   */
+  public int[] prevSmaller(int[] A) {
+    Stack<Integer> st = new Stack<>();
+    int arr[] = new int[A.length];
+
+    for (int i = 0; i < A.length; i++) {
+      while (!st.isEmpty() && st.peek() >= A[i]) {
+        st.pop();
+      }
+
+      if (!st.isEmpty()) {
+        arr[i] = st.peek();
+      } else {
+        arr[i] = -1;
+      }
+
+      st.push(A[i]);
+    }
+    return arr;
+  }
 }
