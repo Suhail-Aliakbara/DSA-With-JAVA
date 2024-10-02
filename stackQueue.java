@@ -247,4 +247,135 @@ public class stackQueue {
       this.prev = null;
     }
   }
+
+  /*
+   * 460. LFU Cache
+   * 
+   * Implement the LFUCache class:
+   *
+   * //LFUCache(int capacity) Initializes the object with the capacity of the data
+   * structure.
+   * // int get(int key) Gets the value of the key if the key exists in the cache.
+   * Otherwise, returns -1.
+   * // void put(int key, int value) Update the value of the key if present, or
+   * inserts the key if not already present. When the cache reaches its capacity,
+   * it should invalidate and remove the least frequently used key before
+   * inserting a new item. For this problem, when there is a tie (i.e., two or
+   * more keys with the same frequency), the least recently used key would be
+   * invalidated.
+   */
+  class LFUCache {
+    int capacity;
+    int currSize;
+    int minFrequency;
+    Map<Integer, DLLNode> cache;
+    Map<Integer, DoubleLinkedlist> frequencyMap;
+
+    public LFUCache(int capacity) {
+      this.capacity = capacity;
+      this.currSize = 0;
+      this.minFrequency = 0;
+
+      this.cache = new HashMap<>();
+      this.frequencyMap = new HashMap<>();
+    }
+
+    public int get(int key) {
+      DLLNode currNode = cache.get(key);
+      if (currNode == null)
+        return -1;
+      updateNode(currNode);
+      return currNode.val;
+    }
+
+    public void put(int key, int value) {
+      if (capacity == 0) {
+        return;
+      }
+
+      if (cache.containsKey(key)) {
+        DLLNode currNode = cache.get(key);
+        currNode.val = value;
+        updateNode(currNode);
+      } else {
+        currSize++;
+        if (currSize > capacity) {
+          DoubleLinkedlist minFreqList = frequencyMap.get(minFrequency);
+          cache.remove(minFreqList.tail.prev.key);
+          minFreqList.removeNode(minFreqList.tail.prev);
+          currSize--;
+        }
+
+        minFrequency = 1;
+        DLLNode newNode = new DLLNode(key, value);
+        DoubleLinkedlist newList = frequencyMap.getOrDefault(1, new DoubleLinkedlist());
+        newList.addNodeAtFirst(newNode);
+        frequencyMap.put(1, newList);
+        cache.put(key, newNode);
+      }
+    }
+
+    public void updateNode(DLLNode currNode) {
+      int currFreq = currNode.frequency;
+      DoubleLinkedlist currList = frequencyMap.get(currFreq);
+      currList.removeNode(currNode);
+
+      if (currFreq == minFrequency && currList.listSize == 0) {
+        minFrequency++;
+      }
+      currNode.frequency++;
+
+      DoubleLinkedlist newList = frequencyMap.getOrDefault(currNode.frequency, new DoubleLinkedlist());
+      newList.addNodeAtFirst(currNode);
+      frequencyMap.put(currNode.frequency, newList);
+
+    }
+  }
+
+  class DLLNode {
+    int key;
+    int val;
+    int frequency;
+    DLLNode next;
+    DLLNode prev;
+
+    DLLNode(int key, int val) {
+      this.key = key;
+      this.val = val;
+      frequency = 1;
+    }
+  }
+
+  class DoubleLinkedlist {
+    int listSize;
+    DLLNode head;
+    DLLNode tail;
+
+    DoubleLinkedlist() {
+      this.head = new DLLNode(0, 0);
+      this.tail = new DLLNode(0, 0);
+      listSize = 0;
+      head.next = tail;
+      tail.prev = head;
+    }
+
+    public void addNodeAtFirst(DLLNode currNode) {
+      DLLNode nextNode = head.next;
+      currNode.next = nextNode;
+      currNode.prev = head;
+      head.next = currNode;
+      nextNode.prev = currNode;
+      listSize++;
+    }
+
+    public void removeNode(DLLNode currNode) {
+      DLLNode prevNode = currNode.prev;
+      DLLNode nextNode = currNode.next;
+      prevNode.next = nextNode;
+      nextNode.prev = prevNode;
+      listSize--;
+
+    }
+  }
+
 }
