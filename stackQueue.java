@@ -391,7 +391,7 @@ public class stackQueue {
    * The largest rectangle is shown in the red area, which has an area = 10 units.
    */
 
-  public int largestRectangleArea(int[] heights) {
+  public int largestRectangleArea(int[] heights) { // TC(O(N)) SC(O(3N));
     int n = heights.length;
     Stack<Integer> st = new Stack<>();
     int leftSmall[] = new int[n];
@@ -430,6 +430,29 @@ public class stackQueue {
       maxRect = Math.max(maxRect, heights[i] * (rightSmall[i] - leftSmall[i] + 1));
     }
 
+    return maxRect;
+  }
+
+  // OPTIMAL 2 --TC(O(N)) SC(0(N))
+  public int largestRectangleArea1(int[] heights) {
+    int n = heights.length;
+    Stack<Integer> st = new Stack<>();
+    int maxRect = 0;
+
+    for (int i = 0; i <= n; i++) {
+      while (!st.isEmpty() && ((i == n) || heights[st.peek()] >= heights[i])) {
+        int height = heights[st.peek()];
+        st.pop();
+
+        int width = 0;
+        if (st.isEmpty())
+          width = i;
+        else
+          width = i - st.peek() - 1;
+        maxRect = Math.max(maxRect, width * height);
+      }
+      st.push(i);
+    }
     return maxRect;
   }
 }
