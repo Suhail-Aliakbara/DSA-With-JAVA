@@ -1,4 +1,5 @@
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -476,7 +477,28 @@ public class stackQueue {
    * 1 3 -1 -3 5 [3 6 7] --7
    */
 
-  public int[] maxSlidingWindow(int[] nums, int k) {
+  static void GetMax(int arr[], int l, int r, ArrayList<Integer> maxx) {
+    int i, maxi = Integer.MIN_VALUE;
+    for (i = l; i <= r; i++)
+      maxi = Math.max(maxi, arr[i]);
+    maxx.add(maxi);
+  }
+
+  static ArrayList<Integer> maxSlidingWindow(int arr[], int k) {
+    int left = 0, right = 0;
+    ArrayList<Integer> maxx = new ArrayList<>();
+    while (right < k - 1) {
+      right++;
+    }
+    while (right < arr.length) {
+      GetMax(arr, left, right, maxx);
+      left++;
+      right++;
+    }
+    return maxx;
+  }
+
+  public int[] maxSlidingWindow1(int[] nums, int k) { // OPTIMAL- TC:O(N) SC:O(K)
 
     int n = nums.length;
     int arr[] = new int[n - k + 1];
