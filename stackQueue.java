@@ -1,3 +1,5 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -454,5 +456,46 @@ public class stackQueue {
       st.push(i);
     }
     return maxRect;
+  }
+
+  /*
+   * 239. Sliding Window Maximum
+   * 
+   * Return the max sliding window.
+   * 
+   * Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+   * Output: [3,3,5,5,6,7]
+   * Explanation:
+   * Window position -----Max
+   * --------------- -----
+   * [1 3 -1] -3 5 3 6 7 --3
+   * 1 [3 -1 -3] 5 3 6 7 --3
+   * 1 3 [-1 -3 5] 3 6 7 --5
+   * 1 3 -1 [-3 5 3] 6 7 --5
+   * 1 3 -1 -3 [5 3 6] 7 --6
+   * 1 3 -1 -3 5 [3 6 7] --7
+   */
+
+  public int[] maxSlidingWindow(int[] nums, int k) {
+
+    int n = nums.length;
+    int arr[] = new int[n - k + 1];
+    int ri = 0;
+
+    Deque<Integer> dq = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) {
+      while (!dq.isEmpty() && dq.peek() == i - k) {
+        dq.poll();
+      }
+      while (!dq.isEmpty() && nums[i] >= nums[dq.peekLast()]) {
+        dq.pollLast();
+      }
+
+      dq.offer(i);
+      if (i >= k - 1) {
+        arr[ri++] = nums[dq.peek()];
+      }
+    }
+    return arr;
   }
 }
