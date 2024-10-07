@@ -591,4 +591,36 @@ public class stackQueue {
     }
     return count_fresh == cnt ? countMin : -1;
   }
+  /*
+   * 901. Online Stock Span
+   * Design an algorithm that collects daily price quotes for some stock and
+   * returns the span of that stock's price for the current day.
+   * 
+   * Input
+   * ["StockSpanner", "next", "next", "next", "next", "next", "next", "next"]
+   * [[], [100], [80], [60], [70], [60], [75], [85]]
+   * Output
+   * [null, 1, 1, 1, 2, 1, 4, 6]
+   */
+
+  class StockSpanner {
+
+    Stack<int[]> st;
+
+    public StockSpanner() {
+      st = new Stack<>();
+    }
+
+    public int next(int price) {
+      int val = 1;
+      while (!st.isEmpty() && st.peek()[0] <= price) {
+        int prevDays = st.pop()[1];
+        val = val + prevDays;
+      }
+      st.push(new int[] { price, val });
+
+      return val;
+    }
+  }
+
 }
