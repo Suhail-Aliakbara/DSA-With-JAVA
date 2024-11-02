@@ -8,6 +8,37 @@ import java.util.HashMap;
 
 public class hashMap {
 
+  /*------- 3. Longest Substring Without Repeating Characters ---------
+  * Given a string s, find the length of the longest substring
+  * without repeating characters.
+  * Input: s = "abcabcbb"
+  * Output: 3
+  * Explanation: The answer is "abc", with the length of 3.
+  */
+  public int lengthOfLongestSubstring(String s) {
+    int n = s.length();
+    HashMap<Character, Integer> mpp = new HashMap<Character, Integer>();
+    int left = 0;
+    int right = 0;
+    int len = 0;
+
+    while (right < n) { // Iterate through the string with the right pointer
+      if (mpp.containsKey(s.charAt(right))) { // If the current character is already in the hashmap
+        // Move the left pointer to the right of the last index of the current character
+        // to avoid repeating characters
+        left = Math.max(mpp.get(s.charAt(right)) + 1, left);
+      }
+      // Update the current character's latest index in the hashmap
+      mpp.put(s.charAt(right), right);
+
+      // Calculate the length of the current substring without repeating characters
+      // and update the maximum length
+      len = Math.max(len, right - left + 1);
+      right++; // Move the right pointer to the next character
+    }
+    return len;
+  }
+
   /*
    * Given an array containing N integers and an integer K., Your task is to find
    * the length of the longest Sub-Array with the sum of the elements equal to the
@@ -23,8 +54,6 @@ public class hashMap {
    * Output : 0
    * Explanation: There is no such sub-array with sum 6.
    */
-
-  // --- This Solution will work for both Positive and negative---
   /*
    * Time Complexity: O(N) or O(N*logN) depending on which map data structure we
    * are using, where N = size of the array.
@@ -35,6 +64,7 @@ public class hashMap {
    * least complexity will be O(N) as we are using a loop to traverse the array.
    * SC(O(N))
    */
+  // --- This Solution will work for both Positive and negative---
 
   public static int getLongestSubarray(int[] a, long k) {
     int n = a.length; // size of the array.
@@ -218,13 +248,10 @@ public class hashMap {
     for (int i = 0; i < n; i++) {
       // add current element to prefix Sum:
       preSum += arr[i];
-
       // Calculate x-k:
       int remove = preSum - k;
-
       // Add the number of subarrays to be removed:
       cnt += map.getOrDefault(remove, 0);
-
       // Update the count of prefix sum in the map.
       map.put(preSum, map.getOrDefault(preSum, 0) + 1);
     }
@@ -263,10 +290,8 @@ public class hashMap {
   public static List<Integer> majorityElement3(int[] nums) {
     int n = nums.length; // size of the array
     List<Integer> ls = new ArrayList<>(); // list of answers
-
     // declaring a map:
     HashMap<Integer, Integer> mpp = new HashMap<>();
-
     // least occurrence of the majority element:
     int mini = (int) (n / 3) + 1;
 
@@ -275,8 +300,7 @@ public class hashMap {
       int value = mpp.getOrDefault(nums[i], 0);
       mpp.put(nums[i], value + 1);
 
-      // checking if nums[i] is
-      // the majority element:
+      // checking if nums[i] is the majority element:
       if (mpp.get(nums[i]) == mini) {
         ls.add(nums[i]);
       }
@@ -349,7 +373,7 @@ public class hashMap {
   }
 
   /*
-   * 3Sum problem // Better approach
+   * 3Sum problem
    * Given an integer array nums, return all the triplets [nums[i], nums[j],
    * nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] +
    * nums[k] == 0.
@@ -367,6 +391,7 @@ public class hashMap {
    * Notice that the order of the output and the order of the triplets does not
    * matter.
    */
+  // Better approach
   public static List<List<Integer>> triplet(int n, int[] arr) {
     Set<List<Integer>> st = new HashSet<>();
 
@@ -406,7 +431,8 @@ public class hashMap {
    * operation of skipping duplicates. So the total time complexity will be O(N2).
    * 
    * Space Complexity: O(no. of quadruplets), This space is only used to store the
-   * answer. We are not using any extra space to solve this problem. So, from that
+   * answer.
+   * We are not using any extra space to solve this problem. So, from that
    * perspective, space complexity can be written as O(1).
    */
   public static List<List<Integer>> triplet1(int n, int[] arr) {
@@ -417,7 +443,6 @@ public class hashMap {
       // remove duplicates:
       if (i != 0 && arr[i] == arr[i - 1]) // [0,0,0,1,1,1,2,2,3]
         continue;
-
       // moving 2 pointers:
       int j = i + 1;
       int k = n - 1;
@@ -425,8 +450,12 @@ public class hashMap {
         int sum = arr[i] + arr[j] + arr[k];
         if (sum < 0) {
           j++;
+          while (j < k && arr[j] == arr[j - 1])
+            j++;
         } else if (sum > 0) {
           k--;
+          while (j < k && arr[k] == arr[k + 1])
+            k--;
         } else {
           List<Integer> temp = Arrays.asList(arr[i], arr[j], arr[k]);
           ans.add(temp);
@@ -456,7 +485,54 @@ public class hashMap {
    * Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
    */
 
-  public List<List<Integer>> fourSum(int[] nums, int target) {
+  // BETTER SOLUTION
+  public static List<List<Integer>> fourSum(int[] nums, int target) {
+    int n = nums.length; // size of the array
+    Set<List<Integer>> st = new HashSet<>();
+
+    // checking all possible quadruplets:
+    for (int i = 0; i < n; i++) {
+      for (int j = i + 1; j < n; j++) {
+        Set<Long> hashset = new HashSet<>();
+        for (int k = j + 1; k < n; k++) {
+          // taking bigger data type
+          // to avoid integer overflow:
+          long sum = nums[i] + nums[j];
+          sum += nums[k];
+          long fourth = target - sum;
+          if (hashset.contains(fourth)) {
+            List<Integer> temp = new ArrayList<>();
+            temp.add(nums[i]);
+            temp.add(nums[j]);
+            temp.add(nums[k]);
+            temp.add((int) fourth);
+            temp.sort(Integer::compareTo);
+            st.add(temp);
+          }
+          // put the kth element into the hashset:
+          hashset.add((long) nums[k]);
+        }
+      }
+    }
+    List<List<Integer>> ans = new ArrayList<>(st);
+    return ans;
+  }
+  /*
+   * Time Complexity: O(N3*log(M)), where N = size of the array, M = no. of
+   * elements in the set.
+   * Reason: Here, we are mainly using 3 nested loops, and inside the loops there
+   * are some operations on the set data structure which take log(M) time
+   * complexity.
+   * Space Complexity: O(2 * no. of the quadruplets)+O(N)
+   * Reason: we are using a set data structure and a list to store the quads. This
+   * results in the first term. And the second space is taken by the set data
+   * structure we are using to store the array elements. At most, the set can
+   * contain approximately all the array elements and so the space complexity is
+   * O(N).
+   */
+
+  // OPTIMAL SOLUTION
+  public List<List<Integer>> fourSum1(int[] nums, int target) {
 
     List<List<Integer>> ans = new ArrayList<>();
     Arrays.sort(nums);

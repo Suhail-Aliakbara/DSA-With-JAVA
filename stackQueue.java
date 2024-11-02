@@ -622,5 +622,9 @@ public class stackQueue {
       return val;
     }
   }
+  /*
+   * Maximum of minimum for every window size
+   * 
+   */
 
 }

@@ -47,8 +47,8 @@ public class Arrays2D {
   // Optimal Solution
   public void setZeroes(int[][] matrix) {
 
-    // int[] row = new int[n]; --> matrix[..][0]
-    // int[] col = new int[m]; --> matrix[0][..]
+    // int[] row = new int[n]; --> matrix[..][0] //first "Col" which is "Row" marker
+    // int[] col = new int[m]; --> matrix[0][..] //first "Row" which is "Col" marker
 
     int n = matrix.length;
     int m = matrix[0].length;
@@ -93,7 +93,7 @@ public class Arrays2D {
     }
   }
 
-  /*
+  /*-----------Rotate an array by 90 degrees------------
    * You are given an n x n 2D matrix representing an image, rotate the image by
    * 90 degrees (clockwise).
    * 
@@ -129,12 +129,12 @@ public class Arrays2D {
       }
     }
     // Reverse each row
-    for (int i = 0; i < matrix.length; i++) {
-      for (int j = 0; j < matrix.length / 2; j++) {
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n / 2; j++) {
         // Swap matrix[i][j] and matrix[i][matrix.length - 1 - j]
         int temp = matrix[i][j];
-        matrix[i][j] = matrix[i][matrix.length - 1 - j];
-        matrix[i][matrix.length - 1 - j] = temp;
+        matrix[i][j] = matrix[i][n - 1 - j];
+        matrix[i][n - 1 - j] = temp;
       }
     }
   }

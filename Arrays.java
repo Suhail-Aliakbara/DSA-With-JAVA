@@ -24,8 +24,7 @@ public class Arrays {
     return sum;
   }
 
-  // ------------------Check if the Array is rotated and
-  // Sorted--------------------
+  // -----------Check if the Array is rotated and Sorted-------------
   /*
    * *
    * Rotated and Sorted array
@@ -51,28 +50,6 @@ public class Arrays {
       return true;
     else
       return false;
-  }
-
-  // ---------------------Remove Duplicates from array------------------------
-
-  /*
-   * Solved by seeing and understanding the solution
-   * 
-   * Input: nums = [0,0,1,1,1,2,2,3,3,4]
-   * Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
-   * Explanation: Your function should return k = 5, with the first five elements
-   * of nums being 0, 1, 2, 3, and 4 respectively.
-   */
-  public int removeDuplicates(int[] nums) {
-    int k = 1;
-    int n = nums.length - 1;
-    for (int i = 0; i < n; i++) {
-      if (nums[i] != nums[i + 1]) {
-        nums[k] = nums[i + 1];
-        k++;
-      }
-    }
-    return k;
   }
 
   // ----------------------Rotate an Array by K places--------------------------
@@ -133,7 +110,6 @@ public class Arrays {
    * 
    * Input: nums = [0,1,0,3,12]
    * Output: [1,3,12,0,0]
-   * 
    */
 
   public void moveZeroes(int[] arr) {
@@ -258,9 +234,9 @@ public class Arrays {
     }
   }
 
-  /*
+  /*----------------------
    * Given an array of integers nums containing n + 1 integers where each integer
-   * is in the range [1, n] inclusive.
+   * is in the range [1, n] inclusive. -----------------------
    * 
    * There is only one repeated number in nums, return this repeated number.
    * You must solve the problem without modifying the array nums and uses only
@@ -295,31 +271,24 @@ public class Arrays {
       else
         low = mid + 1; // Narrow the search space to the upper half
     }
-
     // low (or high) is the duplicate number
     return low;
   }
 
   // Fast-Slow Pointers // Optimal approach TC(O(N))
-
   public int findDuplicate1(int[] nums) {
-    // Initialize two pointers, slow and fast, both starting at the first element
     int slow = nums[0];
     int fast = nums[0];
 
     // Phase 1: Find the intersection point of the two runners.
     do {
-      // Move slow pointer by one step
       slow = nums[slow];
-      // Move fast pointer by two steps
       fast = nums[nums[fast]];
     } while (slow != fast); // Continue until they meet
 
     // Phase 2: Find the entrance to the cycle (duplicate number).
-    // Reset fast to the beginning
     fast = nums[0];
-    while (slow != fast) { // Move slow and fast at the same pace
-      // Move each pointer by one step
+    while (slow != fast) {
       slow = nums[slow];
       fast = nums[fast];
     }
@@ -327,8 +296,7 @@ public class Arrays {
     return slow;
   }
 
-  /*
-   * Pow(x, n)
+  /*------------- Pow(x, n)-----------------
    * Input: x = 2.00000, n = 10
    * Output: 1024.00000
    * 
@@ -361,7 +329,7 @@ public class Arrays {
    * Given the two integers m and n, return the number of possible unique paths
    * that the robot can take to reach the bottom-right corner.
    * 
-   * Input: m = 3, n = 2
+   * Input: m = 4, n = 4
    * Output: 3
    * Explanation: From the top-left corner, there are a total of 3 ways to reach
    * the bottom-right corner:
@@ -494,40 +462,7 @@ public class Arrays {
     return cnt;
   }
 
-  /*
-   * 3. Longest Substring Without Repeating Characters
-   * Given a string s, find the length of the longest substring
-   * without repeating characters.
-   * Input: s = "abcabcbb"
-   * Output: 3
-   * Explanation: The answer is "abc", with the length of 3.
-   */
-  public int lengthOfLongestSubstring(String s) {
-    int n = s.length();
-    HashMap<Character, Integer> mpp = new HashMap<Character, Integer>();
-    int left = 0;
-    int right = 0;
-    int len = 0;
-
-    while (right < n) { // Iterate through the string with the right pointer
-      if (mpp.containsKey(s.charAt(right))) { // If the current character is already in the hashmap
-        // Move the left pointer to the right of the last index of the current character
-        // to avoid repeating characters
-        left = Math.max(mpp.get(s.charAt(right)) + 1, left);
-      }
-      // Update the current character's latest index in the hashmap
-      mpp.put(s.charAt(right), right);
-
-      // Calculate the length of the current substring without repeating characters
-      // and update the maximum length
-      len = Math.max(len, right - left + 1);
-      right++; // Move the right pointer to the next character
-    }
-    return len;
-  }
-
-  /*
-   * 42. Trapping Rain Water
+  /*--------- 42. Trapping Rain Water --------------------
    * Given n non-negative integers representing an elevation map where the width
    * of each bar is 1, compute how much water it can trap after raining.
    * Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
@@ -560,5 +495,28 @@ public class Arrays {
       }
     }
     return res;
+  }
+
+  // ---------------------Remove Duplicates from array------------------------
+
+  /*
+   * Solved by seeing and understanding the solution
+   * 
+   * Input: nums = [0,0,1,1,1,2,2,3,3,4]
+   * Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+   * Explanation: Your function should return k = 5, with the first five elements
+   * of nums being 0, 1, 2, 3, and 4 respectively.
+   */
+
+  public int removeDuplicates(int[] nums) {
+    int k = 1;
+    int n = nums.length - 1;
+    for (int i = 0; i < n; i++) {
+      if (nums[i] != nums[i + 1]) {
+        nums[k] = nums[i + 1];
+        k++;
+      }
+    }
+    return k;
   }
 }
