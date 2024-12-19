@@ -108,7 +108,7 @@ public class stackQueueBasic {
   }
 
   // Function to convert an infix expression to a postfix expression.
-  public static String infixToPostfix(String exp) {
+  public static string infixToPostfix(string exp) {
     // Your code here
     int n = exp.length();
     StringBuilder ans = new StringBuilder();
@@ -147,10 +147,10 @@ public class stackQueueBasic {
    * Input: ab*c+
    * Output: ((a*b)+c)
    */
-  static String postToInfix(String exp) {
+  static string postToInfix(string exp) {
     // code here
     int n = exp.length();
-    Stack<String> s = new Stack<>();
+    Stack<string> s = new Stack<>();
     int i = 0;
 
     while (i < n) {
@@ -158,8 +158,8 @@ public class stackQueueBasic {
       if (Character.isLetterOrDigit(ch)) {
         s.push(ch + "");
       } else {
-        String t1 = s.pop();
-        String t2 = s.pop();
+        string t1 = s.pop();
+        string t2 = s.pop();
         s.push("(" + t2 + ch + t1 + ")");
       }
       i++;
@@ -172,19 +172,19 @@ public class stackQueueBasic {
    * Input: *-A/BC-/AKL
    * Output: ((A-(B/C))*((A/K)-L))
    */
-  static String preToInfix(String pre_exp) { // Almost same as postToInfix conversion
+  static string preToInfix(string pre_exp) { // Almost same as postToInfix conversion
     // code here
     int n = pre_exp.length();
     int i = n - 1;
-    Stack<String> s = new Stack<>();
+    Stack<string> s = new Stack<>();
 
     while (i >= 0) { // loop backward
       char ch = pre_exp.charAt(i);
       if (Character.isLetterOrDigit(ch)) {
         s.push(ch + "");
       } else {
-        String t1 = s.pop();
-        String t2 = s.pop();
+        string t1 = s.pop();
+        string t2 = s.pop();
         s.push("(" + t1 + ch + t2 + ")"); // second element then first element from stack
       }
       i--;
@@ -197,19 +197,19 @@ public class stackQueueBasic {
    * Input: ABC/-AK/L-*
    * Output: *-A/BC-/AKL
    */
-  public static String postToPre(String post_exp) {
+  public static string postToPre(string post_exp) {
     // code here
     int i = 0;
     int n = post_exp.length();
-    Stack<String> s = new Stack<>();
+    Stack<string> s = new Stack<>();
 
     while (i < n) {
       char ch = post_exp.charAt(i);
       if (Character.isLetterOrDigit(ch)) {
         s.push(ch + "");
       } else {
-        String t1 = s.pop();
-        String t2 = s.pop();
+        string t1 = s.pop();
+        string t2 = s.pop();
         s.push(ch + t2 + t1);
       }
       i++;
@@ -222,19 +222,19 @@ public class stackQueueBasic {
    * Input: *-A/BC-/AKL
    * Output: ABC/-AK/L-*
    */
-  static String preToPost(String pre_exp) {
+  static string preToPost(string pre_exp) {
     // code here
     int n = pre_exp.length();
     int i = n - 1;
-    Stack<String> s = new Stack<>();
+    Stack<string> s = new Stack<>();
 
     while (i >= 0) {
       char ch = pre_exp.charAt(i);
       if (Character.isLetterOrDigit(ch)) {
         s.push(ch + "");
       } else {
-        String t1 = s.pop();
-        String t2 = s.pop();
+        string t1 = s.pop();
+        string t2 = s.pop();
         s.push(t1 + t2 + ch);
       }
       i--;
@@ -278,7 +278,7 @@ public class stackQueueBasic {
   }
 
   // Reverse the letters of the word
-  static String reverse(char str[], int start, int end) {
+  static string reverse(char str[], int start, int end) {
     // Temporary variable to store character
     char temp;
     while (start < end) {
@@ -289,16 +289,16 @@ public class stackQueueBasic {
       start++;
       end--;
     }
-    return String.valueOf(str);
+    return string.valueOf(str);
   }
 
-  static String infixToPostfix(char[] infix1) {
+  static string infixToPostfix(char[] infix1) {
     System.out.println(infix1);
-    String infix = '(' + String.valueOf(infix1) + ')';
+    string infix = '(' + string.valueOf(infix1) + ')';
 
     int l = infix.length();
     Stack<Character> char_stack = new Stack<>();
-    String output = "";
+    string output = "";
 
     for (int i = 0; i < l; i++) {
 
@@ -344,12 +344,12 @@ public class stackQueueBasic {
     return output;
   }
 
-  static String infixToPrefix(char[] infix) {
+  static string infixToPrefix(char[] infix) {
     // Reverse String Replace ( with ) and vice versa Get Postfix Reverse Postfix *
 
     int l = infix.length;
     // Reverse infix
-    String infix1 = reverse(infix, 0, l - 1);
+    string infix1 = reverse(infix, 0, l - 1);
     infix = infix1.toCharArray();
 
     // Replace ( with ) and vice versa
@@ -363,7 +363,7 @@ public class stackQueueBasic {
         i++;
       }
     }
-    String prefix = infixToPostfix(infix);
+    string prefix = infixToPostfix(infix);
     // Reverse postfix
     prefix = reverse(prefix.toCharArray(), 0, l - 1);
     return prefix;

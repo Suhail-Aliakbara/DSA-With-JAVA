@@ -165,7 +165,7 @@ public class recursionLC {
    * Output: [["a","a","b"],["aa","b"]]
    */
 
-  boolean isPalindrome(String str, int start, int end) {
+  boolean isPalindrome(string str, int start, int end) {
     while (start <= end) {
       if (str.charAt(start++) != str.charAt(end--)) {
         return false;
@@ -174,7 +174,7 @@ public class recursionLC {
     return true;
   }
 
-  void paliPartition(int idx, String str, List<List<String>> ans, List<String> ds) {
+  void paliPartition(int idx, string str, List<List<string>> ans, List<string> ds) {
     if (idx == str.length()) {
       ans.add(new ArrayList<>(ds));
       return;
@@ -188,8 +188,8 @@ public class recursionLC {
     }
   }
 
-  public List<List<String>> partition(String s) {
-    List<List<String>> ans = new ArrayList<>();
+  public List<List<string>> partition(string s) {
+    List<List<string>> ans = new ArrayList<>();
     paliPartition(0, s, ans, new ArrayList<>());
     return ans;
   }
@@ -217,7 +217,7 @@ public class recursionLC {
    * Output: "213"
    */
 
-  public String getPermutation(int n, int k) {
+  public string getPermutation(int n, int k) {
     int fact = 1;
     ArrayList<Integer> ans = new ArrayList<>();
     for (int i = 1; i < n; i++) {
@@ -226,7 +226,7 @@ public class recursionLC {
     }
     ans.add(n);
     k = k - 1;
-    String str = "";
+    string str = "";
     while (true) {
       str += ans.get(k / fact);
       ans.remove(k / fact);
