@@ -46,44 +46,61 @@ public class stackQueue {
   }
 
   /*
-   * 155. Min Stack
-   * Design a stack that supports push, pop, top, and retrieving the minimum
-   * element in constant time.
+   * Next Greater Element I
+   * Input: N = 11, A[] = {3,10,4,2,1,2,6,1,7,2,9}
+   * Output: 10,-1,6,6,2,6,7,7,9,9,10
    */
-  class MinStack {
-    int min = Integer.MAX_VALUE;
-    Stack<Integer> stack = new Stack<Integer>();
-
-    public void push(int val) {
-      if (val <= min) {
-        stack.push(min);
-        min = val;
+  public static int[] nextGreaterElements(int[] nums) {
+    int n = nums.length;
+    int nge[] = new int[n];
+    Stack<Integer> st = new Stack<>();
+    for (int i = 2 * n - 1; i >= 0; i--) {
+      while (st.isEmpty() == false && st.peek() <= nums[i % n]) {
+        st.pop();
       }
-      stack.push(val);
-    }
 
-    public void pop() {
-      if (stack.pop() == min)
-        min = stack.pop();
-    }
+      if (i < n) {
+        if (st.isEmpty() == false)
+          nge[i] = st.peek();
+        else
+          nge[i] = -1;
+      }
 
-    public int top() {
-      return stack.peek();
+      st.push(nums[i % n]);
     }
-
-    public int getMin() {
-      return min;
-    }
+    return nge;
   }
 
-  /**
-   * Your MinStack object will be instantiated and called as such:
-   * MinStack obj = new MinStack();
-   * obj.push(val);
-   * obj.pop();
-   * int param_3 = obj.top();
-   * int param_4 = obj.getMin();
+  /*
+   * 503. Next Greater Element II
+   * Input: nums = [1,2,1]
+   * Output: [2,-1,2]
    */
+
+  public int[] nextGreaterElements2(int[] nums) {
+    int n = nums.length;
+
+    // Result array to store the next greater elements
+    int[] nge = new int[n];
+
+    // Stack to keep track of elements for comparison
+    Stack<Integer> st = new Stack<>();
+
+    // Iterate backwards twice to simulate circular traversal
+    for (int i = 2 * n - 1; i >= 0; i--) {
+      // Pop elements that are smaller or equal to the current element
+      while (!st.isEmpty() && st.peek() <= nums[i % n]) {
+        st.pop();
+      }
+      // Assign the next greater element for the first pass
+      if (i < n) {
+        nge[i] = st.isEmpty() ? -1 : st.peek();
+      }
+      // Push the current element into the stack
+      st.push(nums[i % n]);
+    }
+    return nge;
+  }
 
   /*
    * 496. Next Greater Element I
@@ -96,7 +113,7 @@ public class stackQueue {
    * Input: nums1 = [2,4], nums2 = [1,2,3,4]
    * Output: [3,-1]
    */
-  public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+  public int[] nextGreaterElement1(int[] nums1, int[] nums2) {
 
     int n = nums2.length;
     Map<Integer, Integer> nge = new HashMap<>();
@@ -117,38 +134,6 @@ public class stackQueue {
       nums1[i] = nge.get(nums1[i]);
     }
     return nums1;
-  }
-
-  /*
-   * Sort a Stack
-   * Sample Input: 5 -2 9 -7 3
-   * Sample Output: 9 5 3 -2 -7
-   */
-  public static void sortedInsert(Stack<Integer> stack, int n) {
-    if (stack.isEmpty() || stack.peek() <= n) {
-      stack.push(n);
-      return;
-    }
-
-    int removeBig = stack.peek();
-    stack.pop();
-
-    sortedInsert(stack, n);
-    stack.push(removeBig);
-  }
-
-  public static void sortStack(Stack<Integer> stack) {
-    // Write your code here.
-    if (stack.isEmpty()) {
-      return;
-    }
-
-    int top = stack.peek();
-    stack.pop();
-
-    sortStack(stack);
-
-    sortedInsert(stack, top);
   }
 
   /*
@@ -174,6 +159,212 @@ public class stackQueue {
       st.push(A[i]);
     }
     return arr;
+  }
+
+  /*
+   * Sort a Stack
+   * Sample Input: 5 -2 9 -7 3
+   * Sample Output: 9 5 3 -2 -7
+   */
+  public static void sortedInsert(Stack<Integer> stack, int n) {
+    if (stack.isEmpty() || stack.peek() <= n) {
+      stack.push(n);
+      return;
+    }
+
+    int removeBig = stack.pop();
+
+    sortedInsert(stack, n);
+    stack.push(removeBig);
+  }
+
+  public static void sortStack(Stack<Integer> stack) {
+    // Write your code here.
+    if (stack.isEmpty()) {
+      return;
+    }
+    int top = stack.pop();
+
+    sortStack(stack);
+
+    sortedInsert(stack, top);
+  }
+
+  /*
+   * 84. Largest Rectangle in Histogram
+   * Given an array of integers heights representing the histogram's bar height
+   * where the width of each bar is 1, return the area of the largest rectangle in
+   * the histogram.
+   * Input: heights = [2,1,5,6,2,3]
+   * Output: 10
+   * Explanation: The above is a histogram where width of each bar is 1.
+   * The largest rectangle is shown in the red area, which has an area = 10 units.
+   */
+
+  public int largestRectangleArea(int[] heights) { // TC(O(N)) SC(O(3N));
+    int n = heights.length;
+    Stack<Integer> st = new Stack<>();
+    int leftSmall[] = new int[n];
+    int rightSmall[] = new int[n];
+
+    for (int i = 0; i < n; i++) {
+      while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
+        st.pop();
+      }
+      if (st.isEmpty())
+        leftSmall[i] = 0;
+      else
+        leftSmall[i] = st.peek() + 1;
+
+      st.push(i);
+    }
+
+    while (!st.isEmpty())
+      st.pop();
+
+    for (int i = n - 1; i >= 0; i--) {
+      while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
+        st.pop();
+      }
+      if (st.isEmpty())
+        rightSmall[i] = n - 1;
+      else
+        rightSmall[i] = st.peek() - 1;
+
+      st.push(i);
+    }
+
+    int maxRect = 0;
+
+    for (int i = 0; i < n; i++) {
+      maxRect = Math.max(maxRect, heights[i] * (rightSmall[i] - leftSmall[i] + 1));
+    }
+
+    return maxRect;
+  }
+
+  // OPTIMAL 2 --TC(O(N)) SC(0(N))
+  public int largestRectangleArea1(int[] heights) {
+    int n = heights.length;
+    Stack<Integer> st = new Stack<>();
+    int maxRect = 0;
+
+    for (int i = 0; i <= n; i++) {
+      while (!st.isEmpty() && ((i == n) || heights[st.peek()] >= heights[i])) {
+        int height = heights[st.peek()];
+        st.pop();
+
+        int width = 0;
+        if (st.isEmpty())
+          width = i;
+        else
+          width = i - st.peek() - 1;
+        maxRect = Math.max(maxRect, width * height);
+      }
+      st.push(i);
+    }
+    return maxRect;
+  }
+
+  /*
+   * 239. Sliding Window Maximum
+   * 
+   * Return the max sliding window.
+   * 
+   * Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+   * Output: [3,3,5,5,6,7]
+   * Explanation:
+   * Window position -----Max
+   * --------------- -----
+   * [1 3 -1] -3 5 3 6 7 --3
+   * 1 [3 -1 -3] 5 3 6 7 --3
+   * 1 3 [-1 -3 5] 3 6 7 --5
+   * 1 3 -1 [-3 5 3] 6 7 --5
+   * 1 3 -1 -3 [5 3 6] 7 --6
+   * 1 3 -1 -3 5 [3 6 7] --7
+   */
+
+  static void GetMax(int arr[], int l, int r, ArrayList<Integer> maxx) {
+    int i, maxi = Integer.MIN_VALUE;
+    for (i = l; i <= r; i++)
+      maxi = Math.max(maxi, arr[i]);
+    maxx.add(maxi);
+  }
+
+  static ArrayList<Integer> maxSlidingWindow(int arr[], int k) {
+    int left = 0, right = 0;
+    ArrayList<Integer> maxx = new ArrayList<>();
+    while (right < k - 1) {
+      right++;
+    }
+    while (right < arr.length) {
+      GetMax(arr, left, right, maxx);
+      left++;
+      right++;
+    }
+    return maxx;
+  }
+  /*
+   * Time Complexity: O(N^2)
+   * Reason: One loop for traversing and another to findMax
+   * 
+   * Space Complexity: O(K)
+   * Reason: No.of windows
+   */
+
+  public int[] maxSlidingWindow1(int[] nums, int k) { // OPTIMAL- TC:O(N) SC:O(K)
+
+    int n = nums.length;
+    int arr[] = new int[n - k + 1];
+    int ri = 0;
+
+    Deque<Integer> dq = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) {
+      while (!dq.isEmpty() && dq.peek() == i - k) {
+        dq.poll();
+      }
+      while (!dq.isEmpty() && nums[i] >= nums[dq.peekLast()]) {
+        dq.pollLast();
+      }
+
+      dq.offer(i);
+      if (i >= k - 1) {
+        arr[ri++] = nums[dq.peek()];
+      }
+    }
+    return arr;
+  }
+
+  /*
+   * 901. Online Stock Span
+   * Design an algorithm that collects daily price quotes for some stock and
+   * returns the span of that stock's price for the current day.
+   * 
+   * Input
+   * ["StockSpanner", "next", "next", "next", "next", "next", "next", "next"]
+   * [[], [100], [80], [60], [70], [60], [75], [85]]
+   * Output
+   * [null, 1, 1, 1, 2, 1, 4, 6]
+   */
+
+  class StockSpanner {
+
+    Stack<int[]> st;
+
+    public StockSpanner() {
+      st = new Stack<>();
+    }
+
+    public int next(int price) {
+      int val = 1;
+      while (!st.isEmpty() && st.peek()[0] <= price) {
+        int prevDays = st.pop()[1];
+        val = val + prevDays;
+      }
+      st.push(new int[] { price, val });
+
+      return val;
+    }
   }
 
   /*
@@ -384,150 +575,6 @@ public class stackQueue {
   }
 
   /*
-   * 84. Largest Rectangle in Histogram
-   * Given an array of integers heights representing the histogram's bar height
-   * where the width of each bar is 1, return the area of the largest rectangle in
-   * the histogram.
-   * Input: heights = [2,1,5,6,2,3]
-   * Output: 10
-   * Explanation: The above is a histogram where width of each bar is 1.
-   * The largest rectangle is shown in the red area, which has an area = 10 units.
-   */
-
-  public int largestRectangleArea(int[] heights) { // TC(O(N)) SC(O(3N));
-    int n = heights.length;
-    Stack<Integer> st = new Stack<>();
-    int leftSmall[] = new int[n];
-    int rightSmall[] = new int[n];
-
-    for (int i = 0; i < n; i++) {
-      while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
-        st.pop();
-      }
-      if (st.isEmpty())
-        leftSmall[i] = 0;
-      else
-        leftSmall[i] = st.peek() + 1;
-
-      st.push(i);
-    }
-
-    while (!st.isEmpty())
-      st.pop();
-
-    for (int i = n - 1; i >= 0; i--) {
-      while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
-        st.pop();
-      }
-      if (st.isEmpty())
-        rightSmall[i] = n - 1;
-      else
-        rightSmall[i] = st.peek() - 1;
-
-      st.push(i);
-    }
-
-    int maxRect = 0;
-
-    for (int i = 0; i < n; i++) {
-      maxRect = Math.max(maxRect, heights[i] * (rightSmall[i] - leftSmall[i] + 1));
-    }
-
-    return maxRect;
-  }
-
-  // OPTIMAL 2 --TC(O(N)) SC(0(N))
-  public int largestRectangleArea1(int[] heights) {
-    int n = heights.length;
-    Stack<Integer> st = new Stack<>();
-    int maxRect = 0;
-
-    for (int i = 0; i <= n; i++) {
-      while (!st.isEmpty() && ((i == n) || heights[st.peek()] >= heights[i])) {
-        int height = heights[st.peek()];
-        st.pop();
-
-        int width = 0;
-        if (st.isEmpty())
-          width = i;
-        else
-          width = i - st.peek() - 1;
-        maxRect = Math.max(maxRect, width * height);
-      }
-      st.push(i);
-    }
-    return maxRect;
-  }
-
-  /*
-   * 239. Sliding Window Maximum
-   * 
-   * Return the max sliding window.
-   * 
-   * Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
-   * Output: [3,3,5,5,6,7]
-   * Explanation:
-   * Window position -----Max
-   * --------------- -----
-   * [1 3 -1] -3 5 3 6 7 --3
-   * 1 [3 -1 -3] 5 3 6 7 --3
-   * 1 3 [-1 -3 5] 3 6 7 --5
-   * 1 3 -1 [-3 5 3] 6 7 --5
-   * 1 3 -1 -3 [5 3 6] 7 --6
-   * 1 3 -1 -3 5 [3 6 7] --7
-   */
-
-  static void GetMax(int arr[], int l, int r, ArrayList<Integer> maxx) {
-    int i, maxi = Integer.MIN_VALUE;
-    for (i = l; i <= r; i++)
-      maxi = Math.max(maxi, arr[i]);
-    maxx.add(maxi);
-  }
-
-  static ArrayList<Integer> maxSlidingWindow(int arr[], int k) {
-    int left = 0, right = 0;
-    ArrayList<Integer> maxx = new ArrayList<>();
-    while (right < k - 1) {
-      right++;
-    }
-    while (right < arr.length) {
-      GetMax(arr, left, right, maxx);
-      left++;
-      right++;
-    }
-    return maxx;
-  }
-  /*
-   * Time Complexity: O(N^2)
-   * Reason: One loop for traversing and another to findMax
-   * 
-   * Space Complexity: O(K)
-   * Reason: No.of windows
-   */
-
-  public int[] maxSlidingWindow1(int[] nums, int k) { // OPTIMAL- TC:O(N) SC:O(K)
-
-    int n = nums.length;
-    int arr[] = new int[n - k + 1];
-    int ri = 0;
-
-    Deque<Integer> dq = new ArrayDeque<>();
-    for (int i = 0; i < n; i++) {
-      while (!dq.isEmpty() && dq.peek() == i - k) {
-        dq.poll();
-      }
-      while (!dq.isEmpty() && nums[i] >= nums[dq.peekLast()]) {
-        dq.pollLast();
-      }
-
-      dq.offer(i);
-      if (i >= k - 1) {
-        arr[ri++] = nums[dq.peek()];
-      }
-    }
-    return arr;
-  }
-  /*
    * 994. Rotting Oranges
    * You are given an m x n grid where each cell can have one of three values:
    * 
@@ -591,37 +638,7 @@ public class stackQueue {
     }
     return count_fresh == cnt ? countMin : -1;
   }
-  /*
-   * 901. Online Stock Span
-   * Design an algorithm that collects daily price quotes for some stock and
-   * returns the span of that stock's price for the current day.
-   * 
-   * Input
-   * ["StockSpanner", "next", "next", "next", "next", "next", "next", "next"]
-   * [[], [100], [80], [60], [70], [60], [75], [85]]
-   * Output
-   * [null, 1, 1, 1, 2, 1, 4, 6]
-   */
 
-  class StockSpanner {
-
-    Stack<int[]> st;
-
-    public StockSpanner() {
-      st = new Stack<>();
-    }
-
-    public int next(int price) {
-      int val = 1;
-      while (!st.isEmpty() && st.peek()[0] <= price) {
-        int prevDays = st.pop()[1];
-        val = val + prevDays;
-      }
-      st.push(new int[] { price, val });
-
-      return val;
-    }
-  }
   /*
    * Maximum of minimum for every window size
    * 

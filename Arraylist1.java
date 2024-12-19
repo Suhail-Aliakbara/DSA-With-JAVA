@@ -142,12 +142,12 @@ public class Arraylist1 {
     // add your code here
     HashSet<Integer> union = new HashSet<>();
 
-    for (int nums : arr1) {
-      union.add(nums);
+    for (int num : arr1) {
+      union.add(num);
     }
 
-    for (int nums : arr2) {
-      union.add(nums);
+    for (int num : arr2) {
+      union.add(num);
     }
 
     ArrayList<Integer> unionArray = new ArrayList<>(union);
@@ -158,7 +158,6 @@ public class Arraylist1 {
   // Another Solution without using HastSet
   public static ArrayList<Integer> findUnionWithoutHashSet(int arr1[], int arr2[], int n, int m) {
     ArrayList<Integer> ans = new ArrayList<>();
-
     int i = 0, j = 0;
 
     while (i < n && j < m) {

@@ -22,7 +22,7 @@ public class hashMap {
     int right = 0;
     int len = 0;
 
-    while (right < n) { // Iterate through the string with the right pointer
+    while (right < n) {
       if (mpp.containsKey(s.charAt(right))) { // If the current character is already in the hashmap
         // Move the left pointer to the right of the last index of the current character
         // to avoid repeating characters
@@ -30,11 +30,8 @@ public class hashMap {
       }
       // Update the current character's latest index in the hashmap
       mpp.put(s.charAt(right), right);
-
-      // Calculate the length of the current substring without repeating characters
-      // and update the maximum length
       len = Math.max(len, right - left + 1);
-      right++; // Move the right pointer to the next character
+      right++;
     }
     return len;
   }
