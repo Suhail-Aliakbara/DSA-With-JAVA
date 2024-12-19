@@ -99,25 +99,25 @@ public class DivideAndConquer {
 
   // ------------------Apply merge sort to sort an Array--------------
 
-  public static string[] mergeArray(string[] str, int si, int ei) {
+  public static String[] mergeArray(String[] str, int si, int ei) {
     if (si == ei) {
-      string[] arr = { str[si] };
+      String[] arr = { str[si] };
       return arr;
     }
     int mid = si + (ei - si) / 2;
 
-    string[] arr1 = mergeArray(str, si, mid);
-    string[] arr2 = mergeArray(str, mid + 1, ei);
-    string[] arr3 = mergeString(arr1, arr2);
+    String[] arr1 = mergeArray(str, si, mid);
+    String[] arr2 = mergeArray(str, mid + 1, ei);
+    String[] arr3 = mergeString(arr1, arr2);
     return arr3;
   }
 
-  public static string[] mergeString(string[] arr1, string[] arr2) {
+  public static String[] mergeString(String[] arr1, String[] arr2) {
     int n = arr1.length;
     int m = arr2.length;
     int i = 0;
     int j = 0;
-    string temp[] = new string[n + m];
+    String temp[] = new String[n + m];
     int k = 0;
 
     while (i < n && j < m) {
@@ -138,14 +138,14 @@ public class DivideAndConquer {
     return temp;
   }
 
-  public static boolean isAllpabaticallyCorrect(string str1, string str2) {
+  public static boolean isAllpabaticallyCorrect(String str1, String str2) {
     if (str1.compareTo(str2) < 0) {
       return true;
     }
     return false;
   }
 
-  public static void printStringArray(string[] str) {
+  public static void printStringArray(String[] str) {
     for (int i = 0; i < str.length; i++) {
       System.out.print(str[i] + " ");
     }
@@ -226,7 +226,7 @@ public class DivideAndConquer {
     return invCount;
   }
 
-  public static void main(string[] args) {
+  public static void main(String[] args) {
     int n[] = { 1, 20, 6, 4, 5 };
     // quickSort(n, 0, n.length - 1);
     // System.out.println(rotatedAndSorted(n, 0, n.length - 1, 2));

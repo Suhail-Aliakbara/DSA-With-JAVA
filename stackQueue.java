@@ -19,7 +19,7 @@ public class stackQueue {
    * Output: false
    */
 
-  public boolean isValid(string s) {
+  public boolean isValid(String s) {
     int n = s.length();
     Stack<Character> st = new Stack<>();
 

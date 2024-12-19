@@ -62,7 +62,7 @@ public class Recursion {
     return tillingProblem(n - 1) + tillingProblem(n - 2);
   }
 
-  public static void removeDuplicate(string name, StringBuilder str, int i,
+  public static void removeDuplicate(String name, StringBuilder str, int i,
       boolean check[]) {
     if (i == name.length()) {
       System.out.println(str);
@@ -77,7 +77,7 @@ public class Recursion {
     }
   }
 
-  public static void BinaryStringProblem(int n, string str, int i, int lp) {
+  public static void BinaryStringProblem(int n, String str, int i, int lp) {
     if (n == i) {
       System.out.println(str);
       return;
@@ -98,7 +98,7 @@ public class Recursion {
     repeatNum(arr, i + 1, key);
   }
 
-  public static void main(string[] args) {
+  public static void main(String[] args) {
     int n[] = { 5, 8, 3, 2, 7, 8, 2, 3, 2 };
     repeatNum(n, 0, 2);
 

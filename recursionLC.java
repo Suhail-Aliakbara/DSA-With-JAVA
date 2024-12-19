@@ -157,7 +157,7 @@ public class recursionLC {
 
   /*
    * 131. Palindrome Partitioning
-   * Given a string s, partition s such that every substring of
+   * Given a String s, partition s such that every subString of
    * the partition is a palindromeReturn
    * all possible palindrome partitioning of s.
    * 
@@ -165,7 +165,7 @@ public class recursionLC {
    * Output: [["a","a","b"],["aa","b"]]
    */
 
-  boolean isPalindrome(string str, int start, int end) {
+  boolean isPalindrome(String str, int start, int end) {
     while (start <= end) {
       if (str.charAt(start++) != str.charAt(end--)) {
         return false;
@@ -174,7 +174,7 @@ public class recursionLC {
     return true;
   }
 
-  void paliPartition(int idx, string str, List<List<string>> ans, List<string> ds) {
+  void paliPartition(int idx, String str, List<List<String>> ans, List<String> ds) {
     if (idx == str.length()) {
       ans.add(new ArrayList<>(ds));
       return;
@@ -188,15 +188,15 @@ public class recursionLC {
     }
   }
 
-  public List<List<string>> partition(string s) {
-    List<List<string>> ans = new ArrayList<>();
+  public List<List<String>> partition(String s) {
+    List<List<String>> ans = new ArrayList<>();
     paliPartition(0, s, ans, new ArrayList<>());
     return ans;
   }
   /*
    * Time Complexity: O( (2^n) *k*(n/2) )
-   * Reason: O(2^n) to generate every substring and O(n/2) to check if the
-   * substring generated is a palindrome. O(k) is for inserting the palindromes in
+   * Reason: O(2^n) to generate every subString and O(n/2) to check if the
+   * subString generated is a palindrome. O(k) is for inserting the palindromes in
    * another data structure, where k is the average length of the palindrome list.
    * 
    * Space Complexity: O(k * x)
@@ -217,7 +217,7 @@ public class recursionLC {
    * Output: "213"
    */
 
-  public string getPermutation(int n, int k) {
+  public String getPermutation(int n, int k) {
     int fact = 1;
     ArrayList<Integer> ans = new ArrayList<>();
     for (int i = 1; i < n; i++) {
@@ -226,7 +226,7 @@ public class recursionLC {
     }
     ans.add(n);
     k = k - 1;
-    string str = "";
+    String str = "";
     while (true) {
       str += ans.get(k / fact);
       ans.remove(k / fact);

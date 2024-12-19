@@ -65,7 +65,7 @@ public class Arraylist1 {
     System.out.println();
   }
 
-  public static void main1(string[] args) {
+  public static void main1(String[] args) {
     int n = 5; // Output: 1 4 6 4 1
     pascalTriangle1(n);
   }

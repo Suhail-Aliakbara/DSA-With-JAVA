@@ -85,10 +85,10 @@ public class backtracking {
    * be precise its O(N! * N).
    * Space Complexity: O( N2 )
    */
-  public static List<string> convertToList(char[][] array) {
-    List<string> list = new ArrayList<>();
+  public static List<String> convertToList(char[][] array) {
+    List<String> list = new ArrayList<>();
     for (char[] row : array) {
-      list.add(new string(row));
+      list.add(new String(row));
     }
     return list;
   }
@@ -109,7 +109,7 @@ public class backtracking {
     return true;
   }
 
-  public void nQueens(int n, List<List<string>> ans, char[][] board, int row) {
+  public void nQueens(int n, List<List<String>> ans, char[][] board, int row) {
     if (row == n) {
       ans.add(convertToList(board));
       return;
@@ -123,8 +123,8 @@ public class backtracking {
     }
   }
 
-  public List<List<string>> solveNQueens(int n) {
-    List<List<string>> ans = new ArrayList<>();
+  public List<List<String>> solveNQueens(int n) {
+    List<List<String>> ans = new ArrayList<>();
     char[][] board = new char[n][n];
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
@@ -141,15 +141,15 @@ public class backtracking {
    * be precise its O(N! * N).
    * Space Complexity: O(N)
    */
-  public static List<string> convertToList1(char[][] array) {
-    List<string> list = new ArrayList<>();
+  public static List<String> convertToList1(char[][] array) {
+    List<String> list = new ArrayList<>();
     for (char[] row : array) {
-      list.add(new string(row));
+      list.add(new String(row));
     }
     return list;
   }
 
-  public void nQueens(int n, int row, List<List<string>> ans, char[][] board, int[] upperCol, int[] leftUpperDiagonal,
+  public void nQueens(int n, int row, List<List<String>> ans, char[][] board, int[] upperCol, int[] leftUpperDiagonal,
       int[] rightUpperDiagonal) {
 
     if (row == n) {
@@ -174,8 +174,8 @@ public class backtracking {
     }
   }
 
-  public List<List<string>> solveNQueens1(int n) {
-    List<List<string>> ans = new ArrayList<>();
+  public List<List<String>> solveNQueens1(int n) {
+    List<List<String>> ans = new ArrayList<>();
     char[][] board = new char[n][n];
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
@@ -275,14 +275,14 @@ public class backtracking {
    * for many cases and for interview
    */
 
-  private void ratInMaze(int[][] mat, List<string> ans, StringBuilder str, int m, int n, int[] di, int[] dj) {
+  private void ratInMaze(int[][] mat, List<String> ans, StringBuilder str, int m, int n, int[] di, int[] dj) {
     int len = mat.length;
     if (m == len - 1 && n == len - 1) {
       ans.add(str.toString());
       return;
     }
 
-    string direction = "DLRU";
+    String direction = "DLRU";
     for (int i = 0; i < 4; i++) {
       int nexti = m + di[i];
       int nextj = n + dj[i];
@@ -296,8 +296,8 @@ public class backtracking {
     }
   }
 
-  public ArrayList<string> findPath(int[][] mat) {
-    ArrayList<string> ans = new ArrayList<>();
+  public ArrayList<String> findPath(int[][] mat) {
+    ArrayList<String> ans = new ArrayList<>();
     int[] di = { 1, 0, 0, -1 };
     int[] dj = { 0, -1, 1, 0 };
     if (mat[0][0] == 1) {
@@ -310,10 +310,10 @@ public class backtracking {
 
   /*
    * Word break 2
-   * You are given a non-empty string S containing no spaces’ and a dictionary of
-   * non-empty strings (say the list of words).
+   * You are given a non-empty String S containing no spaces’ and a dictionary of
+   * non-empty Strings (say the list of words).
    * You are supposed to construct and return all possible sentences after adding
-   * spaces in the originally given string ‘S’, such that each word in a sentence
+   * spaces in the originally given String ‘S’, such that each word in a sentence
    * exists in the given dictionary.
    * Sample Input 1: 6 1
    * god is now no where here
@@ -324,28 +324,28 @@ public class backtracking {
    * god is now here no where
    * god is now here now here
    */
-  public static void solveWordBreak(string s, ArrayList<string> dictionary, ArrayList<string> ans, string str) {
+  public static void solveWordBreak(String s, ArrayList<String> dictionary, ArrayList<String> ans, String str) {
     if (s.length() == 0) {
       ans.add(str);
       return;
     }
     for (int i = 0; i < s.length(); i++) {
-      string sub = s.substring(0, i + 1);
+      String sub = s.substring(0, i + 1);
       if (dictionary.contains(sub)) {
-        string remaning = s.substring(i + 1);
+        String remaning = s.substring(i + 1);
         solveWordBreak(remaning, dictionary, ans, str + sub + " ");
       }
     }
   }
 
-  public static ArrayList<string> wordBreak(string s, ArrayList<string> dictionary) {
+  public static ArrayList<String> wordBreak(String s, ArrayList<String> dictionary) {
     // Write your code here.
-    ArrayList<string> ans = new ArrayList<>();
+    ArrayList<String> ans = new ArrayList<>();
     solveWordBreak(s, dictionary, ans, "");
     return ans;
   }
   /*
-   * Time complextiy : O(n + 2^n) n→ for string length and 2^n for all possible
+   * Time complextiy : O(n + 2^n) n→ for String length and 2^n for all possible
    * partition
    * space complexity : O(n*2^n) stack space and for extra ArrayList
    */

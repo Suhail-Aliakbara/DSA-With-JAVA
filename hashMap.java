@@ -15,7 +15,7 @@ public class hashMap {
   * Output: 3
   * Explanation: The answer is "abc", with the length of 3.
   */
-  public int lengthOfLongestSubstring(string s) {
+  public int lengthOfLongestSubstring(String s) {
     int n = s.length();
     HashMap<Character, Integer> mpp = new HashMap<Character, Integer>();
     int left = 0;
