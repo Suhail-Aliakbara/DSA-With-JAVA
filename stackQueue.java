@@ -207,6 +207,7 @@ public class stackQueue {
     int leftSmall[] = new int[n];
     int rightSmall[] = new int[n];
 
+    // preveous Smallest Element
     for (int i = 0; i < n; i++) {
       while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
         st.pop();
@@ -215,13 +216,14 @@ public class stackQueue {
         leftSmall[i] = 0;
       else
         leftSmall[i] = st.peek() + 1;
-
       st.push(i);
     }
 
+    // Reset the Stack
     while (!st.isEmpty())
       st.pop();
 
+    // Next smallest Element
     for (int i = n - 1; i >= 0; i--) {
       while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
         st.pop();
@@ -230,16 +232,14 @@ public class stackQueue {
         rightSmall[i] = n - 1;
       else
         rightSmall[i] = st.peek() - 1;
-
       st.push(i);
     }
 
+    // Calculate Max Rectangle with NSE and PSE
     int maxRect = 0;
-
     for (int i = 0; i < n; i++) {
       maxRect = Math.max(maxRect, heights[i] * (rightSmall[i] - leftSmall[i] + 1));
     }
-
     return maxRect;
   }
 
@@ -251,8 +251,7 @@ public class stackQueue {
 
     for (int i = 0; i <= n; i++) {
       while (!st.isEmpty() && ((i == n) || heights[st.peek()] >= heights[i])) {
-        int height = heights[st.peek()];
-        st.pop();
+        int height = heights[st.pop()];
 
         int width = 0;
         if (st.isEmpty())
@@ -274,17 +273,16 @@ public class stackQueue {
    * Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
    * Output: [3,3,5,5,6,7]
    * Explanation:
-   * Window position -----Max
-   * --------------- -----
-   * [1 3 -1] -3 5 3 6 7 --3
-   * 1 [3 -1 -3] 5 3 6 7 --3
-   * 1 3 [-1 -3 5] 3 6 7 --5
-   * 1 3 -1 [-3 5 3] 6 7 --5
-   * 1 3 -1 -3 [5 3 6] 7 --6
-   * 1 3 -1 -3 5 [3 6 7] --7
+   * Window position -------Max-------
+   * [1 3 -1] -3 5 3 6 7 -----3
+   * 1 [3 -1 -3] 5 3 6 7 -----3
+   * 1 3 [-1 -3 5] 3 6 7 -----5
+   * 1 3 -1 [-3 5 3] 6 7 -----5
+   * 1 3 -1 -3 [5 3 6] 7 -----6
+   * 1 3 -1 -3 5 [3 6 7] -----7
    */
 
-  static void GetMax(int arr[], int l, int r, ArrayList<Integer> maxx) {
+  static void getMax(int arr[], int l, int r, ArrayList<Integer> maxx) {
     int i, maxi = Integer.MIN_VALUE;
     for (i = l; i <= r; i++)
       maxi = Math.max(maxi, arr[i]);
@@ -292,13 +290,11 @@ public class stackQueue {
   }
 
   static ArrayList<Integer> maxSlidingWindow(int arr[], int k) {
-    int left = 0, right = 0;
+    int left = 0, right = k - 1;
     ArrayList<Integer> maxx = new ArrayList<>();
-    while (right < k - 1) {
-      right++;
-    }
+
     while (right < arr.length) {
-      GetMax(arr, left, right, maxx);
+      getMax(arr, left, right, maxx);
       left++;
       right++;
     }
@@ -366,6 +362,86 @@ public class stackQueue {
       return val;
     }
   }
+
+  /*
+   * 994. Rotting Oranges
+   * You are given an m x n grid where each cell can have one of three values:
+   * 
+   * 0 representing an empty cell,
+   * 1 representing a fresh orange, or
+   * 2 representing a rotten orange.
+   * 
+   * Every minute, any fresh orange that is 4-directionally adjacent to a rotten
+   * orange becomes rotten.
+   * Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+   * Output: 4
+   */
+
+  public int orangesRotting(int[][] grid) {
+    if (grid == null || grid.length == 0)
+      return 0;
+
+    int rows = grid.length;
+    int cols = grid[0].length;
+    Queue<int[]> queue = new LinkedList<>();
+    int freshOranges = 0;
+
+    // Put the position of all rotten oranges in queue
+    // count the number of fresh oranges
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        if (grid[i][j] == 2) {
+          queue.offer(new int[] { i, j });
+        }
+        if (grid[i][j] == 1) {
+          freshOranges++;
+        }
+      }
+    }
+
+    if (freshOranges == 0)
+      return 0;
+
+    int minutesElapsed = 0;
+    int[] rowDirections = { -1, 0, 1, 0 };
+    int[] colDirections = { 0, 1, 0, -1 };
+
+    // BFS starting from initially rotten oranges
+    while (!queue.isEmpty()) {
+      int size = queue.size();
+      boolean hasNewRotten = false;
+
+      for (int i = 0; i < size; i++) {
+        int[] point = queue.poll();
+        int row = point[0];
+        int col = point[1];
+
+        for (int j = 0; j < 4; j++) {
+          int newRow = row + rowDirections[j];
+          int newCol = col + colDirections[j];
+
+          if (newRow < 0 || newRow >= rows || newCol < 0 || newCol >= cols || grid[newRow][newCol] != 1)
+            continue;
+
+          grid[newRow][newCol] = 2;
+          queue.offer(new int[] { newRow, newCol });
+          freshOranges--;
+          hasNewRotten = true;
+        }
+      }
+
+      if (hasNewRotten) {
+        minutesElapsed++;
+      }
+    }
+
+    return freshOranges == 0 ? minutesElapsed : -1;
+  }
+
+  /*
+   * Maximum of minimum for every window size
+   * 
+   */
 
   /*
    * LRU cache
@@ -573,75 +649,5 @@ public class stackQueue {
 
     }
   }
-
-  /*
-   * 994. Rotting Oranges
-   * You are given an m x n grid where each cell can have one of three values:
-   * 
-   * 0 representing an empty cell,
-   * 1 representing a fresh orange, or
-   * 2 representing a rotten orange.
-   * 
-   * Every minute, any fresh orange that is 4-directionally adjacent to a rotten
-   * orange becomes rotten.
-   * Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
-   * Output: 4
-   */
-
-  public int orangesRotting(int[][] grid) {
-    if (grid == null || grid.length == 0)
-      return 0;
-    int rows = grid.length;
-    int cols = grid[0].length;
-    Queue<int[]> queue = new LinkedList<>();
-    int count_fresh = 0;
-    // Put the position of all rotten oranges in queue
-    // count the number of fresh oranges
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        if (grid[i][j] == 2) {
-          queue.offer(new int[] { i, j });
-        }
-        if (grid[i][j] != 0) {
-          count_fresh++;
-        }
-      }
-    }
-
-    if (count_fresh == 0)
-      return 0;
-    int countMin = 0, cnt = 0;
-    int dx[] = { 0, 0, 1, -1 };
-    int dy[] = { 1, -1, 0, 0 };
-
-    // bfs starting from initially rotten oranges
-    while (!queue.isEmpty()) {
-      int size = queue.size();
-      cnt += size;
-      for (int i = 0; i < size; i++) {
-        int[] point = queue.poll();
-        for (int j = 0; j < 4; j++) {
-          int x = point[0] + dx[j];
-          int y = point[1] + dy[j];
-
-          if (x < 0 || y < 0 || x >= rows || y >= cols || grid[x][y] == 0 ||
-              grid[x][y] == 2)
-            continue;
-
-          grid[x][y] = 2;
-          queue.offer(new int[] { x, y });
-        }
-      }
-      if (queue.size() != 0) {
-        countMin++;
-      }
-    }
-    return count_fresh == cnt ? countMin : -1;
-  }
-
-  /*
-   * Maximum of minimum for every window size
-   * 
-   */
 
 }

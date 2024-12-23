@@ -30,7 +30,6 @@ public class string1 {
    * 151. Reverse Words in a String
    * Input: s = "a good   example"
    * Output: "example good a"
-   * 
    */
 
   public String reverseWord(String word) {
@@ -87,6 +86,16 @@ public class string1 {
       cleaned.deleteCharAt(cleaned.length() - 1);
     }
     return cleaned.toString();
+  }
+
+  // same solution with 5 lines
+  public String reverseWords1(String s) {
+    String[] str = s.split(" ");
+    s = "";
+    for (int i = str.length - 1; i >= 0; i--) {
+      s = s.trim() + " " + str[i];
+    }
+    return s.trim();
   }
 
 }
