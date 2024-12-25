@@ -489,6 +489,63 @@ public class stackQueue {
   }
 
   /*
+   * the celebrity Problem
+   * celebrity:- is the on who knows no one and everyone know's him
+   * input: arr = {{0,1,1,0},{0,0,0,0},{0,1,0,0},{1,1,0,0}}
+   * output: 1
+   * 
+   */
+  public int celebrity(int matrix[][]) {
+    int top = 0;
+    int down = matrix.length - 1;
+    while (top < down) {
+      if (matrix[top][down] == 1)
+        top++;
+      else if (matrix[down][top] == 1)
+        down--;
+      else {
+        top++;
+        down--;
+      }
+    }
+    if (top > down)
+      return -1;
+
+    for (int i = 0; i < matrix.length; i++) {
+      if (i == top)
+        continue;
+      if (matrix[top][i] == 0 && matrix[i][top] == 1) {
+        return top;
+      }
+    }
+    return -1;
+  }
+
+  //
+  public int celebrity1(int matrix[][]) {
+    int n = matrix.length;
+    int candidate = 0;
+
+    // Step 1: Find the candidate
+    for (int i = 1; i < n; i++) {
+      if (matrix[candidate][i] == 1) {
+        candidate = i;
+      }
+    }
+
+    // Step 2: Verify the candidate
+    for (int i = 0; i < n; i++) {
+      if (i != candidate) {
+        if (matrix[candidate][i] == 1 || matrix[i][candidate] == 0) {
+          return -1;
+        }
+      }
+    }
+
+    return candidate;
+  }
+
+  /*
    * LRU cache
    * Design a data structure that follows the constraints of a Least Recently Used
    * (LRU) cache.
