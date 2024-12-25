@@ -441,7 +441,52 @@ public class stackQueue {
   /*
    * Maximum of minimum for every window size
    * 
+   * input: arr:[10 20 15 50 10 70 30] N:7
+   * output: ans:[70,30,15,10,10,10,10]
    */
+
+  public static int[] maxMinWindow(int[] arr, int n) {
+    int ans[] = new int[n];
+    Stack<Integer> st = new Stack<>();
+
+    // Initialize ans array to Integer.MIN_VALUE
+    for (int i = 0; i < n; i++) {
+      ans[i] = Integer.MIN_VALUE;
+    }
+    // Process elements
+    for (int i = 0; i < n; i++) {
+      while (!st.isEmpty() && arr[st.peek()] > arr[i]) {
+        int range = 0;
+        int idx = st.pop();
+        if (st.isEmpty()) {
+          range = i;
+          ans[range - 1] = Math.max(ans[range - 1], arr[idx]);
+        } else {
+          range = i - st.peek() - 1;
+          ans[range - 1] = Math.max(ans[range - 1], arr[idx]);
+        }
+      }
+      st.push(i);
+    }
+    // Process remaining elements in the stack
+    while (!st.isEmpty()) {
+      int range = 0;
+      int idx = st.pop();
+      if (st.isEmpty()) {
+        range = n;
+        ans[range - 1] = Math.max(ans[range - 1], arr[idx]);
+      } else {
+        range = n - st.peek() - 1;
+        ans[range - 1] = Math.max(ans[range - 1], arr[idx]);
+      }
+    }
+    // Propagate maximum values backward
+    for (int i = n - 2; i >= 0; i--) {
+      ans[i] = Math.max(ans[i], ans[i + 1]);
+    }
+
+    return ans;
+  }
 
   /*
    * LRU cache
