@@ -1,6 +1,7 @@
-
-import java.util.HashMap;
-
+// Important Methods of Arrays
+/*
+ * 
+ */
 public class Arrays {
   // ---------------------------Print All divisor-----------------==-------
   /*
@@ -329,7 +330,7 @@ public class Arrays {
    * Given the two integers m and n, return the number of possible unique paths
    * that the robot can take to reach the bottom-right corner.
    * 
-   * Input: m = 4, n = 4
+   * Input: m = 3, n = 2
    * Output: 3
    * Explanation: From the top-left corner, there are a total of 3 ways to reach
    * the bottom-right corner:

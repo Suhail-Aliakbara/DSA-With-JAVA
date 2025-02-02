@@ -68,7 +68,7 @@ public class linkedList {
 
   public static Node ReverseLinkedList(Node head) { // TC(O(N)) SC(O(1))
 
-    // Initialize'temp' at head of linked list
+    // Initialize'curr' at head of linked list
     Node curr = head;
 
     // Initialize pointer 'prev' to NULL, representing the previous node

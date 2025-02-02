@@ -5,6 +5,35 @@ import java.util.List;
 
 public class Arraylist1 {
 
+  // Example Code for methods
+  public class ArrayListMethodsDemo {
+    public static void main(String[] args) {
+      ArrayList<Integer> list = new ArrayList<>();
+
+      // Add elements
+      list.add(10);
+      list.add(20);
+      list.add(30);
+
+      // Print size
+      System.out.println("Size: " + list.size());
+
+      // Access element
+      System.out.println("Element at index 1: " + list.get(1));
+
+      // Modify element
+      list.set(1, 25);
+      System.out.println("Modified list: " + list);
+
+      // Check if contains
+      System.out.println("Contains 25: " + list.contains(25));
+
+      // Remove element
+      list.remove(Integer.valueOf(25));
+      System.out.println("List after removal: " + list);
+    }
+  }
+
   /*
    * Pascal triangle
    * Variation 1: Given row number r and column number c. Print the element at

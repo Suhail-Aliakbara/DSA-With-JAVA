@@ -284,27 +284,28 @@ public class hashMap {
    * that it can be considered constant.
    */
 
-  public static List<Integer> majorityElement3(int[] nums) {
+  public static List<Integer> findMajorityElements(int[] nums) {
     int n = nums.length; // size of the array
-    List<Integer> ls = new ArrayList<>(); // list of answers
+    List<Integer> result = new ArrayList<>(); // list of answers
     // declaring a map:
-    HashMap<Integer, Integer> mpp = new HashMap<>();
+    HashMap<Integer, Integer> frequencyMap = new HashMap<>();
     // least occurrence of the majority element:
-    int mini = (int) (n / 3) + 1;
+    int threshold = (int) (n / 3) + 1;
 
-    // storing the elements with its occurnce:
-    for (int i = 0; i < n; i++) {
-      int value = mpp.getOrDefault(nums[i], 0);
-      mpp.put(nums[i], value + 1);
+    // storing the elements with its occurrence:
+    for (int num : nums) {
+      int count = frequencyMap.getOrDefault(num, 0);
+      frequencyMap.put(num, count + 1);
 
-      // checking if nums[i] is the majority element:
-      if (mpp.get(nums[i]) == mini) {
-        ls.add(nums[i]);
+      // checking if num is the majority element:
+      if (frequencyMap.get(num) == threshold) {
+        result.add(num);
       }
-      if (ls.size() == 2)
+      if (result.size() == 2) {
         break;
+      }
     }
-    return ls;
+    return result;
   }
 
   // Optimal Approach
@@ -319,54 +320,55 @@ public class hashMap {
    * elements. The space used is so small that it can be considered constant.
    */
 
-  public static List<Integer> majorityElement4(int[] v) {
-    int n = v.length; // size of the array
+  public static List<Integer> findMajorityElements1(int[] nums) {
+    int n = nums.length; // size of the array
 
-    int cnt1 = 0, cnt2 = 0; // counts
-    int el1 = Integer.MIN_VALUE; // element 1
-    int el2 = Integer.MIN_VALUE; // element 2
+    int count1 = 0, count2 = 0; // counts
+    int candidate1 = Integer.MIN_VALUE; // candidate 1
+    int candidate2 = Integer.MIN_VALUE; // candidate 2
 
-    // applying the Extended Boyer Moore's Voting Algorithm:
-    for (int i = 0; i < n; i++) {
-      if (cnt1 == 0 && el2 != v[i]) {
-        cnt1 = 1;
-        el1 = v[i];
-      } else if (cnt2 == 0 && el1 != v[i]) {
-        cnt2 = 1;
-        el2 = v[i];
-      } else if (v[i] == el1)
-        cnt1++;
-      else if (v[i] == el2)
-        cnt2++;
-      else {
-        cnt1--;
-        cnt2--;
+    // Applying the Extended Boyer-Moore Voting Algorithm:
+    for (int num : nums) {
+      if (count1 == 0 && candidate2 != num) {
+        count1 = 1;
+        candidate1 = num;
+      } else if (count2 == 0 && candidate1 != num) {
+        count2 = 1;
+        candidate2 = num;
+      } else if (num == candidate1) {
+        count1++;
+      } else if (num == candidate2) {
+        count2++;
+      } else {
+        count1--;
+        count2--;
+      }
+    }
+    List<Integer> result = new ArrayList<>(); // list of answers
+    // Manually check if the stored elements in
+    // candidate1 and candidate2 are the majority elements:
+    count1 = 0;
+    count2 = 0;
+    for (int num : nums) {
+      if (num == candidate1) {
+        count1++;
+      }
+      if (num == candidate2) {
+        count2++;
       }
     }
 
-    List<Integer> ls = new ArrayList<>(); // list of answers
-
-    // Manually check if the stored elements in
-    // el1 and el2 are the majority elements:
-    cnt1 = 0;
-    cnt2 = 0;
-    for (int i = 0; i < n; i++) {
-      if (v[i] == el1)
-        cnt1++;
-      if (v[i] == el2)
-        cnt2++;
+    int threshold = (int) (n / 3) + 1;
+    if (count1 >= threshold) {
+      result.add(candidate1);
     }
-
-    int mini = (int) (n / 3) + 1;
-    if (cnt1 >= mini)
-      ls.add(el1);
-    if (cnt2 >= mini)
-      ls.add(el2);
-
+    if (count2 >= threshold) {
+      result.add(candidate2);
+    }
     // Uncomment the following line
     // if it is told to sort the answer array:
-    // Collections.sort(ls); //TC --> O(2*log2) ~ O(1);
-    return ls;
+    // Collections.sort(result); //TC --> O(2*log2) ~ O(1);
+    return result;
   }
 
   /*
@@ -422,7 +424,7 @@ public class hashMap {
 
   /*
    * Optimal Approach
-   * Time Complexity: O(NlogN)+O(2N), where N = size of the array.
+   * Time Complexity: O(NlogN)+O(N^2), where N = size of the array.
    * Reason: The pointer i, is running for approximately N times. And both the
    * pointers j and k combined can run for approximately N times including the
    * operation of skipping duplicates. So the total time complexity will be O(N2).
@@ -584,31 +586,30 @@ public class hashMap {
    * Therefore its length is 4.
    */
   // BETTER APPROACH TC(O(NlogN + N) SC(O(1))
-  public static int longestSuccessiveElements(int[] a) {
-    int n = a.length;
+  public static int longestSuccessiveElements(int[] nums) {
+    int n = nums.length;
     if (n == 0)
       return 0;
 
-    // sort the array:
-    Arrays.sort(a);
-    int lastSmaller = Integer.MIN_VALUE;
-    int cnt = 0;
-    int longest = 1;
+    // Sort the array:
+    Arrays.sort(nums);
+    int previousElement = Integer.MIN_VALUE;
+    int currentStreak = 0;
+    int longestStreak = 1;
 
-    // find longest sequence:
-    for (int i = 0; i < n; i++) {
-      if (a[i] - 1 == lastSmaller) {
-        // a[i] is the next element of the
-        // current sequence.
-        cnt += 1;
-        lastSmaller = a[i];
-      } else if (a[i] != lastSmaller) {
-        cnt = 1;
-        lastSmaller = a[i];
+    // Find the longest sequence:
+    for (int num : nums) {
+      if (num - 1 == previousElement) {
+        // num is the next element of the current sequence.
+        currentStreak += 1;
+        previousElement = num;
+      } else if (num != previousElement) {
+        currentStreak = 1;
+        previousElement = num;
       }
-      longest = Math.max(longest, cnt);
+      longestStreak = Math.max(longestStreak, currentStreak);
     }
-    return longest;
+    return longestStreak;
   }
 
   // OPTIMAL SOLUTION TC(O(N + 2N ~ 3N)) SC(O(N))
@@ -622,33 +623,35 @@ public class hashMap {
    * set operations will be O(logN) and the total time complexity will be
    * O(NlogN).
    */
-  public static int longestSuccessiveElements1(int[] a) {
-    int n = a.length;
+  public static int longestSuccessiveElements1(int[] nums) {
+    int n = nums.length;
     if (n == 0)
       return 0;
 
-    int longest = 1;
-    Set<Integer> set = new HashSet<>();
+    int longestStreak = 1;
+    Set<Integer> numSet = new HashSet<>();
 
-    // put all the array elements into set
-    for (int i = 0; i < n; i++) {
-      set.add(a[i]);
+    // Put all the array elements into the set
+    for (int num : nums) {
+      numSet.add(num);
     }
+
     // Find the longest sequence
-    for (int it : set) {
-      // if 'it' is a starting number
-      if (!set.contains(it - 1)) {
-        // find consecutive numbers
-        int cnt = 1;
-        int x = it;
-        while (set.contains(x + 1)) {
-          x = x + 1;
-          cnt = cnt + 1;
+    for (int num : numSet) {
+      // If 'num' is a starting number
+      if (!numSet.contains(num - 1)) {
+        // Find consecutive numbers
+        int currentNum = num;
+        int currentStreak = 1;
+
+        while (numSet.contains(currentNum + 1)) {
+          currentNum++;
+          currentStreak++;
         }
-        longest = Math.max(longest, cnt);
+        longestStreak = Math.max(longestStreak, currentStreak);
       }
     }
-    return longest;
+    return longestStreak;
   }
 
 }

@@ -98,36 +98,41 @@ public class binarySearch {
    * Output: 10
    */
 
-  public static int singleNonDuplicate(ArrayList<Integer> arr) {
-    int n = arr.size(); // Size of the array.
+  public static int singleNonDuplicate(ArrayList<Integer> nums) {
+    int n = nums.size(); // Size of the array.
+
     // Edge cases:
-    if (n == 1)
-      return arr.get(0);
-    if (!arr.get(0).equals(arr.get(1)))
-      return arr.get(0);
-    if (!arr.get(n - 1).equals(arr.get(n - 2)))
-      return arr.get(n - 1);
+    if (n == 1) {
+      return nums.get(0);
+    }
+    if (!nums.get(0).equals(nums.get(1))) {
+      return nums.get(0);
+    }
+    if (!nums.get(n - 1).equals(nums.get(n - 2))) {
+      return nums.get(n - 1);
+    }
 
-    int low = 1, high = n - 2;
-    while (low <= high) {
-      int mid = (low + high) / 2;
+    int left = 1, right = n - 2;
+    while (left <= right) {
+      int mid = (left + right) / 2;
 
-      // If arr[mid] is the single element:
-      if (!arr.get(mid).equals(arr.get(mid + 1)) && !arr.get(mid).equals(arr.get(mid - 1))) {
-        return arr.get(mid);
+      // If nums[mid] is the single element:
+      if (!nums.get(mid).equals(nums.get(mid + 1)) && !nums.get(mid).equals(nums.get(mid - 1))) {
+        return nums.get(mid);
       }
-      // We are in the left:
-      if ((mid % 2 == 1 && arr.get(mid).equals(arr.get(mid - 1)))
-          || (mid % 2 == 0 && arr.get(mid).equals(arr.get(mid + 1)))) {
+
+      // We are in the left half: 1st instance == even index && 2nd instance == odd
+      // index
+      if ((mid % 2 == 1 && nums.get(mid).equals(nums.get(mid - 1))) ||
+          (mid % 2 == 0 && nums.get(mid).equals(nums.get(mid + 1)))) {
         // Eliminate the left half:
-        low = mid + 1;
-      }
-      // We are in the right:
-      else {
+        left = mid + 1;
+      } else {
         // Eliminate the right half:
-        high = mid - 1;
+        right = mid - 1;
       }
     }
+
     // Dummy return statement:
     return -1;
   }
@@ -272,54 +277,41 @@ public class binarySearch {
    * Space Complexity: O(1) as no extra space is used.
    */
   public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-    int n1 = nums1.length; // Length of the first array
-    int n2 = nums2.length; // Length of the second array
+    int n1 = nums1.length;
+    int n2 = nums2.length;
 
-    // Ensure that nums1 is the smaller array to minimize the number of operations
     if (n1 > n2)
       return findMedianSortedArrays(nums2, nums1);
 
-    int leftTotalPartitionEl = (n1 + n2 + 1) / 2; // Calculate the number of elements on the left side of the partition
-    int n = n1 + n2; // Total number of elements in both arrays
-    int low = 0, high = n1; // Initialize the binary search range for nums1
+    int leftTotalPartitionEl = (n1 + n2 + 1) / 2;
+    int n = n1 + n2;
+    int low = 0, high = n1;
 
-    // Binary search to find the correct partition
     while (low <= high) {
-      int mid1 = (low + high) / 2; // Mid index for the partition in nums1
-      int mid2 = leftTotalPartitionEl - mid1; // Mid index for the partition in nums2, based on the total left elements
+      int mid1 = (low + high) / 2;
+      int mid2 = leftTotalPartitionEl - mid1;
 
-      // Elements just after the partition in nums1 and nums2
-      int r1 = mid1 < n1 ? nums1[mid1] : Integer.MAX_VALUE; // Right element in nums1 or positive infinity if out of
-                                                            // bounds
-      int r2 = mid2 < n2 ? nums2[mid2] : Integer.MAX_VALUE; // Right element in nums2 or positive infinity if out of
-                                                            // bounds
+      int r1 = mid1 < n1 ? nums1[mid1] : Integer.MAX_VALUE;
+      int r2 = mid2 < n2 ? nums2[mid2] : Integer.MAX_VALUE;
 
-      // Elements just before the partition in nums1 and nums2
-      int l1 = mid1 - 1 >= 0 ? nums1[mid1 - 1] : Integer.MIN_VALUE; // Left element in nums1 or negative infinity if out
-                                                                    // of bounds
-      int l2 = mid2 - 1 >= 0 ? nums2[mid2 - 1] : Integer.MIN_VALUE; // Left element in nums2 or negative infinity if out
-                                                                    // of bounds
+      int l1 = mid1 - 1 >= 0 ? nums1[mid1 - 1] : Integer.MIN_VALUE;
+      int l2 = mid2 - 1 >= 0 ? nums2[mid2 - 1] : Integer.MIN_VALUE;
 
-      // Check if we have found the correct partition
       if (l1 <= r2 && l2 <= r1) {
-        // If total number of elements is odd, return the max of the left partition
+
         if (n % 2 == 1) {
           return Math.max(l1, l2);
         } else {
-          // If total number of elements is even, return the average of the middle two
-          // elements
           return ((double) (Math.max(l1, l2) + Math.min(r1, r2)) / 2.0);
         }
+
       } else if (l1 > r2) {
-        // If l1 is greater than r2, move the partition in nums1 to the left
         high = mid1 - 1;
       } else {
-        // If l2 is greater than r1, move the partition in nums1 to the right
         low = mid1 + 1;
       }
     }
-
-    return 0; // This line should never be reached, added to satisfy the return type
+    return 0; // dummy return type
   }
 
   /*
@@ -379,47 +371,55 @@ public class binarySearch {
    * Max number of pages is allocated to student 1 with 12 + 34 + 67 = 113 pages
    * Of the 3 cases, Option 3 has the minimum pages = 113.
    */
-  public int countstd(int pages, int[] arr) {
-    long pageStudent = 0;
-    int n = arr.length;
-    int std = 1;
 
-    for (int i = 0; i < n; i++) {
-      if (pageStudent + arr[i] <= pages) {
-        pageStudent += arr[i];
-      } else {
-        std++;
-        pageStudent = arr[i];
-      }
-    }
-    return std;
-  }
+  public int allocateBooks(int[] pages, int students) {
+    int n = pages.length;
 
-  public int books(int[] A, int B) {
-    int n = A.length;
-
-    if (n < B) {
+    // If there are fewer books than students, return -1
+    if (n < students) {
       return -1;
     }
-    int low = A[0];
-    int high = 0;
+    // Initialize low to the maximum number of pages in a single book
+    // Initialize high to the total number of pages in all books
+    int maxPages = pages[0];
+    int totalPages = 0;
     for (int i = 0; i < n; i++) {
-      if (low < A[i]) {
-        low = A[i];
+      if (maxPages < pages[i]) {
+        maxPages = pages[i];
       }
-      high += A[i];
+      totalPages += pages[i];
     }
+    // Binary Search to find the minimum number of pages
+    int low = maxPages;
+    int high = totalPages;
+
     while (low <= high) {
       int mid = (low + high) / 2;
-      int count = countstd(mid, A);
-
-      if (count > B) {
+      int requiredStudents = countStudents(pages, mid);
+      if (requiredStudents > students) {
         low = mid + 1;
       } else {
         high = mid - 1;
       }
     }
     return low;
+  }
+
+  // Helper function to count the number of students required to allocate books
+  // such that no student reads more than maxPages
+  private int countStudents(int[] pages, int maxPages) {
+    int students = 1;
+    int currentPageSum = 0;
+
+    for (int page : pages) {
+      if (currentPageSum + page <= maxPages) {
+        currentPageSum += page;
+      } else {
+        students++;
+        currentPageSum = page;
+      }
+    }
+    return students;
   }
 
   /*

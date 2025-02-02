@@ -430,9 +430,9 @@ public class stackQueue {
         }
       }
 
-      if (hasNewRotten) {
+      if (hasNewRotten)
         minutesElapsed++;
-      }
+
     }
 
     return freshOranges == 0 ? minutesElapsed : -1;
