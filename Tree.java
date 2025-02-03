@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.tree.TreeNode;
-
 class Tree {
   class Node {
     int data;
@@ -34,14 +32,7 @@ class Tree {
     return (int) Math.pow(2, i - 1);
   }
 
-  // ------preorder Traversal---------
-  /*
-   * Given the root of a binary tree, return the preorder traversal
-   * of its nodes values.
-   * 
-   * Input: root = [1,2,3,4,5,null,8,null,null,6,7,9]
-   * Output: [1,2,4,5,6,7,3,8,9]
-   */
+  // ---------------preorder Traversal------------------------
   public List<Integer> preOrderTraverse(Node root, List<Integer> ans) {
     if (root == null) {
       return ans;
@@ -57,8 +48,35 @@ class Tree {
     return preOrderTraverse(root, ans);
   }
 
-  // --------postorder Traversal-------------
-  /*
-   * 
-   */
+  // ------------------postorder Traversal-------------------
+  public List<Integer> postOrderTraverse(Node root, List<Integer> ans) {
+    if (root == null) {
+      return ans;
+    }
+    postOrderTraverse(root.left, ans);
+    postOrderTraverse(root.right, ans);
+    ans.add(root.data);
+    return ans;
+  }
+
+  public List<Integer> postorderTraversal(Node root) {
+    List<Integer> ans = new ArrayList<>();
+    return postOrderTraverse(root, ans);
+  }
+
+  // -------------inorder Traversal-----------------
+  public List<Integer> inorderTraverse(Node root, List<Integer> ls) {
+    if (root == null)
+      return ls;
+    inorderTraverse(root.left, ls);
+    ls.add(root.data);
+    inorderTraverse(root.right, ls);
+    return ls;
+  }
+
+  public List<Integer> inorderTraversal(Node root) {
+    List<Integer> ls = new ArrayList<>();
+    return inorderTraverse(root, ls);
+  }
+
 }
