@@ -434,7 +434,26 @@ public class Tree {
   }
 
   /*
-   * 
+   * 257 binary tree paths
+   * Given the root of a binary tree, return all root-to-leaf paths in any order.
+   * Input: root = [1,2,3,null,5]
+   * Output: ["1->2->5","1->3"]
    */
+  public void helper(Node root, List<String> ans, String s) {
+    if (root == null)
+      return;
+    if (root.left == null && root.right == null) {
+      s += root.data;
+      ans.add(s);
+      return;
+    }
+    helper(root.left, ans, s + root.data + "->");
+    helper(root.right, ans, s + root.data + "->");
+  }
 
+  public List<String> binaryTreePaths(Node root) {
+    List<String> ans = new ArrayList<>();
+    helper(root, ans, "");
+    return ans;
+  }
 }
