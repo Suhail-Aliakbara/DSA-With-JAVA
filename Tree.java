@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
+import javax.swing.tree.TreeNode;
+
+import org.w3c.dom.Node;
+
 public class Tree {
   public static class Node {
     int data;
@@ -300,5 +304,137 @@ public class Tree {
     result.add(post);
     return result;
   }
+
+  /*
+   * 104 Maximum depth of the binary tree
+   * Input: root = [3,9,20,null,null,15,7]
+   * Output: 3
+   * 
+   */
+  public int maxDepth(Node root) {
+    if (root == null)
+      return 0;
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+  }
+
+  // Iterative solution using BFS
+  public int maxDepth1(Node root) {
+    if (root == null)
+      return 0;
+
+    int depth = 0;
+    Queue<Node> q = new LinkedList<>();
+    q.offer(root);
+
+    while (!q.isEmpty()) {
+      int size = q.size();
+      depth++;
+      while (size-- > 0) {
+        Node node = q.poll();
+        if (node.left != null)
+          q.offer(node.left);
+        if (node.right != null)
+          q.offer(node.right);
+      }
+    }
+    return depth;
+  }
+
+  /*
+   * 543. Diameter of Binary Tree
+   * The diameter of a binary tree is the length of the longest path
+   * between any two nodes in a tree. This path may or may not pass
+   * through the root.
+   * 
+   * Input: root = [1,2,3,4,5]
+   * Output: 3
+   * Explanation: 3 is the length of the path [4,2,1,3] or [5,2,1,3].
+   */
+
+  // Method to calculate the height of the tree
+  public int height(Node root) {
+    // Base case: if the tree is empty or a leaf node
+    if (root == null || (root.left == null && root.right == null))
+      return 0;
+
+    // Recursively calculate the height of the left and right subtrees
+    return 1 + Math.max(height(root.left), height(root.right));
+  }
+
+  // Method to calculate the diameter of the binary tree
+  public int diameterOfBinaryTree(Node root) {
+    // Base case: if the tree is empty or a leaf node
+    if (root == null || (root.left == null && root.right == null))
+      return 0;
+
+    // Recursively calculate the diameter of the left and right subtrees
+    int leftDiameter = diameterOfBinaryTree(root.left);
+    int rightDiameter = diameterOfBinaryTree(root.right);
+
+    // Calculate the height of the left and right subtrees
+    int leftHeight = height(root.left);
+    int rightHeight = height(root.right);
+
+    // Calculate the diameter passing through the root
+    int rootDiameter = leftHeight + rightHeight;
+    if (root.left != null)
+      rootDiameter++;
+    if (root.right != null)
+      rootDiameter++;
+
+    // The diameter of the tree is the maximum of the three diameters
+    int maxDiameter = Math.max(rootDiameter, Math.max(leftDiameter, rightDiameter));
+
+    return maxDiameter;
+  }
+
+  /*
+   * 110. Balanced Binary Tree
+   * A height-balanced binary tree is a binary tree in which
+   * the depth of the two subtrees of every node never
+   * differs by more than one
+   */
+  public int height1(Node root) {
+    if (root == null)
+      return 0;
+    return 1 + Math.max(height(root.left), height(root.right));
+  }
+
+  public boolean isBalanced(Node root) {
+    if (root == null)
+      return true;
+    int lh = height(root.left);
+    int rh = height(root.right);
+    int diff = lh - rh;
+    if (diff < 0)
+      diff = -diff;
+    if (diff > 1)
+      return false;
+    return (isBalanced(root.left) && isBalanced(root.right));
+  }
+
+  /*
+   * ---------Same Tree-----------
+   * Given the roots of two binary trees p and q, write a function to
+   * check if they are the same or not.
+   * 
+   * Two binary trees are considered the same if they are
+   * structurally identical, and the nodes have the same value.
+   */
+
+  public boolean isSameTree(Node p, Node q) {
+    if (p == null && q == null)
+      return true;
+    else if (p == null || q == null)
+      return false;
+    if (p.data != q.data)
+      return false;
+
+    return (isSameTree(p.left, q.left) && isSameTree(p.right, q.right));
+  }
+
+  /*
+   * 
+   */
 
 }
