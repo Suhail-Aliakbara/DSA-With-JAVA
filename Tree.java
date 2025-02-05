@@ -605,4 +605,26 @@ public class Tree {
     return root;
   }
 
+  /*
+   * 101. isSymmetric
+   * Input: root = [1,2,2,3,4,4,3]
+   * Output: true
+   */
+  public boolean isSameTree1(Node p, Node q) {
+    if (p == null && q == null)
+      return true;
+    else if (p == null || q == null)
+      return false;
+    if (p.data != q.data)
+      return false;
+
+    // same question as same tree diff: we are checking left with
+    // right of other tree
+    return (isSameTree1(p.left, q.right) && isSameTree1(p.right, q.left));
+  }
+
+  public boolean isSymmetric(Node root) {
+    return isSameTree1(root.left, root.right);
+  }
+
 }
