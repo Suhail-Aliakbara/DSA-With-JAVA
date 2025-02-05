@@ -525,4 +525,84 @@ public class Tree {
     return null;
   }
 
+  /*
+   * Root to Leaf Paths
+   * Given a Binary Tree, you need to find all the possible paths from the root
+   * node to all the leaf nodes of the binary tree.
+   * Input: root[] = [1, 2, 3, 4, 5]
+   * Output: [[1, 2, 4], [1, 2, 5], [1, 3]]
+   */
+  public static void findPaths(Node root, List<List<Integer>> result, List<Integer> currentPath) {
+    if (root == null) {
+      return;
+    }
+
+    currentPath.add(root.data);
+    // If it's a leaf node, add the current path to the result
+    if (root.left == null && root.right == null) {
+      result.add(new ArrayList<>(currentPath));
+    } else {
+      findPaths(root.left, result, currentPath);
+      findPaths(root.right, result, currentPath);
+    }
+    // Remove the current node from the path to backtrack
+    currentPath.remove(currentPath.size() - 1);
+  }
+
+  public static List<List<Integer>> getAllRootToLeafPaths(Node root) {
+    List<List<Integer>> result = new ArrayList<>();
+    findPaths(root, result, new ArrayList<>());
+    return result;
+  }
+
+  // --------- using iterative method------------
+  public static List<List<Integer>> getAllRootToLeafPaths1(Node root) {
+    List<List<Integer>> result = new ArrayList<>();
+    if (root == null) {
+      return result;
+    }
+
+    Stack<Pair<Node, List<Integer>>> stack = new Stack<>();
+    stack.push(new Pair<>(root, new ArrayList<>()));
+
+    while (!stack.isEmpty()) {
+      Pair<Node, List<Integer>> current = stack.pop();
+      Node currentNode = current.getKey();
+      List<Integer> currentPath = current.getValue();
+
+      currentPath.add(currentNode.data);
+
+      // If it's a leaf node, add the current path to the result
+      if (currentNode.left == null && currentNode.right == null) {
+        result.add(new ArrayList<>(currentPath));
+      } else {
+        // Push right and left children to the stack
+        if (currentNode.right != null) {
+          List<Integer> rightPath = new ArrayList<>(currentPath);
+          stack.push(new Pair<>(currentNode.right, rightPath));
+        }
+        if (currentNode.left != null) {
+          List<Integer> leftPath = new ArrayList<>(currentPath);
+          stack.push(new Pair<>(currentNode.left, leftPath));
+        }
+      }
+    }
+    return result;
+  }
+
+  /*
+   * 226. Invert Binary Tree
+   * Input: root = [4,2,7,1,3,6,9]
+   * Output: [4,7,2,9,6,3,1]
+   */
+  public Node invertTree(Node root) {
+    if (root == null)
+      return root;
+    Node leftRoot = invertTree(root.left);
+    Node rightRoot = invertTree(root.right);
+    root.right = leftRoot;
+    root.left = rightRoot;
+    return root;
+  }
+
 }
