@@ -456,4 +456,73 @@ public class Tree {
     helper(root, ans, "");
     return ans;
   }
+
+  /*
+   * 236. Lowest Common Ancestor of a Binary Tree
+   * Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+   * Output: 3
+   * Explanation: The LCA of nodes 5 and 1 is 3.
+   */
+
+  // TC(O(3N)) SC(O(3N))
+  public boolean nodeToRootPath(Node root, Node node, LinkedList<Node> path) {
+    if (root == null)
+      return false;
+
+    path.add(root); // Add current node to the path
+
+    if (root == node)
+      return true; // Found the node, stop recursion
+
+    // Recur for left or right subtree
+    if (nodeToRootPath(root.left, node, path) || nodeToRootPath(root.right, node, path)) {
+      return true;
+    }
+
+    // If node is not found in either subtree, backtrack (remove last added node)
+    path.removeLast();
+    return false;
+  }
+
+  public Node lowestCommonAncestor(Node root, Node p, Node q) {
+    LinkedList<Node> path1 = new LinkedList<>();
+    LinkedList<Node> path2 = new LinkedList<>();
+
+    nodeToRootPath(root, p, path1);
+    nodeToRootPath(root, q, path2);
+
+    int i = 0;
+    while (i < path1.size() && i < path2.size() && path1.get(i) == path2.get(i)) {
+      i++; // Move to the next common node
+    }
+    return path1.get(i - 1); // The last common node is the LCA
+  }
+
+  // Optimal Solution TC(O(2N)) SC(O(N))
+
+  public boolean contains(Node root, Node node) {
+    if (root == null)
+      return false;
+    if (root == node)
+      return true;
+    return (contains(root.left, node) || contains(root.right, node));
+  }
+
+  public Node lowestCommonAncestor1(Node root, Node p, Node q) {
+    if (p == root || q == root)
+      return root;
+    if (p == q)
+      return p;
+    boolean leftTree = contains(root.left, p);
+    boolean rightTree = contains(root.right, q);
+    if ((leftTree && rightTree) || (!leftTree && !rightTree))
+      return root;
+    else if (leftTree && !rightTree)
+      return lowestCommonAncestor1(root.left, p, q);
+    else if (!leftTree && rightTree)
+      return lowestCommonAncestor1(root.right, p, q);
+
+    return null;
+  }
+
 }
