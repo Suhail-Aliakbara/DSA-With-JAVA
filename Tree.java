@@ -627,4 +627,48 @@ public class Tree {
     return isSameTree1(root.left, root.right);
   }
 
+  /*
+   * 103. Binary Tree Zigzag Level Order Traversal
+   * Input: root = [3,9,20,null,null,15,7]
+   * Output: [[3],[20,9],[15,7]]
+   */
+
+  public void levelOrderFromleft(Node root, int n, List<Integer> ls) {
+    if (root == null)
+      return;
+    if (n == 1) {
+      ls.add(root.data);
+      return;
+    }
+    levelOrderFromleft(root.left, n - 1, ls);
+    levelOrderFromleft(root.right, n - 1, ls);
+  }
+
+  public void levelOrderFromRight(Node root, int n, List<Integer> ls) {
+    if (root == null)
+      return;
+    if (n == 1) {
+      ls.add(root.data);
+      return;
+    }
+    levelOrderFromRight(root.right, n - 1, ls);
+    levelOrderFromRight(root.left, n - 1, ls);
+  }
+
+  public List<List<Integer>> zigzagLevelOrder(Node root) {
+    List<List<Integer>> ans = new ArrayList<>();
+
+    int height = height(root);
+    for (int i = 1; i <= height; i++) {
+      List<Integer> ls = new ArrayList<>();
+      if (i % 2 == 1) {
+        levelOrderFromleft(root, i, ls);
+      } else {
+        levelOrderFromRight(root, i, ls);
+      }
+      ans.add(ls);
+    }
+    return ans;
+  }
+
 }
