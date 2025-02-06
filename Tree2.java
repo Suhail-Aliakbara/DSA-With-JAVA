@@ -1,5 +1,7 @@
 import java.util.*;
 
+import javax.swing.tree.TreeNode;
+
 import org.w3c.dom.Node;
 
 public class Tree2 {
@@ -134,4 +136,33 @@ public class Tree2 {
     return ans;
   }
 
+  /*
+   * construct BT using preorder and inorder
+   * Given two integer arrays preorder and inorder where preorder is
+   * the preorder traversal of a binary tree and inorder is
+   * the inorder traversal of the same tree, construct and return
+   * the `binary tree.
+   * 
+   * Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+   * Output: [3,9,20,null,null,15,7]
+   */
+  public Node helper(int[] preorder, int preLow, int preHigh, int[] inorder, int inLow, int inHigh) {
+    if (preLow > preHigh)
+      return null;
+    Node root = new Node(preorder[preLow]);
+    int i = 0;
+    while (inorder[i] != root.data) {
+      i++;
+    }
+    int leftSize = i - inLow;
+    root.left = helper(preorder, preLow + 1, preLow + leftSize, inorder, inLow, i - 1);
+    root.right = helper(preorder, preLow + leftSize + 1, preHigh, inorder, i + 1, inHigh);
+    return root;
+  }
+
+  public Node buildTree(int[] preorder, int[] inorder) {
+    int ph = preorder.length;
+    int ih = inorder.length;
+    return helper(preorder, 0, ph - 1, inorder, 0, ih - 1);
+  }
 }
