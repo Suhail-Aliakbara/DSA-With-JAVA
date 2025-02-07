@@ -1,9 +1,5 @@
 import java.util.*;
 
-import javax.swing.tree.TreeNode;
-
-import org.w3c.dom.Node;
-
 public class Tree2 {
   public static class Node {
     int data;
@@ -164,5 +160,33 @@ public class Tree2 {
     int ph = preorder.length;
     int ih = inorder.length;
     return helper(preorder, 0, ph - 1, inorder, 0, ih - 1);
+  }
+
+  /*
+   * 106. Construct Binary Tree from Inorder and Postorder Traversal
+   * Given two integer arrays inorder and postorder where inorder
+   * is the inorder traversal of a binary tree and postorder is
+   * the postorder traversal of the same tree, construct and
+   * return the binary tree.
+   * Input: inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
+   * Output: [3,9,20,null,null,15,7]
+   */
+  public Node postAndIn(int[] postorder, int postLow, int postHigh, int[] inorder, int inLow, int inHigh) {
+    if (postLow > postHigh)
+      return null;
+    Node root = new Node(postorder[postHigh]);
+    int i = inLow;
+    while (inorder[i] != root.data)
+      i++;
+    int leftSize = i - inLow - 1;
+    root.left = postAndIn(postorder, postLow, postLow + leftSize, inorder, inLow, i - 1);
+    root.right = postAndIn(postorder, postLow + leftSize + 1, postHigh - 1, inorder, i + 1, inHigh);
+    return root;
+  }
+
+  public Node buildTree1(int[] inorder, int[] postorder) {
+    int postHigh = postorder.length;
+    int inHigh = inorder.length;
+    return postAndIn(postorder, 0, postHigh - 1, inorder, 0, inHigh - 1);
   }
 }
