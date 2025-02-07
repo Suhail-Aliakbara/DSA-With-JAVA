@@ -1,5 +1,7 @@
 import java.util.*;
 
+import javax.swing.tree.TreeNode;
+
 public class Tree2 {
   public static class Node {
     int data;
@@ -189,4 +191,64 @@ public class Tree2 {
     int inHigh = inorder.length;
     return postAndIn(postorder, 0, postHigh - 1, inorder, 0, inHigh - 1);
   }
+
+  /*
+   * 
+   * 112. Path Sum
+   * Given the root of a binary tree and an integer targetSum, return
+   * true if the tree has a root-to-leaf path such that adding up all
+   * the values along the path equals targetSum.
+   * Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+   * Output: true
+   */
+  public boolean hasPathSum(Node root, int targetSum) {
+    if (root != null && root.left == null && root.right == null) {
+      if (targetSum == root.data) {
+        return true;
+      }
+    }
+    if (root == null)
+      return false;
+    return (hasPathSum(root.left, targetSum - root.data) || hasPathSum(root.right, targetSum - root.data));
+  }
+
+  /*
+   * 113. Path Sum II
+   * Given the root of a binary tree and an integer targetSum, return
+   * all root-to-leaf paths where the sum of the node values in the
+   * path equals targetSum. Each path should be returned as a list
+   * of the node values, not node references.
+   * Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+   * Output: [[5,4,11,2],[5,8,4,5]]
+   */
+  public void helper(Node root, int target, List<Integer> ls, List<List<Integer>> ans) {
+    if (root == null)
+      return;
+    if (root.left == null && root.right == null) {
+      if (target == root.data) {
+        ls.add(root.data);
+        List<Integer> list = new ArrayList<>(ls);
+        ans.add(list);
+        ls.remove(ls.size() - 1);
+      }
+      return;
+    }
+    ls.add(root.data);
+    helper(root.left, target - root.data, ls, ans);
+    helper(root.right, target - root.data, ls, ans);
+    ls.remove(ls.size() - 1);
+  }
+
+  public List<List<Integer>> pathSum2(Node root, int targetSum) {
+    List<List<Integer>> ans = new ArrayList<>();
+    if (root == null)
+      return ans;
+    List<Integer> ls = new ArrayList<>();
+    helper(root, targetSum, ls, ans);
+    return ans;
+  }
+
+  /*
+   * 
+   */
 }

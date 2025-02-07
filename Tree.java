@@ -388,6 +388,24 @@ public class Tree {
     return maxDiameter;
   }
 
+  // ----Optimize verstion of diameter of tree----
+  public static int diameter(Node root) {
+    return diameterHelper(root)[1]; // Returning the diameter
+  }
+
+  private static int[] diameterHelper(Node root) {
+    if (root == null)
+      return new int[] { 0, 0 }; // {height, diameter}
+
+    int[] left = diameterHelper(root.left);
+    int[] right = diameterHelper(root.right);
+
+    int height = Math.max(left[0], right[0]) + 1;
+    int diameter = Math.max(left[0] + right[0], Math.max(left[1], right[1]));
+
+    return new int[] { height, diameter }; // Returning height and diameter
+  }
+
   /*
    * 110. Balanced Binary Tree
    * A height-balanced binary tree is a binary tree in which
