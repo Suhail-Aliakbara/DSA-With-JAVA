@@ -1,7 +1,5 @@
 import java.util.*;
 
-import javax.swing.tree.TreeNode;
-
 public class Tree2 {
   public static class Node {
     int data;
@@ -249,6 +247,58 @@ public class Tree2 {
   }
 
   /*
+   * 437. Path Sum III
+   * Given the root of a binary tree and an integer targetSum, return
+   * the number of paths where the sum of the values along
+   * the path equals targetSum.
+   * 
+   * The path does not need to start or end at the root or a leaf,
+   * but it must go downwards (i.e., traveling only from parent nodes
+   * to child nodes).
+   * Input: root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
+   * Output: 3
    * 
    */
+  public int countPathSum(Node root, long target) {
+    if (root == null)
+      return 0;
+    int count = 0;
+    if ((long) root.data == target)
+      count++;
+    return count + countPathSum(root.left, target - (long) root.data)
+        + countPathSum(root.right, target - (long) root.data);
+  }
+
+  public int pathSum(Node root, int targetSum) {
+    if (root == null)
+      return 0;
+    int count = countPathSum(root, targetSum);
+    count += pathSum(root.left, targetSum) + pathSum(root.right, targetSum);
+    return count;
+  }
+
+  // Optimal verstion TC=Same(O(N))-- SC(O(N))
+  public int pathSum1(Node root, int targetSum) {
+    HashMap<Long, Integer> prefixSumMap = new HashMap<>();
+    prefixSumMap.put(0L, 1); // Base case for sum = targetSum at the root itself
+    return helper(root, 0L, targetSum, prefixSumMap);
+  }
+
+  private int helper(Node node, long currentSum, int target, HashMap<Long, Integer> prefixSumMap) {
+    if (node == null)
+      return 0;
+
+    currentSum += node.data;
+
+    int count = prefixSumMap.getOrDefault(currentSum - target, 0);
+    prefixSumMap.put(currentSum, prefixSumMap.getOrDefault(currentSum, 0) + 1);
+
+    count += helper(node.left, currentSum, target, prefixSumMap);
+    count += helper(node.right, currentSum, target, prefixSumMap);
+
+    prefixSumMap.put(currentSum, prefixSumMap.get(currentSum) - 1);
+
+    return count;
+  }
+
 }
