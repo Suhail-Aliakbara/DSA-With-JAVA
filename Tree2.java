@@ -1,5 +1,7 @@
 import java.util.*;
 
+import javax.swing.tree.TreeNode;
+
 public class Tree2 {
   public static class Node {
     int data;
@@ -301,4 +303,34 @@ public class Tree2 {
     return count;
   }
 
+  /*
+   * Flatten binary tree to linkedList
+   * Given the root of a binary tree, flatten the tree into a "linked list":
+   * 
+   * The "linked list" should use the same TreeNode class where the
+   * right child pointer points to the next node in the list and
+   * the left child pointer is always null.
+   * The "linked list" should be in the same order as a pre-order
+   * traversal of the binary tree.
+   * Input: root = [1,2,5,3,4,null,6]
+   * Output: [1,null,2,null,3,null,4,null,5,null,6]
+   */
+  public void flatten(Node root) {
+    if (root == null)
+      return;
+    Node leftN = root.left;
+    Node rightN = root.right;
+    flatten(leftN);
+    flatten(rightN);
+    root.left = null;
+    root.right = leftN;
+    Node temp = leftN;
+    while (temp != null && temp.right != null) {
+      temp = temp.right;
+    }
+    if (temp != null)
+      temp.right = rightN;
+    else
+      root.right = rightN;
+  }
 }
