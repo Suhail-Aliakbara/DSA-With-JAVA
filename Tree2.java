@@ -333,4 +333,91 @@ public class Tree2 {
     else
       root.right = rightN;
   }
+
+  // Optimal Solution for flatten using morries traversal
+  public void flatten1(Node root) {
+    if (root == null)
+      return;
+    Node curr = root;
+    while (curr != null) {
+      if (curr.left != null) {
+        Node pred = curr.left;
+        while (pred.right != null) {
+          pred = pred.right;
+        }
+        pred.right = curr.right;
+        curr.right = curr.left;
+        curr.left = null;
+      }
+      curr = curr.right;
+    }
+  }
+
+  /*
+   * Tree Boundary Traversal
+   * Given a Binary Tree, find its Boundary Traversal. The traversal
+   * should be in the following order:
+   * Left Boundary
+   * Leaf Nodes
+   * Reverse Right Boundary
+   * Input: root[] = [1, 2, 3, 4, 5, 6, 7, N, N, 8, 9, N, N, N, N]
+   * Output: [1, 2, 4, 8, 9, 6, 7, 3]
+   */
+  void addLeftBoundary(Node root, ArrayList<Integer> ans) {
+    Node curr = root.left;
+    while (curr != null) {
+      if (!isLeaf(curr))
+        ans.add(curr.data);
+      if (curr.left != null)
+        curr = curr.left;
+      else
+        curr = curr.right;
+    }
+  }
+
+  void addLeafNodes(Node root, ArrayList<Integer> ans) {
+    if (isLeaf(root)) {
+      ans.add(root.data);
+      return;
+    }
+    if (root.left != null)
+      addLeafNodes(root.left, ans);
+    if (root.right != null)
+      addLeafNodes(root.right, ans);
+  }
+
+  void addRightBoundary(Node root, ArrayList<Integer> ans) {
+    Node curr = root.right;
+    Stack<Integer> st = new Stack<>();
+    while (curr != null) {
+      if (!isLeaf(curr))
+        st.push(curr.data);
+      if (curr.right != null)
+        curr = curr.right;
+      else
+        curr = curr.left;
+    }
+    while (!st.isEmpty()) {
+      ans.add(st.pop());
+    }
+  }
+
+  ArrayList<Integer> boundaryTraversal(Node node) {
+    // code here
+    ArrayList<Integer> ans = new ArrayList<>();
+    if (!isLeaf(node))
+      ans.add(node.data);
+    addLeftBoundary(node, ans);
+    addLeafNodes(node, ans);
+    addRightBoundary(node, ans);
+
+    return ans;
+  }
+
+  boolean isLeaf(Node root) {
+    if (root.left == null && root.right == null)
+      return true;
+    else
+      return false;
+  }
 }
