@@ -556,4 +556,27 @@ public class Tree2 {
     return maxWidth;
   }
 
+  /*
+   * 124. BT maximum path sum
+   * Input: root = [1,2,3]
+   * Output: 6
+   * Input: root = [-10,9,20,null,null,15,7]
+   * Output: 42
+   */
+  public int maxPath(Node root, int[] maximum) {
+    if (root == null)
+      return 0;
+    int leftSum = Math.max(0, maxPath(root.left, maximum));
+    int rightSum = Math.max(0, maxPath(root.right, maximum));
+    maximum[0] = Math.max(maximum[0], leftSum + rightSum + root.data);
+    return Math.max(leftSum, rightSum) + root.data;
+  }
+
+  int findMaxSum(Node root) {
+    // your code goes here
+    int maximum[] = new int[1];
+    maximum[0] = Integer.MIN_VALUE;
+    maxPath(root, maximum);
+    return maximum[0];
+  }
 }
