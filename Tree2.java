@@ -420,4 +420,78 @@ public class Tree2 {
     else
       return false;
   }
+
+  /*
+   * 2385. Amount of Time for Binary Tree to Be Infected
+   * You are given the root of a binary tree with unique values, and
+   * an integer start. At minute 0, an infection starts from the
+   * node with value start.
+   * 
+   * Each minute, a node becomes infected if:
+   * 
+   * The node is currently uninfected.
+   * The node is adjacent to an infected node.
+   * Return the number of minutes needed for the entire tree to be infected.
+   * Input: root = [1,5,3,null,4,10,6,9,2], start = 3
+   * Output: 4
+   */
+  public static Node getInfectedNode(Node root, int target) {
+    if (root == null)
+      return null;
+    if (root.data == target)
+      return root;
+    Node left = getInfectedNode(root.left, target);
+    Node right = getInfectedNode(root.right, target);
+    if (left == null)
+      return right;
+    else
+      return left;
+  }
+
+  public static void preorder(Node root, Map<Node, Node> childParent) {
+    if (root == null)
+      return;
+    if (root.left != null)
+      childParent.put(root.left, root);
+    if (root.right != null)
+      childParent.put(root.right, root);
+    preorder(root.left, childParent);
+    preorder(root.right, childParent);
+  }
+
+  public static int minTime(Node root, int target) {
+    // code here
+    Node node = getInfectedNode(root, target);
+
+    Map<Node, Node> childParent = new HashMap<>();
+    preorder(root, childParent);
+
+    Queue<Node> q = new LinkedList<>();
+    q.add(node);
+    Map<Node, Integer> isVisited = new HashMap<>();
+    isVisited.put(node, 0);
+
+    while (!q.isEmpty()) {
+      Node temp = q.remove();
+      int level = isVisited.get(temp);
+
+      if (temp.left != null && !isVisited.containsKey(temp.left)) {
+        q.add(temp.left);
+        isVisited.put(temp.left, level + 1);
+      }
+      if (temp.right != null && !isVisited.containsKey(temp.right)) {
+        q.add(temp.right);
+        isVisited.put(temp.right, level + 1);
+      }
+      if (childParent.containsKey(temp) && !isVisited.containsKey(childParent.get(temp))) {
+        q.add(childParent.get(temp));
+        isVisited.put(childParent.get(temp), level + 1);
+      }
+    }
+    int maxTime = -1;
+    for (int i : isVisited.values()) {
+      maxTime = Math.max(maxTime, i);
+    }
+    return maxTime;
+  }
 }
