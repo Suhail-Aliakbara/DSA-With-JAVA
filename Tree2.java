@@ -494,4 +494,66 @@ public class Tree2 {
     }
     return maxTime;
   }
+
+  /*
+   * 662 Maximum width of the binary tree
+   * Given the root of a binary tree, return the maximum width of the given tree.
+   * The maximum width of a tree is the maximum width among all levels.
+   * 
+   * Input: root = [1,3,2,5,null,null,9,6,null,7]
+   * Output: 7
+   * Input: root = [1,3,2,5]
+   * Output: 2
+   * Explanation: The maximum width exists in the second level with length 2
+   * (3,2).
+   */
+  static class Pair3 {
+    Node node;
+    int index;
+
+    Pair3(Node node, int index) {
+      this.node = node;
+      this.index = index;
+    }
+  }
+
+  public int widthOfBinaryTree(Node root) {
+    if (root == null)
+      return 0;
+
+    int maxWidth = 0;
+    Queue<Pair3> queue = new LinkedList<>();
+    queue.add(new Pair3(root, 0));
+
+    while (!queue.isEmpty()) {
+      int size = queue.size();
+
+      // Minimum index at the current level
+      int minIndex = queue.peek().index;
+      int firstIndex = 0, lastIndex = 0;
+
+      for (int i = 0; i < size; i++) {
+        Pair3 currentPair = queue.remove();
+
+        // Normalize index to avoid overflow
+        int currentIndex = currentPair.index - minIndex;
+        Node currentNode = currentPair.node;
+
+        if (i == 0)
+          firstIndex = currentIndex; // First index at the current level
+        if (i == size - 1)
+          lastIndex = currentIndex; // Last index at the current level
+        if (currentNode.left != null) {
+          queue.add(new Pair3(currentNode.left, currentIndex * 2 + 1));
+        }
+        if (currentNode.right != null) {
+          queue.add(new Pair3(currentNode.right, currentIndex * 2 + 2));
+        }
+      }
+      maxWidth = Math.max(maxWidth, lastIndex - firstIndex + 1);
+    }
+
+    return maxWidth;
+  }
+
 }
