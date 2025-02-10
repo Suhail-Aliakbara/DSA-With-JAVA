@@ -1,7 +1,5 @@
 import java.util.*;
 
-import javax.swing.tree.TreeNode;
-
 public class Tree2 {
   public static class Node {
     int data;
@@ -578,5 +576,124 @@ public class Tree2 {
     maximum[0] = Integer.MIN_VALUE;
     maxPath(root, maximum);
     return maximum[0];
+  }
+
+  /*
+   * BT Right Side view
+   * Given the root of a binary tree, imagine yourself standing on
+   * the right side of it, return the values of the nodes you can
+   * see ordered from top to bottom.
+   * Input: root = [1,2,3,null,5,null,4]
+   * Output: [1,3,4]
+   */
+  class Pair4 {
+    Node node;
+    int hd;
+
+    Pair4(Node node, int hd) {
+      this.node = node;
+      this.hd = hd;
+    }
+  }
+
+  public List<Integer> rightSideView(Node root) {
+    List<Integer> ans = new ArrayList<>();
+    if (root == null)
+      return ans;
+
+    Map<Integer, Integer> map = new HashMap<>();
+    Queue<Pair4> q = new LinkedList<>();
+    q.add(new Pair4(root, 0));
+
+    while (!q.isEmpty()) {
+      Pair4 currPair = q.remove();
+      Node node = currPair.node;
+      int hd = currPair.hd;
+
+      if (!map.containsKey(hd)) {
+        map.put(hd, node.data);
+      }
+
+      if (node.right != null)
+        q.add(new Pair4(node.right, hd + 1));
+      if (node.left != null)
+        q.add(new Pair4(node.left, hd + 1));
+    }
+
+    for (int value : map.values()) {
+      ans.add(value);
+    }
+
+    return ans;
+  }
+
+  /*
+   * 987 Vertical order traversal of BT
+   * The vertical order traversal of a binary tree is a list of
+   * top-to-bottom orderings for each column index starting from
+   * the leftmost column and ending on the rightmost column.
+   * There may be multiple nodes in the same row and same column.
+   * In such a case, sort these nodes by their values
+   * Input: root = [3,9,20,null,null,15,7]
+   * Output: [[9],[3,15],[20],[7]]
+   * Explanation:
+   * Column -1: Only node 9 is in this column.
+   * Column 0: Nodes 3 and 15 are in this column in that order from top to bottom.
+   * Column 1: Only node 20 is in this column.
+   * Column 2: Only node 7 is in this column.
+   */
+  class turple {
+    Node node;
+    int row;
+    int col;
+
+    turple(Node node, int row, int col) {
+      this.node = node;
+      this.row = row;
+      this.col = col;
+    }
+  }
+
+  public List<List<Integer>> verticalTraversal(Node root) {
+    List<List<Integer>> ans = new ArrayList<>();
+    if (root == null)
+      return ans;
+
+    TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> map = new TreeMap<>();
+    Queue<turple> q = new LinkedList<>();
+    q.add(new turple(root, 0, 0));
+
+    while (!q.isEmpty()) {
+      turple curr = q.remove();
+      Node node = curr.node;
+      int vertical = curr.row;
+      int level = curr.col;
+
+      if (!map.containsKey(vertical)) {
+        map.put(vertical, new TreeMap<>());
+      }
+
+      if (!map.get(vertical).containsKey(level)) {
+        map.get(vertical).put(level, new PriorityQueue<>());
+      }
+
+      map.get(vertical).get(level).offer(node.data);
+
+      if (node.left != null)
+        q.add(new turple(node.left, vertical - 1, level + 1));
+      if (node.right != null)
+        q.add(new turple(node.right, vertical + 1, level + 1));
+    }
+
+    for (TreeMap<Integer, PriorityQueue<Integer>> ys : map.values()) {
+      List<Integer> ls = new ArrayList<>();
+      for (PriorityQueue<Integer> pq : ys.values()) {
+        while (!pq.isEmpty()) {
+          ls.add(pq.poll());
+        }
+      }
+      ans.add(ls);
+    }
+    return ans;
   }
 }
