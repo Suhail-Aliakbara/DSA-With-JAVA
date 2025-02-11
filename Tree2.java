@@ -756,11 +756,35 @@ public class Tree2 {
         }
       }
     }
-
     while (!q.isEmpty()) {
       ans.add(q.poll().data);
     }
     return ans;
+  }
 
+  /*
+   * Children Sum in a Binary Tree
+   * Binary tree
+   * 35
+   * / \
+   * 20 15
+   * / \ / \
+   * 15 5 10 5
+   * 
+   * Output: 1
+   */
+  public static int isSumProperty(Node root) {
+    // add your code here
+    if (root == null || root.left == null && root.right == null)
+      return 1;
+    int sum = 0;
+    if (root.left != null)
+      sum = root.left.data;
+    if (root.right != null)
+      sum += root.right.data;
+    if (root.data == sum && isSumProperty(root.left) == 1 && isSumProperty(root.right) == 1) {
+      return 1;
+    }
+    return 0;
   }
 }
