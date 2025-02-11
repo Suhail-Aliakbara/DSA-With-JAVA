@@ -61,4 +61,24 @@ public class BST {
     }
     return root;
   }
+
+  /*
+   * 98. validate BST
+   * Given the root of a binary tree, determine if it is a valid
+   * binary search tree (BST).
+   * Input: root = [2,1,3]
+   * Output: true
+   * 
+   */
+  public boolean isValidBST(TreeNode root) {
+    return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+  }
+
+  boolean isValidBST(TreeNode root, long minValue, long maxValue) {
+    if (root == null)
+      return true;
+    if (root.val >= maxValue || root.val <= minValue)
+      return false;
+    return isValidBST(root.left, minValue, (long) root.val) && isValidBST(root.right, (long) root.val, maxValue);
+  }
 }
