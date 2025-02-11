@@ -1,5 +1,7 @@
 import java.util.*;
 
+import javax.swing.tree.TreeNode;
+
 public class Tree2 {
   public static class Node {
     int data;
@@ -695,5 +697,70 @@ public class Tree2 {
       ans.add(ls);
     }
     return ans;
+  }
+
+  /*
+   * All node Distance K in binary tree
+   * 
+   * You can return the answer in any order.
+   * 
+   * Input: root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, k = 2
+   * Output: [7,4,1]
+   * Explanation: The nodes that are a distance 2 from the target
+   * node (with value 5) have values 7, 4, and 1.
+   */
+  public void getParentNode(Node root, HashMap<Node, Node> childParent) {
+    if (root == null)
+      return;
+    if (root.left != null)
+      childParent.put(root.left, root);
+    if (root.right != null)
+      childParent.put(root.right, root);
+    getParentNode(root.left, childParent);
+    getParentNode(root.right, childParent);
+
+  }
+
+  public List<Integer> distanceK(Node root, Node target, int k) {
+    List<Integer> ans = new ArrayList<>();
+
+    HashMap<Node, Node> childParent = new HashMap<>();
+    getParentNode(root, childParent);
+
+    Queue<Node> q = new LinkedList<>();
+    q.add(target);
+
+    HashMap<Node, Boolean> isVisited = new HashMap<>();
+    isVisited.put(target, true);
+    int curr_level = 0;
+
+    while (!q.isEmpty()) {
+      int size = q.size();
+      if (curr_level == k)
+        break;
+      curr_level++;
+      for (int i = 0; i < size; i++) {
+        Node currNode = q.remove();
+
+        if (currNode.left != null && isVisited.get(currNode.left) == null) {
+          q.offer(currNode.left);
+          isVisited.put(currNode.left, true);
+        }
+        if (currNode.right != null && isVisited.get(currNode.right) == null) {
+          q.offer(currNode.right);
+          isVisited.put(currNode.right, true);
+        }
+        if (childParent.containsKey(currNode) && isVisited.get(childParent.get(currNode)) == null) {
+          q.offer(childParent.get(currNode));
+          isVisited.put(childParent.get(currNode), true);
+        }
+      }
+    }
+
+    while (!q.isEmpty()) {
+      ans.add(q.poll().data);
+    }
+    return ans;
+
   }
 }
