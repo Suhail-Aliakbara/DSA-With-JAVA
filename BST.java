@@ -81,4 +81,58 @@ public class BST {
       return false;
     return isValidBST(root.left, minValue, (long) root.val) && isValidBST(root.right, (long) root.val, maxValue);
   }
+
+  // Delete: The node has 0 child
+  public void deleteLeafNode(TreeNode root, int target) {
+    if (root == null) {
+      return;
+    }
+    if (root.val > target) {
+      if (root.left.val == target)
+        root.left = null;
+      else
+        deleteLeafNode(root.left, target);
+    }
+    if (root.val < target) {
+      if (root.right.val == target)
+        root.right = null;
+      else
+        deleteLeafNode(root.right, target);
+    }
+  }
+
+  // Delete: The Node who has 1 child
+  public void deleteOneChildNode(TreeNode root, int target) {
+    if (root == null) {
+      return;
+    }
+    if (root.val > target) {
+      if (root.left.val == target) {
+        TreeNode l = root.left;
+        if (l.left == null && l.right == null)
+          root.left = null;
+        else if (l.left != null || l.right != null) {
+          if (l.left != null)
+            root.left = l.left;
+          else
+            root.left = l.right;
+        }
+      } else
+        deleteOneChildNode(root.left, target);
+    }
+    if (root.val < target) {
+      if (root.right.val == target) {
+        TreeNode r = root.right;
+        if (r.left == null && r.right == null)
+          root.right = null;
+        else if (r.left == null || r.right == null) {
+          if (r.left != null)
+            root.right = r.left;
+          else
+            root.right = r.right;
+        }
+      } else
+        deleteOneChildNode(root.right, target);
+    }
+  }
 }
