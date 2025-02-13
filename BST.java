@@ -18,6 +18,25 @@ public class BST {
     }
   }
 
+  public class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node() {
+    }
+
+    Node(int data) {
+      this.data = data;
+    }
+
+    Node(int data, Node left, Node right) {
+      this.data = data;
+      this.left = left;
+      this.right = right;
+    }
+  }
+
   /*
    * 700 Search in BST
    * ou are given the root of a binary search tree (BST) and an integer val.
