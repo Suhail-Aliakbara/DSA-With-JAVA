@@ -135,4 +135,44 @@ public class BST {
         deleteOneChildNode(root.right, target);
     }
   }
+
+  /*
+   * Pair Sum in BST
+   * Given a Binary Search Tree(BST) and a target. Check whether
+   * there's a pair of Nodes in the BST with value summing up to
+   * the target.
+   * 
+   * Input: root = [7, 3, 8, 2, 4, N, 9], target = 12
+   * Output: True
+   * Explanation: In the binary tree above, there are two nodes
+   * (8 and 4) that add up to 12.
+   */
+  boolean findTarget(Node root, int target) {
+    // Write your code here
+    return helper(root, root, target);
+  }
+
+  boolean helper(Node root, Node current, int target) {
+    if (root == null || current == null) {
+      return false;
+    }
+    if (findNode(root, current, target - current.data)) {
+      return true;
+    }
+    return helper(root, current.left, target)
+        || helper(root, current.right, target);
+  }
+
+  boolean findNode(Node root, Node current, int target) {
+    if (root == null || root == current) {
+      return false;
+    }
+    if (root.data == target) {
+      return true;
+    } else if (root.data > target) {
+      return findNode(root.left, current, target);
+    } else {
+      return findNode(root.right, current, target);
+    }
+  }
 }
