@@ -156,6 +156,77 @@ public class BST {
   }
 
   /*
+   * 450. Delete Node in a BST
+   * Given a root node reference of a BST and a key, delete the node
+   * with the given key in the BST. Return the root node reference
+   * (possibly updated) of the BST.
+   * 
+   * Input: root = [5,3,6,2,4,null,7], key = 3
+   * Output: [5,4,6,2,null,null,7]
+   */
+  public void delete(TreeNode root, int target) {
+    if (root == null)
+      return;
+    if (root.val > target) {
+      if (root.left == null)
+        return;
+      if (root.left.val == target) {
+        TreeNode l = root.left;
+        if (l.left == null && l.right == null)
+          root.left = null;
+        else if (l.left == null || l.right == null) {
+          if (l.left != null)
+            root.left = l.left;
+          else
+            root.left = l.right;
+        } else {
+          TreeNode curr = l;
+          TreeNode pred = curr.left;
+          while (pred.right != null)
+            pred = pred.right;
+          delete(root, pred.val);
+          pred.left = curr.left;
+          pred.right = curr.right;
+          root.left = pred;
+        }
+      } else
+        delete(root.left, target);
+    }
+    if (root.val < target) {
+      if (root.right == null)
+        return;
+      if (root.right.val == target) {
+        TreeNode l = root.right;
+        if (l.left == null && l.right == null)
+          root.right = null;
+        else if (l.left == null || l.right == null) {
+          if (l.left != null)
+            root.right = l.left;
+          else
+            root.right = l.right;
+        } else {
+          TreeNode curr = l;
+          TreeNode pred = curr.left;
+          while (pred.right != null)
+            pred = pred.right;
+          delete(root, pred.val);
+          pred.left = curr.left;
+          pred.right = curr.right;
+          root.right = pred;
+        }
+      } else
+        delete(root.right, target);
+    }
+  }
+
+  public TreeNode deleteNode(TreeNode root, int key) {
+    TreeNode temp = new TreeNode(Integer.MAX_VALUE);
+    temp.left = root;
+    delete(temp, key);
+    return temp.left;
+  }
+
+  /*
    * Pair Sum in BST
    * Given a Binary Search Tree(BST) and a target. Check whether
    * there's a pair of Nodes in the BST with value summing up to
