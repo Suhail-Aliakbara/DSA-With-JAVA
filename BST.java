@@ -265,4 +265,37 @@ public class BST {
       return findNode(root.right, current, target);
     }
   }
+
+  /*
+   * 235. Lowest Common Ancestor of a Binary Search Tree
+   * Given a binary search tree (BST), find the lowest common ancestor
+   * (LCA) node of two given nodes in the BST.
+   * 
+   * Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+   * Output: 6
+   */
+
+  public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (p.val == root.val || q.val == root.val)
+      return root;
+    else if (p.val < root.val && q.val > root.val)
+      return root;
+    else if (p.val > root.val && q.val < root.val)
+      return root;
+    else if (p.val < root.val && q.val < root.val)
+      return lowestCommonAncestor(root.left, p, q);
+    else
+      return lowestCommonAncestor(root.right, p, q);
+  }
+
+  // short version bcz 3 time i am just return root in above
+  public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+    if (p.val < root.val && q.val < root.val)
+      return lowestCommonAncestor2(root.left, p, q);
+    else if (p.val > root.val && q.val > root.val)
+      return lowestCommonAncestor2(root.right, p, q);
+    else
+      return root;
+  }
+
 }
