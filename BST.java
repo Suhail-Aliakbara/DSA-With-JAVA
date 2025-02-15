@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class BST {
   public class TreeNode {
     int val;
@@ -368,4 +371,84 @@ public class BST {
   public TreeNode sortedArrayToBST(int[] nums) {
     return constructBST(nums, 0, nums.length - 1);
   }
+
+  /*
+   * 230. Kth Smallest Element in a BST
+   * Given the root of a binary search tree, and an integer k, return
+   * the kth smallest value (1-indexed) of all the values of the
+   * nodes in the tree.
+   * 
+   * Input: root = [3,1,4,null,2], k = 1
+   * Output: 1
+   */
+  public void inorderKthSmallest(TreeNode root, int k, List<Integer> ans) {
+    if (root == null)
+      return;
+    inorderKthSmallest(root.left, k, ans);
+    ans.add(root.val);
+    inorderKthSmallest(root.right, k, ans);
+  }
+
+  public int kthSmallest(TreeNode root, int k) {
+    List<Integer> ans = new ArrayList<>();
+    inorderKthSmallest(root, k, ans);
+    int value = -1;
+    for (int i = 0; i < ans.size(); i++) {
+      if (i == k) {
+        break;
+      }
+      value = ans.get(i);
+    }
+    return value;
+  }
+
+  // Optimal Solution for Kth Smallest and Largest
+
+  private void reverseInorder(TreeNode node, int[] counter, int k, int[] kLargest) {
+    if (node == null || counter[0] >= k)
+      return;
+
+    reverseInorder(node.right, counter, k, kLargest);
+    counter[0]++;
+
+    if (counter[0] == k) {
+      kLargest[0] = node.val;
+      return;
+    }
+
+    reverseInorder(node.left, counter, k, kLargest);
+  }
+
+  private void inorder(TreeNode node, int[] counter, int k, int[] kSmallest) {
+    if (node == null || counter[0] >= k)
+      return;
+
+    inorder(node.left, counter, k, kSmallest);
+    counter[0]++;
+
+    if (counter[0] == k) {
+      kSmallest[0] = node.val;
+      return;
+    }
+
+    inorder(node.right, counter, k, kSmallest);
+  }
+
+  public int[] findKth(TreeNode root, int k) {
+    int[] kSmallest = new int[] { Integer.MIN_VALUE };
+    int[] kLargest = new int[] { Integer.MIN_VALUE };
+    // Counter to track visited nodes
+    int[] counter = new int[] { 0 };
+
+    // Find Kth smallest element (perform inorder traversal)
+    inorder(root, counter, k, kSmallest);
+
+    // Reset counter for Kth largest element
+    counter[0] = 0;
+    // Find Kth largest element (perform reverse inorder traversal)
+    reverseInorder(root, counter, k, kLargest);
+
+    return new int[] { kSmallest[0], kLargest[0] };
+  }
+
 }
