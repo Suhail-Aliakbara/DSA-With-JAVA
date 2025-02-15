@@ -298,4 +298,74 @@ public class BST {
       return root;
   }
 
+  /*
+   * Predecessor and Successor
+   * You are given root node of the BST and an integer key. You need
+   * to find the in-order successor and predecessor of the given key.
+   * If either predecessor or successor is not found, then set it to NULL.
+   * 
+   * Note:- In an inorder traversal the number just smaller than the
+   * target is the predecessor and the number just greater than the target
+   * is the successor.
+   * 
+   * Input: root[] = [8, 1, 9, N, 4, N, 10, 3, N, N, N]
+   * 8
+   * / \
+   * 1 9
+   * \ \
+   * 4 10
+   * /
+   * 3
+   * key = 8
+   * Output: 4 9
+   */
+
+  public static void findPreSuc(Node root, Node[] pre, Node[] suc, int key) {
+    // code here.
+    // update pre[0] with the predecessor of the key
+    // update suc[0] with the successor of the key
+    Node curr = root;
+
+    while (curr != null) {
+      if (curr.data < key) {
+        pre[0] = curr;
+        curr = curr.right;
+      } else {
+        curr = curr.left;
+      }
+    }
+
+    curr = root;
+
+    while (curr != null) {
+      if (curr.data > key) {
+        suc[0] = curr;
+        curr = curr.left;
+      } else {
+        curr = curr.right;
+      }
+    }
+  }
+
+  /*
+   * 108. Convert Sorted Array to Binary Search Tree
+   * Given an integer array nums where the elements are sorted in
+   * ascending order, convert it to a height-balanced binary search tree.
+   * 
+   * Input: nums = [-10,-3,0,5,9]
+   * Output: [0,-3,9,-10,null,5]
+   */
+  public TreeNode constructBST(int[] nums, int low, int high) {
+    if (low > high)
+      return null;
+    int mid = (low + high) / 2;
+    TreeNode root = new TreeNode(nums[mid]);
+    root.left = constructBST(nums, low, mid - 1);
+    root.right = constructBST(nums, mid + 1, high);
+    return root;
+  }
+
+  public TreeNode sortedArrayToBST(int[] nums) {
+    return constructBST(nums, 0, nums.length - 1);
+  }
 }
