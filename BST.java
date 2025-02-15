@@ -40,6 +40,23 @@ public class BST {
     }
   }
 
+  public class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode() {
+    }
+
+    ListNode(int val) {
+      this.val = val;
+    }
+
+    ListNode(int val, ListNode next) {
+      this.val = val;
+      this.next = next;
+    }
+  }
+
   /*
    * 700 Search in BST
    * ou are given the root of a binary search tree (BST) and an integer val.
@@ -449,6 +466,53 @@ public class BST {
     reverseInorder(root, counter, k, kLargest);
 
     return new int[] { kSmallest[0], kLargest[0] };
+  }
+
+  /*
+   * 109. Convert Sorted List to Binary Search Tree
+   * Given the head of a singly linked list where elements are sorted in
+   * ascending order, convert it to a height-balanced binary search tree.
+   * 
+   * Input: head = [-10,-3,0,5,9]
+   * Output: [0,-3,9,-10,null,5]
+   */
+  public TreeNode inorderLinkedList(List<Integer> list, int low, int high) {
+    if (low > high)
+      return null;
+    int mid = (low + high) / 2;
+    TreeNode root = new TreeNode(list.get(mid));
+    root.left = inorderLinkedList(list, low, mid - 1);
+    root.right = inorderLinkedList(list, mid + 1, high);
+    return root;
+  }
+
+  public TreeNode sortedListToBST(ListNode head) {
+    List<Integer> list = new ArrayList<>();
+
+    ListNode temp = head;
+    while (temp != null) {
+      list.add(temp.val);
+      temp = temp.next;
+    }
+
+    TreeNode root = inorderLinkedList(list, 0, list.size() - 1);
+    return root;
+  }
+
+  /*
+   * 1008. Construct Binary Search Tree from Preorder Traversal
+   * Given an array of integers preorder, which represents the preorder traversal
+   * of a BST (i.e., binary search tree), construct the tree and return its root.
+   * 
+   * Input: preorder = [8,5,1,7,10,12]
+   * Output: [8,5,10,1,7,null,12]
+   */
+  public TreeNode bstFromPreorder(int[] preorder) {
+    TreeNode root = new TreeNode(preorder[0]);
+    for (int i = 1; i < preorder.length; i++) {
+      insertIntoBST(root, preorder[i]); // Used above InserInto method
+    }
+    return root;
   }
 
 }
