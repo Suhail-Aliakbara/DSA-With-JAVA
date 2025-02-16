@@ -787,4 +787,91 @@ public class Tree2 {
     }
     return 0;
   }
+
+  /*
+   * (in copy 52 question) BT inorder Mories Traversal
+   * Input: root = [1,null,2,3]
+   * Output: [1,3,2]
+   */
+  public List<Integer> inorderTraversal(Node root) {
+    List<Integer> ls = new ArrayList<>();
+    Node curr = root;
+    while (curr != null) {
+      if (curr.left != null) {
+        Node pred = curr.left;
+        while (pred.right != null && pred.right != curr) {
+          pred = pred.right;
+        }
+        if (pred.right == null) {
+          pred.right = curr;
+          curr = curr.left;
+        }
+        if (pred.right == curr) {
+          pred.right = null;
+          ls.add(curr.data);
+          curr = curr.right;
+        }
+      } else {
+        ls.add(curr.data);
+        curr = curr.right;
+      }
+    }
+    return ls;
+  }
+
+  /*
+   * 297. Serialize and Deserialize Binary Tree
+   * Serialization is the process of converting a data structure or object
+   * into a sequence of bits so that it can be stored in a file or memory buffer,
+   * or transmitted across a network connection link to be reconstructed later in
+   * the same or another computer environment.
+   * 
+   * Input: root = [1,2,3,null,null,4,5]
+   * Output: [1,2,3,null,null,4,5]
+   * 
+   */
+  // Encodes a tree to a single string.
+  public String serialize(Node root) {
+    if (root == null)
+      return "";
+    Queue<Node> q = new LinkedList<>();
+    StringBuilder res = new StringBuilder();
+    q.add(root);
+    while (!q.isEmpty()) {
+      Node curr = q.remove();
+      if (curr == null) {
+        res.append("N ");
+        continue;
+      }
+      res.append(curr.data + " ");
+      q.add(curr.left);
+      q.add(curr.right);
+    }
+    return res.toString();
+  }
+
+  // Decodes your encoded data to tree.
+  public Node deserialize(String data) {
+    if (data == "")
+      return null;
+    Queue<Node> q = new LinkedList<>();
+    String[] values = data.split(" ");
+    Node root = new Node(Integer.parseInt(values[0]));
+    q.add(root);
+    for (int i = 1; i < values.length; i++) {
+      Node parent = q.poll();
+      if (!values[i].equals("N")) {
+        Node left = new Node(Integer.parseInt(values[i]));
+        parent.left = left;
+        q.add(left);
+      }
+      if (!values[++i].equals("N")) {
+        Node right = new Node(Integer.parseInt(values[i]));
+        parent.right = right;
+        q.add(right);
+      }
+    }
+    return root;
+  }
+
 }
