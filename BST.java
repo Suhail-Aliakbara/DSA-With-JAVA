@@ -515,4 +515,61 @@ public class BST {
     return root;
   }
 
+  /*
+   * 538. Convert BST to Greater Tree
+   * Given the root of a Binary Search Tree (BST), convert it to a Greater Tree
+   * such that every key of the original BST is changed to the original key plus
+   * the sum of all keys greater than the original key in BST.
+   * 
+   * Input: root = [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]
+   * Output: [30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]
+   */
+  public void greaterTree(TreeNode root, int[] sum) {
+    if (root == null)
+      return;
+
+    greaterTree(root.right, sum);
+    sum[0] = root.val + sum[0];
+    root.val = sum[0];
+    greaterTree(root.left, sum);
+
+  }
+
+  public TreeNode convertBST(TreeNode root) {
+    greaterTree(root, new int[] { 0 });
+    return root;
+  }
+
+  /*
+   * 783. Minimum Distance Between BST Nodes
+   * Given the root of a Binary Search Tree (BST), return the minimum difference
+   * between the values of any two different nodes in the tree.
+   * 
+   * Input: root = [1,0,48,null,null,12,49]
+   * Output: 1
+   */
+
+  public void calculateDiff(TreeNode root, TreeNode[] prev, int[] minDiff) {
+    if (root == null)
+      return;
+
+    calculateDiff(root.left, prev, minDiff);
+
+    if (prev[0] != null) {
+      int curr = root.val - prev[0].val;
+      minDiff[0] = Math.min(minDiff[0], curr);
+    }
+
+    prev[0] = root;
+    calculateDiff(root.right, prev, minDiff);
+
+  }
+
+  public int minDiffInBST(TreeNode root) {
+    TreeNode[] prev = new TreeNode[1];
+    int[] minDiff = new int[] { Integer.MAX_VALUE };
+    calculateDiff(root, prev, minDiff);
+    return minDiff[0];
+  }
+
 }
