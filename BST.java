@@ -681,4 +681,73 @@ public class BST {
     return -1;
   }
 
+  /*
+   * 653. Two Sum IV - Input is a BST
+   * Given the root of a binary search tree and an integer k, return true if
+   * there exist two elements in the BST such that their sum is equal to k,
+   * or false otherwise.
+   * 
+   * Input: root = [5,3,6,2,4,null,7], k = 9
+   * Output: true
+   */
+  public boolean findTarget(TreeNode root, int k) {
+    ArrayList<Integer> arr = new ArrayList<>();
+    inorderMorries(root, arr);
+
+    int i = 0, j = arr.size() - 1;
+    while (i < j) {
+      int total = arr.get(i) + arr.get(j);
+      if (total == k) {
+        return true;
+      } else if (total < k)
+        i++;
+      else
+        j--;
+    }
+    return false;
+  }
+
+  /*
+   * 669. Trim a Binary Search Tree
+   * Given the root of a binary search tree and the lowest and highest boundaries
+   * as low and high, trim the tree so that all its elements lies in [low, high].
+   * 
+   * Input: root = [1,0,2], low = 1, high = 2
+   * Output: [1,null,2]
+   */
+
+  public void trim(TreeNode root, int low, int high) {
+    if (root == null)
+      return;
+    while (root.left != null) {
+      if (root.left.val < low)
+        root.left = root.left.right;
+      else if (root.left.val > high)
+        root.left = root.left.left;
+      else
+        break;
+    }
+    while (root.right != null) {
+      if (root.right.val < low)
+        root.right = root.right.right;
+      else if (root.right.val > high)
+        root.right = root.right.left;
+      else
+        break;
+    }
+
+    trim(root.left, low, high);
+    trim(root.right, low, high);
+  }
+
+  public TreeNode trimBST(TreeNode root, int low, int high) {
+    TreeNode temp = new TreeNode(Integer.MAX_VALUE);
+    temp.left = root;
+    trim(temp, low, high);
+    return temp.left;
+  }
+
+  /*
+   * 
+   */
 }
