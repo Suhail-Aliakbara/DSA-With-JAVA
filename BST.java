@@ -748,6 +748,70 @@ public class BST {
   }
 
   /*
+   * 99. Recover Binary Search Tree
+   * You are given the root of a binary search tree (BST), where the values of
+   * exactly two nodes of the tree were swapped by mistake. Recover the tree
+   * without changing its structure.
    * 
+   * Input: root = [1,3,null,null,2]
+   * Output: [3,1,null,null,2]
+   * Explanation: 3 cannot be a left child of 1 because 3 > 1. Swapping 1 and 3
+   * makes the BST valid.
    */
+  public void recoverTree(TreeNode root) {
+    List<TreeNode> ls = new ArrayList<>();
+    TreeNode curr = root;
+    TreeNode prev = null;
+    TreeNode prevPrev = null;
+    while (curr != null) {
+
+      if (curr.left != null) {
+        TreeNode pred = curr.left;
+        while (pred.right != null && pred.right != curr)
+          pred = pred.right;
+        if (pred.right == null) {
+          pred.right = curr;
+          curr = curr.left;
+        }
+        if (pred.right == curr) {
+          pred.right = null;
+
+          if (prevPrev != null && prev != null) {
+            if (prevPrev.val < prev.val && prev.val > curr.val)
+              ls.add(prev);
+            if (prevPrev.val > prev.val && prev.val < curr.val)
+              ls.add(prev);
+          } else if (prev != null && prev.val > curr.val) {
+            ls.add(prev);
+          }
+
+          prevPrev = prev;
+          prev = curr;
+          curr = curr.right;
+        }
+
+      } else {
+        if (prevPrev != null && prev != null) {
+          if (prevPrev.val < prev.val && prev.val > curr.val)
+            ls.add(prev);
+          if (prevPrev.val > prev.val && prev.val < curr.val)
+            ls.add(prev);
+        } else if (prev != null && prev.val > curr.val) {
+          ls.add(prev);
+        }
+
+        prevPrev = prev;
+        prev = curr;
+        curr = curr.right;
+      }
+    }
+    if (prevPrev.val > prev.val)
+      ls.add(prev);
+    TreeNode firstVal = ls.get(0);
+    TreeNode lastVal = ls.get(ls.size() - 1);
+    int temp = firstVal.val;
+    firstVal.val = lastVal.val;
+    lastVal.val = temp;
+  }
+
 }
