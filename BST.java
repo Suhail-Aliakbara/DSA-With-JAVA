@@ -572,4 +572,113 @@ public class BST {
     return minDiff[0];
   }
 
+  /*
+   * 1305. All Elements in Two Binary Search Trees
+   * Given two binary search trees root1 and root2, return a list containing
+   * all the integers from both trees sorted in ascending order.
+   * 
+   * Input: root1 = [2,1,4], root2 = [1,0,3]
+   * Output: [0,1,1,2,3,4]
+   */
+  public void inorderMorries(TreeNode root, List<Integer> ls) {
+    TreeNode curr = root;
+    while (curr != null) {
+      if (curr.left != null) {
+        TreeNode pred = curr.left;
+        while (pred.right != null && pred.right != curr)
+          pred = pred.right;
+        if (pred.right == null) {
+          pred.right = curr;
+          curr = curr.left;
+        }
+        if (pred.right == curr) {
+          pred.right = null;
+          ls.add(curr.val);
+          curr = curr.right;
+        }
+      } else {
+        ls.add(curr.val);
+        curr = curr.right;
+      }
+    }
+  }
+
+  public void merge(List<Integer> arr1, List<Integer> arr2, List<Integer> ans) {
+    int m = arr1.size(), n = arr2.size();
+    int i = 0, j = 0;
+
+    while (i < m && j < n) {
+      if (arr1.get(i) <= arr2.get(j)) {
+        ans.add(arr1.get(i++));
+      } else {
+        ans.add(arr2.get(j++));
+      }
+    }
+
+    while (i < m) {
+      ans.add(arr1.get(i++));
+    }
+    while (j < n) {
+      ans.add(arr2.get(j++));
+    }
+  }
+
+  public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
+    List<Integer> arr1 = new ArrayList<>();
+    List<Integer> arr2 = new ArrayList<>();
+    List<Integer> ans = new ArrayList<>();
+    inorderMorries(root1, arr1);
+    inorderMorries(root2, arr2);
+
+    merge(arr1, arr2, ans);
+    return ans;
+  }
+
+  /*
+   * Ceil in BST
+   * Given a BST and a number X, find Ceil of X.
+   * Note: Ceil(X) is a number that is either equal to X or is immediately greater
+   * than X.
+   * If Ceil could not be found, return -1.
+   * Input: root = [5, 1, 7, N, 2, N, N, N, 3], X = 3
+   * 5
+   * / \
+   * 1 7
+   * \
+   * 2
+   * \
+   * 3
+   * Output: 3
+   */
+  int findCeil(Node root, int key) {
+    if (root == null)
+      return -1;
+    // Code here
+    Node curr = root;
+    while (curr != null) {
+      if (curr.left != null) {
+        Node pred = curr.left;
+        while (pred.right != null && pred.right != curr)
+          pred = pred.right;
+        if (pred.right == null) {
+          pred.right = curr;
+          curr = curr.left;
+        }
+        if (pred.right == curr) {
+          pred.right = null;
+          if (curr.data >= key) {
+            return curr.data;
+          }
+          curr = curr.right;
+        }
+      } else {
+        if (curr.data >= key) {
+          return curr.data;
+        }
+        curr = curr.right;
+      }
+    }
+    return -1;
+  }
+
 }
