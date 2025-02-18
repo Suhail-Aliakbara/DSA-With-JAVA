@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
-import javax.swing.tree.TreeNode;
-
-import org.w3c.dom.Node;
-
 public class Tree {
   public static class Node {
     int data;

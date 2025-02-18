@@ -1,7 +1,5 @@
 import java.util.*;
 
-import javax.swing.tree.TreeNode;
-
 public class Tree2 {
   public static class Node {
     int data;
