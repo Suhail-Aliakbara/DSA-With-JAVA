@@ -2,6 +2,23 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class heap {
+  public class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode() {
+    }
+
+    ListNode(int val) {
+      this.val = val;
+    }
+
+    ListNode(int val, ListNode next) {
+      this.val = val;
+      this.next = next;
+    }
+  }
+
   /*
    * 215. Kth Largest Element in an Array
    * Given an integer array nums and an integer k, return the kth
@@ -103,4 +120,52 @@ public class heap {
     return ans;
   }
 
+  /*
+   * 23. Merge k Sorted Lists
+   * You are given an array of k linked-lists lists, each linked-list is
+   * sorted in ascending order.
+   * Merge all the linked-lists into one sorted linked-list and return it.
+   * Input: lists = [[1,4,5],[1,3,4],[2,6]]
+   * Output: [1,1,2,3,4,4,5,6]
+   * Explanation: The linked-lists are:
+   * [
+   * 1->4->5,
+   * 1->3->4,
+   * 2->6
+   * ]
+   * merging them into one sorted list:
+   * 1->1->2->3->4->4->5->6
+   */
+  class Pair {
+    int num;
+    ListNode node;
+
+    Pair(int num, ListNode node) {
+      this.num = num;
+      this.node = node;
+    }
+  }
+
+  public ListNode mergeKLists(ListNode[] lists) {
+    PriorityQueue<Pair> pq = new PriorityQueue<>((x, y) -> Integer.compare(x.num, y.num));
+    int n = lists.length;
+
+    for (int i = 0; i < n; i++) {
+      if (lists[i] != null) {
+        pq.add(new Pair(lists[i].val, lists[i]));
+      }
+    }
+    ListNode dummy = new ListNode(-1);
+    ListNode temp = dummy;
+    while (!pq.isEmpty()) {
+      Pair p = pq.remove();
+      ListNode node = p.node;
+      temp.next = node;
+      if (node.next != null) {
+        pq.add(new Pair(node.next.val, node.next));
+      }
+      temp = temp.next;
+    }
+    return dummy.next;
+  }
 }
