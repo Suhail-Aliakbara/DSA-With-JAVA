@@ -168,4 +168,42 @@ public class heap {
     }
     return dummy.next;
   }
+
+  /*
+   * 295. Find Median from Data Stream
+   * The median is the middle value in an ordered integer list. If the size
+   * of the list is even, there is no middle value, and the median is the
+   * mean of the two middle values.
+   * 
+   */
+  class MedianFinder {
+
+    PriorityQueue<Integer> leftPq;
+    PriorityQueue<Integer> rightPq;
+
+    public MedianFinder() {
+      leftPq = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
+      rightPq = new PriorityQueue<>();
+
+    }
+
+    public void addNum(int num) {
+      if (leftPq.size() == rightPq.size()) {
+        rightPq.add(num);
+        leftPq.add(rightPq.remove());
+      } else {
+        leftPq.add(num);
+        rightPq.add(leftPq.remove());
+      }
+    }
+
+    public double findMedian() {
+      if (leftPq.size() == rightPq.size()) {
+        return (leftPq.peek() + rightPq.peek()) / 2.0;
+      } else {
+        return leftPq.peek() * 1.0;
+      }
+    }
+  }
+
 }

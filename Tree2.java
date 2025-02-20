@@ -277,6 +277,15 @@ public class Tree2 {
     return count;
   }
 
+  /*
+   * 10
+   * / \
+   * 5 -3
+   * / \ \
+   * 3 2 11
+   * / \ \
+   * 3 -2 1
+   */
   // Optimal verstion TC=Same(O(N))-- SC(O(N))
   public int pathSum1(Node root, int targetSum) {
     HashMap<Long, Integer> prefixSumMap = new HashMap<>();
@@ -314,22 +323,28 @@ public class Tree2 {
    * Output: [1,null,2,null,3,null,4,null,5,null,6]
    */
   public void flatten(Node root) {
-    if (root == null)
+    if (root == null) {
       return;
-    Node leftN = root.left;
-    Node rightN = root.right;
-    flatten(leftN);
-    flatten(rightN);
-    root.left = null;
-    root.right = leftN;
-    Node temp = leftN;
-    while (temp != null && temp.right != null) {
-      temp = temp.right;
     }
-    if (temp != null)
-      temp.right = rightN;
-    else
-      root.right = rightN;
+    // Flatten the left and right subtrees
+    flatten(root.left);
+    flatten(root.right);
+
+    // Store the left and right subtrees
+    Node leftSubtree = root.left;
+    Node rightSubtree = root.right;
+    // Set the left subtree to null and the right subtree to the flattened left
+    // subtree
+    root.left = null;
+    root.right = leftSubtree;
+
+    // Find the end of the new right subtree (which was the left subtree)
+    Node current = root;
+    while (current.right != null) {
+      current = current.right;
+    }
+    // Attach the flattened right subtree to the end of the new right subtree
+    current.right = rightSubtree;
   }
 
   // Optimal Solution for flatten using morries traversal
@@ -514,6 +529,15 @@ public class Tree2 {
       this.index = index;
     }
   }
+  /*
+   * 1
+   * / \
+   * 3 2
+   * / \
+   * 5 9
+   * / \
+   * 6 7
+   */
 
   public int widthOfBinaryTree(Node root) {
     if (root == null)
@@ -625,6 +649,37 @@ public class Tree2 {
     }
 
     return ans;
+  }
+
+  // without using Map
+  public List<Integer> rightSideView1(Node root) {
+    List<Integer> result = new ArrayList<>();
+    if (root == null) {
+      return result;
+    }
+
+    Queue<Node> queue = new LinkedList<>();
+    queue.add(root);
+
+    while (!queue.isEmpty()) {
+      int levelSize = queue.size();
+      for (int i = 0; i < levelSize; i++) {
+        Node currentNode = queue.poll();
+        // Add the last node of each level to the result
+        if (i == levelSize - 1) {
+          result.add(currentNode.data);
+        }
+        // Add left and right children to the queue
+        if (currentNode.left != null) {
+          queue.add(currentNode.left);
+        }
+        if (currentNode.right != null) {
+          queue.add(currentNode.right);
+        }
+      }
+    }
+
+    return result;
   }
 
   /*
@@ -818,7 +873,7 @@ public class Tree2 {
   }
 
   /*
-   * 297. Serialize and Deserialize Binary Tree
+   * (in copy 53 question) 297. Serialize and Deserialize Binary Tree
    * Serialization is the process of converting a data structure or object
    * into a sequence of bits so that it can be stored in a file or memory buffer,
    * or transmitted across a network connection link to be reconstructed later in
