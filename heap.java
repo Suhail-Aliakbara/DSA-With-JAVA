@@ -206,4 +206,102 @@ public class heap {
     }
   }
 
+  /*
+   * s
+   */
+
+  /////////////////////////////////////////////////////////////////
+  class MinHeap {
+    int[] heapArray;
+    int capacity;
+    int size;
+
+    MinHeap(int capacity) {
+      this.size = 0;
+      this.capacity = capacity;
+      this.heapArray = new int[capacity];
+    }
+
+    int parent(int index) {
+      return (index - 1) / 2;
+    }
+
+    int left(int index) {
+      return 2 * index + 1;
+    }
+
+    int right(int index) {
+      return 2 * index + 2;
+    }
+
+    // Function to extract the minimum element (root) from the heap
+    int extractMin() {
+      if (size < 1)
+        return -1; // If heap is empty, return -1
+
+      int minValue = heapArray[0]; // The root is the smallest element
+      heapArray[0] = heapArray[size - 1]; // Move the last element to root
+      size--; // Reduce the heap size
+      MinHeapify(0); // Restore heap property
+
+      return minValue;
+    }
+
+    // Function to insert a new key into the heap
+    void insertKey(int k) {
+      if (size == capacity)
+        return; // If heap is full, do nothing
+
+      size++; // Increase the heap size
+      decreaseKey(size - 1, k); // Insert at the last index and adjust
+    }
+
+    // Function to delete a key at a specific index
+    void deleteKey(int i) {
+      if (i < size) {
+        decreaseKey(i, Integer.MIN_VALUE); // Reduce key to the smallest value
+        extractMin(); // Extract min to remove it
+      }
+    }
+
+    // Function to decrease the value at index 'i' and move it up if necessary
+    void decreaseKey(int i, int new_val) {
+      heapArray[i] = new_val; // Update the value at index 'i'
+
+      // Move the updated node upwards if it violates heap property
+      while (i != 0 && heapArray[parent(i)] > heapArray[i]) {
+        // Swap heapArray[i] with its parent
+        int temp = heapArray[i];
+        heapArray[i] = heapArray[parent(i)];
+        heapArray[parent(i)] = temp;
+
+        i = parent(i); // Move up in the heap
+      }
+    }
+
+    // Function to maintain the MinHeap property (push elements downward if needed)
+    void MinHeapify(int index) {
+
+      int smallest = index; // Assume current node is the smallest
+      int leftChild = left(index); // Get the left child index
+      int rightChild = right(index); // Get the right child index
+
+      // If left child exists and is smaller, update smallest
+      if (leftChild < size && heapArray[leftChild] < heapArray[index])
+        smallest = leftChild;
+
+      // If right child exists and is smaller than smallest, update smallest
+      if (rightChild < size && heapArray[rightChild] < heapArray[smallest])
+        smallest = rightChild;
+
+      // If smallest is not the current node, swap and continue heapifying
+      if (smallest != index) {
+        int temp = heapArray[index];
+        heapArray[index] = heapArray[smallest];
+        heapArray[smallest] = temp;
+        MinHeapify(smallest); // Recursively heapify the affected subtree
+      }
+    }
+  }
+
 }
