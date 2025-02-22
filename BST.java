@@ -59,7 +59,7 @@ public class BST {
 
   /*
    * 700 Search in BST
-   * ou are given the root of a binary search tree (BST) and an integer val.
+   * You are given the root of a binary search tree (BST) and an integer val.
    * 
    * Find the node in the BST that the node's value equals val and return
    * the subtree rooted with that node. If such a node does not exist,
@@ -121,7 +121,7 @@ public class BST {
     return isValidBST(root.left, minValue, (long) root.val) && isValidBST(root.right, (long) root.val, maxValue);
   }
 
-  // Delete: The node has 0 child
+  // ------- Delete: The node has 0 child---------------
   public void deleteLeafNode(TreeNode root, int target) {
     if (root == null) {
       return;
@@ -325,8 +325,8 @@ public class BST {
    * If either predecessor or successor is not found, then set it to NULL.
    * 
    * Note:- In an inorder traversal the number just smaller than the
-   * target is the predecessor and the number just greater than the target
-   * is the successor.
+   * target is the predecessor and the number just greater than the targets the
+   * successor.
    * 
    * Input: root[] = [8, 1, 9, N, 4, N, 10, 3, N, N, N]
    * 8
