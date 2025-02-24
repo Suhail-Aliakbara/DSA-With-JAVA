@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class heap {
   public class ListNode {
@@ -296,6 +298,36 @@ public class heap {
       arr[largest] = temp;
       maxHeapify(arr, N, largest);
     }
+  }
+
+  /*
+   * 347. Top K Frequent Elements
+   * Given an integer array nums and an integer k, return the k most frequent
+   * elements. You may return the answer in any order.
+   * Input: nums = [1,1,1,2,2,3], k = 2
+   * Output: [1,2]
+   */
+  public int[] topKFrequent(int[] nums, int k) {
+    HashMap<Integer, Integer> map = new HashMap<>();
+    int n = nums.length;
+
+    for (int i = 0; i < n; i++) {
+      map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+    }
+
+    PriorityQueue<Map.Entry<Integer, Integer>> maxHeap = new PriorityQueue<>((a, b) -> (b.getValue() - a.getValue()));
+    for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+      maxHeap.add(entry);
+    }
+
+    int[] ans = new int[k];
+    int i = 0;
+    while (i < k) {
+      Map.Entry<Integer, Integer> entry = maxHeap.poll();
+      ans[i] = entry.getKey();
+      i++;
+    }
+    return ans;
   }
 
   /////////////////////////////////////////////////////////////////

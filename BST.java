@@ -807,11 +807,11 @@ public class BST {
     }
     if (prevPrev.val > prev.val)
       ls.add(prev);
-    TreeNode firstVal = ls.get(0);
-    TreeNode lastVal = ls.get(ls.size() - 1);
-    int temp = firstVal.val;
-    firstVal.val = lastVal.val;
-    lastVal.val = temp;
+    TreeNode firstNode = ls.get(0);
+    TreeNode lastNode = ls.get(ls.size() - 1);
+    int temp = firstNode.val;
+    firstNode.val = lastNode.val;
+    lastNode.val = temp;
   }
 
 }

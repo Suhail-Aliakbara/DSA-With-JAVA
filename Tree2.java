@@ -914,14 +914,14 @@ public class Tree2 {
     for (int i = 1; i < values.length; i++) {
       Node parent = q.poll();
       if (!values[i].equals("N")) {
-        Node left = new Node(Integer.parseInt(values[i]));
-        parent.left = left;
-        q.add(left);
+        Node leftN = new Node(Integer.parseInt(values[i]));
+        parent.left = leftN;
+        q.add(leftN);
       }
       if (!values[++i].equals("N")) {
-        Node right = new Node(Integer.parseInt(values[i]));
-        parent.right = right;
-        q.add(right);
+        Node rightN = new Node(Integer.parseInt(values[i]));
+        parent.right = rightN;
+        q.add(rightN);
       }
     }
     return root;
