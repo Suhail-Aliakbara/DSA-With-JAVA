@@ -1,5 +1,9 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.Arrays;
 
 public class heap {
   public class ListNode {
@@ -207,8 +211,92 @@ public class heap {
   }
 
   /*
-   * s
+   * Maximum Sum Combination
+   * Given two integer array A and B of size N each.
+   * A sum combination is made by adding one element from array A and another
+   * element of array B.
+   * Input:
+   * N = 2
+   * K = 2
+   * A [ ] = {3, 2}
+   * B [ ] = {1, 4}
+   * Output: {7, 6}
+   * Explanation:
+   * 7 -> (A : 3) + (B : 4)
+   * 6 -> (A : 2) + (B : 4)
    */
+  static List<Integer> maxCombinations(int N, int K, int A[], int B[]) {
+    // code here
+    Arrays.sort(A);
+    Arrays.sort(B);
+
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]);
+    Set<String> visited = new HashSet<>();
+    List<Integer> ans = new ArrayList<>();
+
+    pq.add(new int[] { A[N - 1] + B[N - 1], N - 1, N - 1 });
+    visited.add((N - 1) + "," + (N - 1));
+
+    while (!pq.isEmpty() && K-- > 0) {
+      int sum = pq.peek()[0];
+      int idx1A = pq.peek()[1];
+      int idx2B = pq.peek()[2];
+      pq.poll();
+
+      ans.add(sum);
+
+      if (idx1A - 1 >= 0 && !visited.contains((idx1A - 1) + "," + idx2B)) {
+        pq.add(new int[] { A[idx1A - 1] + B[idx2B], idx1A - 1, idx2B });
+        visited.add((idx1A - 1) + "," + idx2B);
+
+      }
+      if (idx2B - 1 >= 0 && !visited.contains(idx1A + "," + (idx2B - 1))) {
+        pq.add(new int[] { A[idx1A] + B[idx2B - 1], idx1A, idx2B - 1 });
+        visited.add(idx1A + "," + (idx2B - 1));
+      }
+    }
+    return ans;
+  }
+
+  /*
+   * Convert Min Heap to Max Heap
+   * You are given an array arr of N integers representing a min Heap. The task is
+   * to convert it to max Heap.
+   * 
+   * Input:
+   * N = 5
+   * arr = [3, 4, 8, 11, 13]
+   * Output:
+   * [13, 11, 8, 3, 4]
+   */
+  static void convertMinToMaxHeap(int N, int[] arr) {
+    // Start from the last non-leaf node and move up.
+    for (int i = (N / 2) - 1; i >= 0; i--) {
+      // Perform heapify operation on each non-leaf node.
+      maxHeapify(arr, N, i);
+    }
+  }
+
+  public static void maxHeapify(int[] arr, int N, int index) {
+    int largest = index; // Initialize largest as the current node.
+    int leftChild = 2 * index + 1;
+    int rightChild = 2 * index + 2;
+
+    if (leftChild < N && arr[leftChild] > arr[largest]) {
+      largest = leftChild;
+    }
+
+    if (rightChild < N && arr[rightChild] > arr[largest]) {
+      largest = rightChild;
+    }
+
+    if (largest != index) {
+      int temp = arr[index];
+      arr[index] = arr[largest];
+      arr[largest] = temp;
+      maxHeapify(arr, N, largest);
+    }
+  }
 
   /////////////////////////////////////////////////////////////////
   class MinHeap {
