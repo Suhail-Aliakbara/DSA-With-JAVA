@@ -35,7 +35,7 @@ public class graph {
 
   /*
    * BFS of graph
-   * Given a undirected graph represented by an adjacency list adj, which is a
+   * Given an undirected graph represented by an adjacency list adj, which is a
    * vector of vectors where each adj[i] represents the list of vertices connected
    * to vertex i. Perform a Breadth First Traversal (BFS) starting from vertex 0,
    * visiting vertices from left to right according to the adjacency list, and
@@ -44,26 +44,72 @@ public class graph {
    * Output: [0, 2, 3, 1, 4]
    */
   public ArrayList<Integer> bfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
-    // code here
-    ArrayList<Integer> ans = new ArrayList<>();
-    Queue<Integer> q = new LinkedList<>();
-    boolean[] vis = new boolean[V];
+    ArrayList<Integer> bfsTraversal = new ArrayList<>();
+    Queue<Integer> queue = new LinkedList<>();
+    boolean[] visited = new boolean[V];
 
-    q.add(0);
-    vis[0] = true;
+    // Start BFS from vertex 0
+    queue.add(0);
+    visited[0] = true;
 
-    while (q.size() > 0) {
-      int rem = q.remove();
-      ArrayList<Integer> ls = adj.get(rem);
-      ans.add(rem);
-      for (int i = 0; i < ls.size(); i++) {
-        if (!vis[ls.get(i)]) {
-          q.add(ls.get(i));
-          vis[ls.get(i)] = true;
+    while (!queue.isEmpty()) {
+      int currentVertex = queue.remove();
+      bfsTraversal.add(currentVertex);
+
+      // Get all adjacent vertices of the dequeued vertex
+      ArrayList<Integer> adjacentVertices = adj.get(currentVertex); // List of adjNodes
+      for (int i = 0; i < adjacentVertices.size(); i++) {
+        int adjacentVertex = adjacentVertices.get(i);
+        if (!visited[adjacentVertex]) {
+          queue.add(adjacentVertex);
+          visited[adjacentVertex] = true;
         }
       }
     }
-    return ans;
+    return bfsTraversal;
   }
 
+  /*
+   * Graphs_ Source to Destination Path
+   * You have been given edges of a graph and a source node(sn) and destination
+   * node(dn). Return true if there is a path from source node to destination node
+   * or false otherwise.
+   */
+  public boolean srcToDes(int V, ArrayList<ArrayList<Integer>> adj, int src, int destination) {
+    Queue<Integer> queue = new LinkedList<>();
+    boolean[] visited = new boolean[V];
+
+    // Start BFS from vertex 0
+    queue.add(src);
+    visited[src] = true;
+
+    while (!queue.isEmpty()) {
+      int currentVertex = queue.remove();
+
+      // Get all adjacent vertices of the dequeued vertex
+      ArrayList<Integer> adjacentVertices = adj.get(currentVertex); // List of adjNodes
+      for (int i = 0; i < adjacentVertices.size(); i++) {
+        int adjacentVertex = adjacentVertices.get(i);
+        if (!visited[adjacentVertex]) {
+          queue.add(adjacentVertex);
+          visited[adjacentVertex] = true;
+        }
+      }
+    }
+    return visited[destination];
+  }
+
+  // Example usage
+  public static void main(String[] args) {
+    graph g = new graph();
+    ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+    adj.add(new ArrayList<>(List.of(2, 3, 1)));
+    adj.add(new ArrayList<>(List.of(0)));
+    adj.add(new ArrayList<>(List.of(0, 4)));
+    adj.add(new ArrayList<>(List.of(0)));
+    adj.add(new ArrayList<>(List.of(2)));
+
+    ArrayList<Integer> bfsResult = g.bfsOfGraph(5, adj);
+    System.out.println(bfsResult); // Output: [0, 2, 3, 1, 4]
+  }
 }
